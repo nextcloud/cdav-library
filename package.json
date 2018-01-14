@@ -1,0 +1,26 @@
+{
+  "name": "cdav-library",
+  "version": "0.0.1",
+  "description": "CalDAV and CardDAV client library for Nextcloud",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nextcloud/cdav-library.git"
+  },
+  "keywords": [
+    "caldav",
+    "carddav",
+    "nextcloud",
+    "rfc4791",
+    "rfc6352"
+  ],
+  "author": "Alexander Weidinger, Georg Ehrke, Hendrik Leppelsack, Raimund Schlüßler, Thomas Citharel",
+  "license": "AGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/nextcloud/cdav-library/issues"
+  },
+  "homepage": "https://github.com/nextcloud/cdav-library#readme"
+}
