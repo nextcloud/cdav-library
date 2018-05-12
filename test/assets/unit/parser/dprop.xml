@@ -1,0 +1,46 @@
+<d:prop xmlns:d="DAV:" xmlns:cal="urn:ietf:params:xml:ns:caldav" xmlns:cs="http://calendarserver.org/ns/" xmlns:oc="http://owncloud.org/ns">
+    <d:displayname>Privat</d:displayname>
+    <d:resourcetype>
+        <d:collection/>
+        <cal:calendar/>
+    </d:resourcetype>
+    <x1:calendar-order xmlns:x1="http://apple.com/ns/ical/">0</x1:calendar-order>
+    <x1:calendar-color xmlns:x1="http://apple.com/ns/ical/">#78e774</x1:calendar-color>
+    <cal:supported-calendar-component-set>
+        <cal:comp name="VEVENT"/>
+        <cal:comp name="VTODO"/>
+    </cal:supported-calendar-component-set>
+    <cs:allowed-sharing-modes>
+        <cs:can-be-shared/>
+        <cs:can-be-published/>
+    </cs:allowed-sharing-modes>
+    <oc:calendar-enabled>1</oc:calendar-enabled>
+    <d:acl>
+        <d:ace>
+            <d:principal>
+                <d:href>/remote.php/dav/principals/users/admin/</d:href>
+            </d:principal>
+            <d:grant>
+                <d:privilege>
+                    <d:read/>
+                </d:privilege>
+            </d:grant>
+            <d:protected/>
+        </d:ace>
+        <d:ace>
+            <d:principal>
+                <d:href>/remote.php/dav/principals/users/admin/</d:href>
+            </d:principal>
+            <d:grant>
+                <d:privilege>
+                    <d:write/>
+                </d:privilege>
+            </d:grant>
+            <d:protected/>
+        </d:ace>
+    </d:acl>
+    <d:owner>
+        <d:href>/remote.php/dav/principals/users/admin/</d:href>
+    </d:owner>
+    <oc:invite/>
+</d:prop>
