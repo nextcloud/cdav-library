@@ -6,6 +6,8 @@ module.exports = {
         path: path.resolve(__dirname, './dist'),
         publicPath: '/',
         filename: 'dist.js',
-        library: 'cdav'
+        library: 'cdav',
+        libraryTarget: 'umd',
+		umdNamedDefine: true
     }
 };
