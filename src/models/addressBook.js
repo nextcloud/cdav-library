@@ -112,7 +112,7 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 	async createVCard(data) {
 		debug('creating VCard object');
 
-		const name = StringUtility.uid('', '.vcf');
+		const name = StringUtility.uid('', 'vcf');
 		const headers = {
 			'Content-Type': 'text/vcard; charset=utf-8'
 		};

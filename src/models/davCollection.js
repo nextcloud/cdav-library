@@ -107,7 +107,7 @@ export class DavCollection extends DAVEventListener {
 	 */
 	async find(uri) {
 		const response = await this._request.propFind(this._url + uri, this._propFindList, 0);
-		return this._handleMultiStatusResponse(response, false)[0];
+		return this._handleMultiStatusResponse({ [this._url + uri]: response }, false)[0];
 	}
 
 	/**
@@ -126,7 +126,6 @@ export class DavCollection extends DAVEventListener {
 	 */
 	async createCollection(name, props) {
 		debug('creating a collection');
-		console.log(this);
 
 		const [skeleton, dPropChildren] = XMLUtility.getRootSkeleton(
 			[NS.DAV, 'mkcol'],
@@ -161,7 +160,7 @@ export class DavCollection extends DAVEventListener {
 		debug('creating an object');
 
 		await this._request.put(this.url + name, headers, data);
-		return this._request.find(name);
+		return this.find(name);
 	}
 
 	/**
