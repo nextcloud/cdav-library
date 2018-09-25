@@ -140,7 +140,7 @@ export class DavCollection extends DAVEventListener {
 		const uri = this._getAvailableNameFromToken(name);
 		const data = XMLUtility.serialize(skeleton);
 		await this._request.mkCol(this.url + uri, {}, data);
-		return this.find(uri);
+		return this.find(uri + '/');
 	}
 
 	/**
