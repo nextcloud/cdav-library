@@ -22,7 +22,7 @@
  */
 // import normalizeUrl from 'normalize-url';
 
-import {debugFactory} from "./debug.js";
+import { debugFactory } from './debug.js';
 const debug = debugFactory('request.js');
 
 /**
@@ -34,9 +34,9 @@ export default class Request {
 	 * @param {String} baseUrl
 	 * @param {Function} xhrProvider
 	 */
-	constructor(baseUrl, xhrProvider=null) {
+	constructor(baseUrl, xhrProvider = null) {
 		this.baseUrl = baseUrl;
-		this._davClient = new dav.Client({baseUrl});
+		this._davClient = new dav.Client({ baseUrl });
 		this._davClient.xhrProvider = xhrProvider || this._davClient.xhrProvider;
 	}
 
@@ -101,7 +101,7 @@ export default class Request {
 	 * @param {object} headers - additional HTTP headers to send
 	 * @returns {Promise<*>}
 	 */
-	async delete(url, headers={}) {
+	async delete(url, headers = {}) {
 		url = this.absoluteUrl(url);
 		return this._davClient.request('DELETE', url, headers);
 	}
@@ -131,7 +131,7 @@ export default class Request {
 	 * @param {object} headers - additional HTTP headers to send
 	 * @returns {Promise<*>}
 	 */
-	async propFind(url, properties, depth=0, headers={}) {
+	async propFind(url, properties, depth = 0, headers = {}) {
 		// convert out own property format to clarke notation
 		const props = properties.map((p) => `{${p[0]}}${p[1]}`);
 
@@ -252,6 +252,7 @@ export default class Request {
 		const urlObject = new URL(url, this.baseUrl);
 		return urlObject.href;
 	}
+
 }
 
 /**
@@ -262,7 +263,7 @@ function groupMultistatusByPath(responses) {
 	const grouped = {};
 
 	responses.forEach((response) => {
-	   grouped[response.href] = response.propStat;
+		grouped[response.href] = response.propStat;
 	});
 
 	return grouped;

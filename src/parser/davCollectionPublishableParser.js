@@ -21,7 +21,7 @@
  *
  */
 
-import * as NS from "../utility/namespaceUtility.js";
+import * as NS from '../utility/namespaceUtility.js';
 
 /**
  *
@@ -36,18 +36,17 @@ export default function davCollectionPublishableParser(props) {
 
 	Object.entries(props).forEach(([key, value]) => {
 		switch (key) {
-			case '{http://calendarserver.org/ns/}publish-url':
-				parsed[key] = publishUrl(value);
-				break;
+		case '{http://calendarserver.org/ns/}publish-url':
+			parsed[key] = publishUrl(value);
+			break;
 
-			default:
-				break;
+		default:
+			break;
 		}
 	});
 
 	return parsed;
 }
-
 
 /**
  *

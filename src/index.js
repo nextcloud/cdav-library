@@ -20,15 +20,15 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-import Request from "./request.js";
-import * as NS from "./utility/namespaceUtility.js";
-import {CalendarHome} from "./models/calendarHome.js";
-import {AddressBookHome} from "./models/addressBookHome.js";
+import Request from './request.js';
+import * as NS from './utility/namespaceUtility.js';
+import { CalendarHome } from './models/calendarHome.js';
+import { AddressBookHome } from './models/addressBookHome.js';
 
-import {debugFactory} from "./debug.js";
+import { debugFactory } from './debug.js';
 const debug = debugFactory('index.js');
 
-export {debugFactory as debug, NS as namespaces};
+export { debugFactory as debug, NS as namespaces };
 
 /**
  *
@@ -42,7 +42,7 @@ export default class DavClient {
 	 */
 	constructor(options, xhrProvider = null, factories = {}) {
 		Object.assign(this, {
-			rootUrl: null,
+			rootUrl: null
 		}, options);
 
 		Object.assign(this, {
@@ -50,7 +50,7 @@ export default class DavClient {
 			principalUrl: null,
 			principalCollections: [],
 			calendarHomes: [],
-			addressBookHomes: [],
+			addressBookHomes: []
 		});
 
 		this._request = new Request(this.rootUrl, xhrProvider);
@@ -61,7 +61,7 @@ export default class DavClient {
 	 * @param {Object} options
 	 * @returns {Promise<DavClient>}
 	 */
-	async connect(options={enableCalDAV: false, enableCardDAV: false}) {
+	async connect(options = { enableCalDAV: false, enableCardDAV: false }) {
 		// TODO - check if already connected and don't connect again
 
 		// we don't support rfc 6764 for now - Pull-requests welcome :)
@@ -120,10 +120,10 @@ export default class DavClient {
 	 */
 	async _discoverPrincipalUri() {
 		const props = await this._request.propFind(this.rootUrl, [
-			[NS.DAV, 'current-user-principal'],
+			[NS.DAV, 'current-user-principal']
 		], 0);
 
-		this.principalUrl = this._request.pathname(props["{DAV:}current-user-principal"][0].textContent);
+		this.principalUrl = this._request.pathname(props['{DAV:}current-user-principal'][0].textContent);
 	}
 
 	/**
@@ -171,7 +171,7 @@ export default class DavClient {
 	async _discoverAddressBookHomes() {
 		const props = await this._request.propFind(this.principalUrl, [
 			[NS.IETF_CARDDAV, 'addressbook-home-set'],
-			[NS.DAV, 'principal-collection-set'],
+			[NS.DAV, 'principal-collection-set']
 		], 0);
 
 		// TODO - store advertised features
@@ -198,5 +198,5 @@ export default class DavClient {
 			return this._request.pathname(principalCollection.textContent);
 		});
 	}
-}
 
+}

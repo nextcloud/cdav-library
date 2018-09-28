@@ -21,7 +21,7 @@
  *
  */
 
-import * as NS from "../utility/namespaceUtility.js";
+import * as NS from '../utility/namespaceUtility.js';
 
 /**
  *
@@ -37,16 +37,16 @@ export default function davCollectionShareableParser(props) {
 
 	Object.entries(props).forEach(([key, value]) => {
 		switch (key) {
-			case '{http://owncloud.org/ns}invite':
-				parsed[key] = invite(value);
-				break;
+		case '{http://owncloud.org/ns}invite':
+			parsed[key] = invite(value);
+			break;
 
-			case '{http://calendarserver.org/ns/}allowed-sharing-modes':
-				parsed[key] = allowedSharingModes(value);
-				break;
+		case '{http://calendarserver.org/ns/}allowed-sharing-modes':
+			parsed[key] = allowedSharingModes(value);
+			break;
 
-			default:
-				break;
+		default:
+			break;
 		}
 	});
 
@@ -78,20 +78,20 @@ function invite(value) {
 			displayName = displayName[0].textContent;
 		}
 
-        let access = s.getElementsByTagNameNS(NS.OWNCLOUD, 'access');
-        if (access.length === 0) {
-            return;
-        }
-        access = access[0];
+		let access = s.getElementsByTagNameNS(NS.OWNCLOUD, 'access');
+		if (access.length === 0) {
+			return;
+		}
+		access = access[0];
 
-        const readWrite = access.getElementsByTagNameNS(NS.OWNCLOUD, 'read-write');
-        const writable = readWrite.length !== 0;
+		const readWrite = access.getElementsByTagNameNS(NS.OWNCLOUD, 'read-write');
+		const writable = readWrite.length !== 0;
 
 		shares.push({
 			href,
 			displayName,
 			writable
-		})
+		});
 	});
 
 	return shares;
@@ -111,5 +111,3 @@ function allowedSharingModes(value) {
 		return `{${v.namespaceURI}}${v.localName}`;
 	});
 }
-
-

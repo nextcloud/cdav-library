@@ -21,10 +21,10 @@
  *
  */
 
-import DAVEventListener from "./davEventListener.js";
-import * as NS from "../utility/namespaceUtility.js";
+import DAVEventListener from './davEventListener.js';
+import * as NS from '../utility/namespaceUtility.js';
 
-import {debugFactory} from "../debug.js";
+import { debugFactory } from '../debug.js';
 const debug = debugFactory('DavObject');
 
 /**
@@ -40,7 +40,7 @@ export class DavObject extends DAVEventListener {
 	 * @param {Object} props - Properties including etag, content-type, etc.
 	 * @param {boolean} isPartial - Are we dealing with the complete or just partial addressbook / calendar data
 	 */
-	constructor(parent, request, url, props, isPartial=false) {
+	constructor(parent, request, url, props, isPartial = false) {
 		super();
 
 		Object.assign(this, {
@@ -118,7 +118,7 @@ export class DavObject extends DAVEventListener {
 		}
 
 		const headers = {
-			'If-Match': this.etag,
+			'If-Match': this.etag
 		};
 
 		// TODO - update E-TAG
@@ -155,7 +155,7 @@ export class DavObject extends DAVEventListener {
 	 * @param {boolean} mutable
 	 * @returns void
 	 */
-	_exposeProperty(localName, xmlNamespace, xmlName, mutable=false) {
+	_exposeProperty(localName, xmlNamespace, xmlName, mutable = false) {
 		if (mutable) {
 			Object.defineProperty(this, localName, {
 				get: () => this._props[`{${xmlNamespace}}${xmlName}`],
@@ -181,4 +181,5 @@ export class DavObject extends DAVEventListener {
 			[NS.DAV, 'resourcetype']
 		];
 	}
+
 }

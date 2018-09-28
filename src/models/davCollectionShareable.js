@@ -22,9 +22,9 @@
  */
 import * as NS from '../utility/namespaceUtility.js';
 import * as XMLUtility from '../utility/xmlUtility.js';
-import davCollectionShareableParser from "../parser/davCollectionShareableParser.js";
+import davCollectionShareableParser from '../parser/davCollectionShareableParser.js';
 
-import {debugFactory} from "../debug.js";
+import { debugFactory } from '../debug.js';
 const debug = debugFactory('DavCollectionShareable');
 
 export function davCollectionShareable(Base) {
@@ -73,7 +73,7 @@ export function davCollectionShareable(Base) {
 
 			const xml = XMLUtility.serialize(skeleton);
 			return super._request.post(this._url, {
-				'Content-Type' : 'application/xml; charset=utf-8'
+				'Content-Type': 'application/xml; charset=utf-8'
 			}, xml).then((res) => {
 				// TODO - add to existing data
 
@@ -100,7 +100,7 @@ export function davCollectionShareable(Base) {
 
 			const xml = XMLUtility.serialize(skeleton);
 			return super._request.post(this._url, {
-				'Content-Type' : 'application/xml; charset=utf-8'
+				'Content-Type': 'application/xml; charset=utf-8'
 			}, xml).then((res) => {
 				// TODO - add to existing data
 
@@ -131,5 +131,6 @@ export function davCollectionShareable(Base) {
 				[NS.CALENDARSERVER, 'allowed-sharing-modes']
 			]);
 		}
-	}
+
+	};
 }

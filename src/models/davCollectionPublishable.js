@@ -20,11 +20,11 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-import * as NS from "../utility/namespaceUtility.js";
+import * as NS from '../utility/namespaceUtility.js';
 import * as XMLUtility from '../utility/xmlUtility.js';
-import davCollectionPublishableParser from "../parser/davCollectionPublishableParser.js";
+import davCollectionPublishableParser from '../parser/davCollectionPublishableParser.js';
 
-import {debugFactory} from "../debug.js";
+import { debugFactory } from '../debug.js';
 const debug = debugFactory('DavCollectionPublishable');
 
 export function davCollectionPublishable(Base) {
@@ -52,7 +52,7 @@ export function davCollectionPublishable(Base) {
 			const xml = XMLUtility.serialize(skeleton);
 
 			await super._request.post(this._url, {
-				'Content-Type' : 'application/xml; charset=utf-8'
+				'Content-Type': 'application/xml; charset=utf-8'
 			}, xml);
 
 			return this;
@@ -71,7 +71,7 @@ export function davCollectionPublishable(Base) {
 			const xml = XMLUtility.serialize(skeleton);
 
 			await super._request.post(this._url, {
-				'Content-Type' : 'application/xml; charset=utf-8'
+				'Content-Type': 'application/xml; charset=utf-8'
 			}, xml);
 
 			return this;
@@ -85,5 +85,6 @@ export function davCollectionPublishable(Base) {
 				[NS.CALENDARSERVER, 'publish-url']
 			]);
 		}
-	}
+
+	};
 }

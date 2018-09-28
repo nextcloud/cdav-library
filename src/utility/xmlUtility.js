@@ -30,7 +30,7 @@ let prefixMap = {};
  * @params {...Array} array of namespace / name pairs
  * @returns {*[]}
  */
-export function getRootSkeleton()  {
+export function getRootSkeleton() {
 	if (arguments.length === 0) {
 		return [{}, null];
 	}

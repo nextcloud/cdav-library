@@ -20,15 +20,15 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-import * as NS from '../utility/namespaceUtility.js'
-import * as StringUtility from '../utility/stringUtility.js'
-import * as XMLUtility from '../utility/xmlUtility.js'
-import DAVEventListener from './davEventListener.js'
-import davCollectionParser from "../parser/davCollectionParser.js"
+import * as NS from '../utility/namespaceUtility.js';
+import * as StringUtility from '../utility/stringUtility.js';
+import * as XMLUtility from '../utility/xmlUtility.js';
+import DAVEventListener from './davEventListener.js';
+import davCollectionParser from '../parser/davCollectionParser.js';
 
-import {debugFactory} from "../debug.js";
-import davCollectionPropSet from "../propset/davCollectionPropSet.js";
-import {DavObject} from "./davObject.js";
+import { debugFactory } from '../debug.js';
+import davCollectionPropSet from '../propset/davCollectionPropSet.js';
+import { DavObject } from './davObject.js';
 const debug = debugFactory('DavCollection');
 
 export class DavCollection extends DAVEventListener {
@@ -60,7 +60,7 @@ export class DavCollection extends DAVEventListener {
 
 			// parsers / factories
 			_propFindList: [],
-			_propSetFactory: [],
+			_propSetFactory: []
 
 		});
 
@@ -176,7 +176,7 @@ export class DavCollection extends DAVEventListener {
 
 		const properties = {};
 		this._updatedProperties.forEach((updatedProperty) => {
-			properties[updatedProperty] = this._props[updatedProperty]
+			properties[updatedProperty] = this._props[updatedProperty];
 		});
 		const propSet = this._propSetFactory.reduce((arr, p) => [...arr, ...p(properties)], []);
 
@@ -252,7 +252,7 @@ export class DavCollection extends DAVEventListener {
 	 * @param {boolean} mutable
 	 * @returns void
 	 */
-	_exposeProperty(localName, xmlNamespace, xmlName, mutable=false) {
+	_exposeProperty(localName, xmlNamespace, xmlName, mutable = false) {
 		if (mutable) {
 			Object.defineProperty(this, localName, {
 				get: () => this._props[`{${xmlNamespace}}${xmlName}`],
@@ -277,8 +277,8 @@ export class DavCollection extends DAVEventListener {
 	 */
 	_getAvailableNameFromToken(token) {
 		return StringUtility.uri(token, name => {
-			return this._childrenNames.indexOf(this._url + name) === -1 &&
-				this._childrenNames.indexOf(this._url + name + '/') === -1;
+			return this._childrenNames.indexOf(this._url + name) === -1
+				&& this._childrenNames.indexOf(this._url + name + '/') === -1;
 		});
 	}
 
@@ -288,7 +288,7 @@ export class DavCollection extends DAVEventListener {
 	 * @returns {Object}
 	 * @protected
 	 */
-	_handleMultiStatusResponse(response, isPartial=false) {
+	_handleMultiStatusResponse(response, isPartial = false) {
 		const index = [];
 		const children = [];
 
@@ -355,6 +355,7 @@ export class DavCollection extends DAVEventListener {
 			[NS.DAV, 'current-user-privilege-set']
 		];
 	}
+
 }
 
 /**

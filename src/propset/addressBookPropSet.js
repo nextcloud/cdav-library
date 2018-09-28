@@ -21,7 +21,7 @@
  *
  */
 
-import * as NS from "../utility/namespaceUtility.js";
+import * as NS from '../utility/namespaceUtility.js';
 
 /**
  *
@@ -37,22 +37,22 @@ export default function addressBookPropSet(props) {
 
 	Object.entries(props).forEach(([key, value]) => {
 		switch (key) {
-			case '{urn:ietf:params:xml:ns:carddav}addressbook-description':
-				xmlified.push({
-					name: [NS.IETF_CARDDAV, 'addressbook-description'],
-					value: value
-				});
-				break;
+		case '{urn:ietf:params:xml:ns:carddav}addressbook-description':
+			xmlified.push({
+				name: [NS.IETF_CARDDAV, 'addressbook-description'],
+				value: value
+			});
+			break;
 
-			case '{http://owncloud.org/ns}enabled':
-				xmlified.push({
-					name: [NS.OWNCLOUD, 'enabled'],
-					value: value ? '1' : '0'
-				});
-				break;
+		case '{http://owncloud.org/ns}enabled':
+			xmlified.push({
+				name: [NS.OWNCLOUD, 'enabled'],
+				value: value ? '1' : '0'
+			});
+			break;
 
-			default:
-				break;
+		default:
+			break;
 		}
 	});
 

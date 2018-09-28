@@ -21,7 +21,7 @@
  *
  */
 
-import * as NS from "../utility/namespaceUtility.js";
+import * as NS from '../utility/namespaceUtility.js';
 
 /**
  *
@@ -36,15 +36,15 @@ export default function davCollectionPropSet(props) {
 
 	Object.entries(props).forEach(([key, value]) => {
 		switch (key) {
-			case '{DAV:}displayname':
-				xmlified.push({
-					name: [NS.DAV, 'displayname'],
-					value: value
-				});
-				break;
+		case '{DAV:}displayname':
+			xmlified.push({
+				name: [NS.DAV, 'displayname'],
+				value: value
+			});
+			break;
 
-			default:
-				break;
+		default:
+			break;
 		}
 	});
 

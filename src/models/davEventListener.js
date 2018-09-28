@@ -34,9 +34,9 @@ export default class DAVEventListener {
 	 * @param {function} listener
 	 * @param {object} options
 	 */
-	addEventListener(type, listener, options={}) {
+	addEventListener(type, listener, options = {}) {
 		this._eventListeners[type] = this._eventListeners[type] || [];
-		this._eventListeners[type].push({listener, options});
+		this._eventListeners[type].push({ listener, options });
 	}
 
 	/**
@@ -46,12 +46,12 @@ export default class DAVEventListener {
 	 * @param {function} listener
 	 * @param {object} options
 	 */
-	removeEventListener(type, listener, options={}) {
+	removeEventListener(type, listener, options = {}) {
 		if (!this._eventListeners[type]) {
 			return;
 		}
 
-		const index = this._eventListeners[type].findIndex(({sListener, sOptions}) => {
+		const index = this._eventListeners[type].findIndex(({ sListener, sOptions }) => {
 			return listener === sListener && options === sOptions;
 		});
 		if (index === -1) {
@@ -71,7 +71,7 @@ export default class DAVEventListener {
 			return;
 		}
 
-		this._eventListeners[type].forEach(({listener, options}) => {
+		this._eventListeners[type].forEach(({ listener, options }) => {
 			if (options.once) {
 				this.removeEventListener(type, listener, options);
 			}
@@ -79,4 +79,5 @@ export default class DAVEventListener {
 			listener(event);
 		});
 	}
+
 }

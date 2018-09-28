@@ -49,54 +49,54 @@ export default function calendarParser(props) {
 
 	Object.entries(props).forEach(([key, value]) => {
 		switch (key) {
-			case '{http://apple.com/ns/ical/}calendar-color':
-				parsed[key] = calendarColor(value);
-				break;
+		case '{http://apple.com/ns/ical/}calendar-color':
+			parsed[key] = calendarColor(value);
+			break;
 
-			case '{http://calendarserver.org/ns/}getctag':
-			case '{http://nextcloud.com/ns}owner-displayname':
-			case '{urn:ietf:params:xml:ns:caldav}calendar-description':
-			case '{urn:ietf:params:xml:ns:caldav}calendar-timezone':
-				parsed[key] = simpleText(value);
-				break;
+		case '{http://calendarserver.org/ns/}getctag':
+		case '{http://nextcloud.com/ns}owner-displayname':
+		case '{urn:ietf:params:xml:ns:caldav}calendar-description':
+		case '{urn:ietf:params:xml:ns:caldav}calendar-timezone':
+			parsed[key] = simpleText(value);
+			break;
 
-			case '{http://apple.com/ns/ical/}calendar-order':
-			case '{urn:ietf:params:xml:ns:caldav}max-resource-size':
-			case '{urn:ietf:params:xml:ns:caldav}max-instances':
-			case '{urn:ietf:params:xml:ns:caldav}max-attendees-per-instance':
-				parsed[key] = simpleInt(value);
-				break;
+		case '{http://apple.com/ns/ical/}calendar-order':
+		case '{urn:ietf:params:xml:ns:caldav}max-resource-size':
+		case '{urn:ietf:params:xml:ns:caldav}max-instances':
+		case '{urn:ietf:params:xml:ns:caldav}max-attendees-per-instance':
+			parsed[key] = simpleInt(value);
+			break;
 
-			case '{http://calendarserver.org/ns/}source':
-				parsed[key] = source(value);
-				break;
+		case '{http://calendarserver.org/ns/}source':
+			parsed[key] = source(value);
+			break;
 
-			case '{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set':
-				parsed[key] = supportedCalendarComponentSet(value);
-				break;
+		case '{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set':
+			parsed[key] = supportedCalendarComponentSet(value);
+			break;
 
-			case '{urn:ietf:params:xml:ns:caldav}supported-calendar-data':
-				parsed[key] = supportedCalendarData(value);
-				break;
+		case '{urn:ietf:params:xml:ns:caldav}supported-calendar-data':
+			parsed[key] = supportedCalendarData(value);
+			break;
 
-			case '{urn:ietf:params:xml:ns:caldav}min-date-time':
-				parsed[key] = dateTime(value);
-				break;
+		case '{urn:ietf:params:xml:ns:caldav}min-date-time':
+			parsed[key] = dateTime(value);
+			break;
 
-			case '{urn:ietf:params:xml:ns:caldav}max-date-time':
-				parsed[key] = dateTime(value);
-				break;
+		case '{urn:ietf:params:xml:ns:caldav}max-date-time':
+			parsed[key] = dateTime(value);
+			break;
 
-			case '{urn:ietf:params:xml:ns:caldav}supported-collation-set':
-				parsed[key] = supportedCollationSet(value);
-				break;
+		case '{urn:ietf:params:xml:ns:caldav}supported-collation-set':
+			parsed[key] = supportedCollationSet(value);
+			break;
 
-			case '{http://owncloud.org/ns}calendar-enabled':
-				parsed[key] = simpleBool(value);
-				break;
+		case '{http://owncloud.org/ns}calendar-enabled':
+			parsed[key] = simpleBool(value);
+			break;
 
-			default:
-				break;
+		default:
+			break;
 		}
 	});
 
@@ -120,7 +120,7 @@ function calendarColor(prop) {
 	// but some browsers can't parse that *cough cough* Safari 9 *cough cough*
 	// Safari 10 seems to support this though
 	if (prop.length === 9) {
-		return prop.substr(0,7);
+		return prop.substr(0, 7);
 	}
 
 	return prop;

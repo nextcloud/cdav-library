@@ -21,7 +21,7 @@
  *
  */
 
-import * as NS from "../utility/namespaceUtility.js";
+import * as NS from '../utility/namespaceUtility.js';
 
 /**
  *
@@ -41,25 +41,25 @@ export default function addressBookParser(props) {
 
 	Object.entries(props).forEach(([key, value]) => {
 		switch (key) {
-			case '{urn:ietf:params:xml:ns:carddav}addressbook-description':
-			case '{http://calendarserver.org/ns/}getctag':
-				parsed[key] = text(value);
-				break;
-			case '{urn:ietf:params:xml:ns:carddav}max-resource-size':
-				parsed[key] = int(value);
-				break;
+		case '{urn:ietf:params:xml:ns:carddav}addressbook-description':
+		case '{http://calendarserver.org/ns/}getctag':
+			parsed[key] = text(value);
+			break;
+		case '{urn:ietf:params:xml:ns:carddav}max-resource-size':
+			parsed[key] = int(value);
+			break;
 
-			case '{http://owncloud.org/ns}enabled':
-			case '{http://owncloud.org/ns}read-only':
-				parsed[key] = bool(value);
-				break;
+		case '{http://owncloud.org/ns}enabled':
+		case '{http://owncloud.org/ns}read-only':
+			parsed[key] = bool(value);
+			break;
 
-			case '{urn:ietf:params:xml:ns:carddav}supported-address-data':
-				parsed[key] = supportedAddressData(value);
-				break;
+		case '{urn:ietf:params:xml:ns:carddav}supported-address-data':
+			parsed[key] = supportedAddressData(value);
+			break;
 
-			default:
-				break;
+		default:
+			break;
 		}
 	});
 
@@ -81,7 +81,7 @@ function text(value) {
  * @returns {boolean}
  */
 function bool(value) {
-	return value === '1'
+	return value === '1';
 }
 
 /**

@@ -28,9 +28,10 @@ export default class DAVEvent {
 	 * @param {string} type
 	 * @param {object} options
 	 */
-	constructor(type, options={}) {
+	constructor(type, options = {}) {
 		Object.assign(this, {
 			type
 		}, options);
 	}
+
 }

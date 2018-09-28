@@ -21,17 +21,17 @@
  *
  */
 
-import {DavCollection} from "./davCollection.js";
-import {davCollectionPublishable} from "./davCollectionPublishable.js";
-import {davCollectionShareable} from "./davCollectionShareable.js";
-import {VObject} from "./vobject.js";
-import calendarParser from "../parser/calendarParser.js";
-import calendarPropSet from "../propset/calendarPropSet.js";
-import * as NS from "../utility/namespaceUtility.js";
-import * as StringUtility from "../utility/stringUtility.js";
-import * as XMLUtility from "../utility/xmlUtility.js";
+import { DavCollection } from './davCollection.js';
+import { davCollectionPublishable } from './davCollectionPublishable.js';
+import { davCollectionShareable } from './davCollectionShareable.js';
+import { VObject } from './vobject.js';
+import calendarParser from '../parser/calendarParser.js';
+import calendarPropSet from '../propset/calendarPropSet.js';
+import * as NS from '../utility/namespaceUtility.js';
+import * as StringUtility from '../utility/stringUtility.js';
+import * as XMLUtility from '../utility/xmlUtility.js';
 
-import {debugFactory} from "../debug.js";
+import { debugFactory } from '../debug.js';
 const debug = debugFactory('Calendar');
 
 /**
@@ -53,22 +53,22 @@ const debug = debugFactory('Calendar');
  */
 export class Calendar extends davCollectionPublishable(davCollectionShareable(DavCollection)) {
 
-    /**
+	/**
 	 * @inheritDoc
 	 */
 	constructor(...args) {
 		super(...args);
 
-        super._registerObjectFactory('text/calendar', VObject);
-        super._registerPropFindParser(calendarParser);
-        super._registerPropSetFactory(calendarPropSet);
+		super._registerObjectFactory('text/calendar', VObject);
+		super._registerPropFindParser(calendarParser);
+		super._registerPropSetFactory(calendarPropSet);
 
-        super._exposeProperty('color', NS.APPLE, 'calendar-color', true);
-        super._exposeProperty('enabled', NS.OWNCLOUD, 'calendar-enabled', true);
-        super._exposeProperty('order', NS.APPLE, 'calendar-order', true);
-        super._exposeProperty('timezone', NS.IETF_CALDAV, 'calendar-timezone', true);
-        super._exposeProperty('components', NS.IETF_CALDAV, 'supported-calendar-component-set');
-    }
+		super._exposeProperty('color', NS.APPLE, 'calendar-color', true);
+		super._exposeProperty('enabled', NS.OWNCLOUD, 'calendar-enabled', true);
+		super._exposeProperty('order', NS.APPLE, 'calendar-order', true);
+		super._exposeProperty('timezone', NS.IETF_CALDAV, 'calendar-timezone', true);
+		super._exposeProperty('components', NS.IETF_CALDAV, 'supported-calendar-component-set');
+	}
 
 	/**
 	 * finds all VObjects in this calendar
@@ -79,14 +79,14 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 		return super.findAllByFilter((elm) => elm instanceof VObject);
 	}
 
-    /**
+	/**
      * find all VObjects filtered by type
 	 *
      * @param {number} type
      * @returns {Promise<VObject[]>}
      */
-    async findByType(type) {
-    	return this.calendarQuery([{
+	async findByType(type) {
+		return this.calendarQuery([{
 			name: [NS.IETF_CALDAV, 'comp-filter'],
 			attributes: [
 				['name', 'VCALENDAR']
@@ -98,9 +98,9 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 				]
 			}]
 		}]);
-    }
+	}
 
-    /**
+	/**
      * find all VObjects in a time-range filtered by type
 	 *
      * @param {number} type
@@ -108,7 +108,7 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
      * @param {Date} to
      * @returns {Promise<VObject[]>}
      */
-    async findByTypeInTimeRange(type, from, to) {
+	async findByTypeInTimeRange(type, from, to) {
 		return this.calendarQuery([{
 			name: [NS.IETF_CALDAV, 'comp-filter'],
 			attributes: [
@@ -128,21 +128,21 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 				}]
 			}]
 		}]);
-    }
+	}
 
-    /**
+	/**
      * create a VObject inside this calendar
 	 *
      * @returns {Promise<VObject>}
      */
-    async createVObject(data) {
-        const name = StringUtility.uid('', 'ics');
-        const headers = {
-            'Content-Type': 'text/calendar; charset=utf-8'
-        };
+	async createVObject(data) {
+		const name = StringUtility.uid('', 'ics');
+		const headers = {
+			'Content-Type': 'text/calendar; charset=utf-8'
+		};
 
-        return super.createObject(name, headers, data);
-    }
+		return super.createObject(name, headers, data);
+	}
 
 	/**
 	 * sends a calendar query as defined in
@@ -153,17 +153,17 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 	 * @param {String} timezone
 	 * @returns {Promise<VObject[]>}
 	 */
-	async calendarQuery(filter, prop=null, timezone = null) {
+	async calendarQuery(filter, prop = null, timezone = null) {
 		debug('sending an calendar-query request');
 
-		const [skeleton, ] = XMLUtility.getRootSkeleton(
+		const [skeleton] = XMLUtility.getRootSkeleton(
 			[NS.IETF_CALDAV, 'calendar-query']
 		);
 
 		if (!prop) {
 			skeleton.children.push({
 				name: [NS.DAV, 'prop'],
-				children: super._propFindList,
+				children: super._propFindList
 			});
 		} else {
 			skeleton.children.push({
@@ -201,27 +201,27 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 	 * @param {Object[]} prop
 	 * @returns {Promise<VObject[]>}
 	 */
-	async calendarMultiget(hrefs=[], prop) {
+	async calendarMultiget(hrefs = [], prop) {
 		debug('sending an calendar-multiget request');
 
 		if (hrefs.length === 0) {
 			return [];
 		}
 
-		const [skeleton, ] = XMLUtility.getRootSkeleton(
-			[NS.IETF_CALDAV, 'calendar-multiget'],
+		const [skeleton] = XMLUtility.getRootSkeleton(
+			[NS.IETF_CALDAV, 'calendar-multiget']
 		);
 
 		if (!prop) {
 			skeleton.children.push({
 				name: [NS.DAV, 'prop'],
-				children: super._propFindList,
+				children: super._propFindList
 			});
 		} else {
 			skeleton.children.push({
 				name: [NS.DAV, 'prop'],
 				children: prop
-			})
+			});
 		}
 
 		hrefs.forEach((href) => {
@@ -250,7 +250,7 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 	async freeBusyQuery(from, to) {
 		debug('sending a free-busy-query request');
 
-		const [skeleton, ] = XMLUtility.getRootSkeleton(
+		const [skeleton] = XMLUtility.getRootSkeleton(
 			[NS.IETF_CALDAV, 'free-busy-query'],
 			[NS.IETF_CALDAV, 'time-range']
 		);
@@ -267,32 +267,32 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 		// TODO - finish implementation
 	}
 
-    /**
+	/**
      * @inheritDoc
      */
-    static getPropFindList() {
-        return super.getPropFindList().concat([
-            [NS.APPLE, 'calendar-order'],
-            [NS.APPLE, 'calendar-color'],
-            [NS.CALENDARSERVER, 'getctag'],
-            [NS.CALENDARSERVER, 'source'],
-            [NS.IETF_CALDAV, 'calendar-description'],
-            [NS.IETF_CALDAV, 'calendar-timezone'],
-            [NS.IETF_CALDAV, 'supported-calendar-component-set'],
-            [NS.IETF_CALDAV, 'supported-calendar-data'],
-            [NS.IETF_CALDAV, 'max-resource-size'],
-            [NS.IETF_CALDAV, 'min-date-time'],
-            [NS.IETF_CALDAV, 'max-date-time'],
-            [NS.IETF_CALDAV, 'max-instances'],
-            [NS.IETF_CALDAV, 'max-attendees-per-instance'],
-            [NS.IETF_CALDAV, 'supported-collation-set'],
-            [NS.IETF_CALDAV, 'calendar-free-busy-set'],
-            [NS.IETF_CALDAV, 'schedule-calendar-transp'],
-            [NS.IETF_CALDAV, 'schedule-default-calendar-URL'],
-            [NS.OWNCLOUD, 'calendar-enabled'],
-            [NS.NEXTCLOUD, 'owner-displayname']
-        ]);
-    }
+	static getPropFindList() {
+		return super.getPropFindList().concat([
+			[NS.APPLE, 'calendar-order'],
+			[NS.APPLE, 'calendar-color'],
+			[NS.CALENDARSERVER, 'getctag'],
+			[NS.CALENDARSERVER, 'source'],
+			[NS.IETF_CALDAV, 'calendar-description'],
+			[NS.IETF_CALDAV, 'calendar-timezone'],
+			[NS.IETF_CALDAV, 'supported-calendar-component-set'],
+			[NS.IETF_CALDAV, 'supported-calendar-data'],
+			[NS.IETF_CALDAV, 'max-resource-size'],
+			[NS.IETF_CALDAV, 'min-date-time'],
+			[NS.IETF_CALDAV, 'max-date-time'],
+			[NS.IETF_CALDAV, 'max-instances'],
+			[NS.IETF_CALDAV, 'max-attendees-per-instance'],
+			[NS.IETF_CALDAV, 'supported-collation-set'],
+			[NS.IETF_CALDAV, 'calendar-free-busy-set'],
+			[NS.IETF_CALDAV, 'schedule-calendar-transp'],
+			[NS.IETF_CALDAV, 'schedule-default-calendar-URL'],
+			[NS.OWNCLOUD, 'calendar-enabled'],
+			[NS.NEXTCLOUD, 'owner-displayname']
+		]);
+	}
 
 	/**
 	 * checks if the prop part of a report requested partial data
@@ -336,4 +336,5 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 			'Z'
 		].join('');
 	}
+
 }
