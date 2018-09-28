@@ -34,7 +34,7 @@ import * as NS from '../utility/namespaceUtility.js';
 export default function davCollectionPublishableParser(props) {
 	const parsed = {};
 
-	Object.entries(props).forEach(([key, value]) => {
+	Object.entries(props).forEach(([key, value, ]) => {
 		switch (key) {
 		case '{http://calendarserver.org/ns/}publish-url':
 			parsed[key] = publishUrl(value);

@@ -35,19 +35,19 @@ import * as NS from '../utility/namespaceUtility.js';
 export default function addressBookPropSet(props) {
 	const xmlified = [];
 
-	Object.entries(props).forEach(([key, value]) => {
+	Object.entries(props).forEach(([key, value, ]) => {
 		switch (key) {
 		case '{urn:ietf:params:xml:ns:carddav}addressbook-description':
 			xmlified.push({
-				name: [NS.IETF_CARDDAV, 'addressbook-description'],
-				value: value
+				name: [NS.IETF_CARDDAV, 'addressbook-description', ],
+				value: value,
 			});
 			break;
 
 		case '{http://owncloud.org/ns}enabled':
 			xmlified.push({
-				name: [NS.OWNCLOUD, 'enabled'],
-				value: value ? '1' : '0'
+				name: [NS.OWNCLOUD, 'enabled', ],
+				value: value ? '1' : '0',
 			});
 			break;
 

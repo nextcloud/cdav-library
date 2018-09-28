@@ -20,11 +20,11 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-import { DavCollection } from './davCollection.js';
+import { DavCollection, } from './davCollection.js';
 import * as NS from '../utility/namespaceUtility.js';
-import { AddressBook } from './addressBook.js';
+import { AddressBook, } from './addressBook.js';
 
-import { debugFactory } from '../debug.js';
+import { debugFactory, } from '../debug.js';
 const debug = debugFactory('AddressBookHome');
 
 /**
@@ -65,16 +65,16 @@ export class AddressBookHome extends DavCollection {
 		debug('creating an addressbook collection');
 
 		const props = [{
-			name: [NS.DAV, 'resourcetype'],
+			name: [NS.DAV, 'resourcetype', ],
 			children: [{
-				name: [NS.DAV, 'collection']
+				name: [NS.DAV, 'collection', ],
 			}, {
-				name: [NS.IETF_CARDDAV, 'addressbook']
-			}]
+				name: [NS.IETF_CARDDAV, 'addressbook', ],
+			}, ],
 		}, {
-			name: [NS.DAV, 'displayname'],
-			value: displayname
-		}];
+			name: [NS.DAV, 'displayname', ],
+			value: displayname,
+		}, ];
 
 		const name = super._getAvailableNameFromToken(displayname);
 		return super.createCollection(name, props);

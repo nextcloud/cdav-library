@@ -39,7 +39,7 @@ import * as NS from '../utility/namespaceUtility.js';
 export default function addressBookParser(props) {
 	const parsed = {};
 
-	Object.entries(props).forEach(([key, value]) => {
+	Object.entries(props).forEach(([key, value, ]) => {
 		switch (key) {
 		case '{urn:ietf:params:xml:ns:carddav}addressbook-description':
 		case '{http://calendarserver.org/ns/}getctag':
@@ -106,7 +106,7 @@ function supportedAddressData(value) {
 	return value.map((v) => {
 		return {
 			'content-type': v.getAttribute('content-type'),
-			'version': v.getAttribute('version')
+			'version': v.getAttribute('version'),
 		};
 	});
 }

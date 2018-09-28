@@ -34,12 +34,12 @@ import * as NS from '../utility/namespaceUtility.js';
 export default function davCollectionPropSet(props) {
 	const xmlified = [];
 
-	Object.entries(props).forEach(([key, value]) => {
+	Object.entries(props).forEach(([key, value, ]) => {
 		switch (key) {
 		case '{DAV:}displayname':
 			xmlified.push({
-				name: [NS.DAV, 'displayname'],
-				value: value
+				name: [NS.DAV, 'displayname', ],
+				value: value,
 			});
 			break;
 

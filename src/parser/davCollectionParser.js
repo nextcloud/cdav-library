@@ -38,7 +38,7 @@ import * as NS from '../utility/namespaceUtility.js';
 export default function davCollectionParser(props) {
 	const parsed = {};
 
-	Object.entries(props).forEach(([key, value]) => {
+	Object.entries(props).forEach(([key, value, ]) => {
 		switch (key) {
 		case '{DAV:}acl':
 			parsed[key] = acl(value);
@@ -78,7 +78,7 @@ function acl(props) {
 		const aceChildren = ace.childNodes;
 
 		const principal = {};
-		let obj = { principal, grant: [], deny: [], protect: [], inherit: [] };
+		let obj = { principal, grant: [], deny: [], protect: [], inherit: [], };
 
 		aceChildren.forEach((aceChild) => {
 			if (aceChild.namespaceURI === 'DAV:' && aceChild.localName === 'principal') {

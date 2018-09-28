@@ -1,68 +1,68 @@
 {
-  "name": "cdav-library",
-  "version": "0.0.1",
-  "description": "CalDAV and CardDAV client library for Nextcloud",
-  "main": "dist/dist.js",
-  "scripts": {
-    "dev": "webpack --config webpack.dev.js",
-    "watch": "webpack --progress --watch --config webpack.dev.js",
-    "build": "webpack --progress --hide-modules --config webpack.prod.js",
-    "test": "./node_modules/.bin/karma start karma.conf.js",
-    "build-doc": "./node_modules/.bin/esdoc",
+	"name": "cdav-library",
+	"version": "0.0.1",
+	"description": "CalDAV and CardDAV client library for Nextcloud",
+	"main": "dist/dist.js",
+	"scripts": {
+		"dev": "webpack --config webpack.dev.js",
+		"watch": "webpack --progress --watch --config webpack.dev.js",
+		"build": "webpack --progress --hide-modules --config webpack.prod.js",
+		"test": "./node_modules/.bin/karma start karma.conf.js",
+		"build-doc": "./node_modules/.bin/esdoc",
 		"lint": "eslint --ext .js src",
 		"lint:fix": "eslint --ext .js src --fix"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nextcloud/cdav-library.git"
-  },
-  "keywords": [
-    "caldav",
-    "carddav",
-    "nextcloud",
-    "rfc4791",
-    "rfc6352"
-  ],
-  "author": "Georg Ehrke",
-  "license": "AGPL-3.0",
-  "private": true,
-  "bugs": {
-    "url": "https://github.com/nextcloud/cdav-library/issues"
-  },
-  "homepage": "https://github.com/nextcloud/cdav-library#readme",
-  "babel": {
-    "presets": [
-      "@babel/preset-stage-3",
-      "@babel/preset-env"
-    ]
-  },
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/nextcloud/cdav-library.git"
+	},
+	"keywords": [
+		"caldav",
+		"carddav",
+		"nextcloud",
+		"rfc4791",
+		"rfc6352"
+	],
+	"author": "Georg Ehrke",
+	"license": "AGPL-3.0",
+	"private": true,
+	"bugs": {
+		"url": "https://github.com/nextcloud/cdav-library/issues"
+	},
+	"homepage": "https://github.com/nextcloud/cdav-library#readme",
+	"babel": {
+		"presets": [
+			"@babel/preset-stage-3",
+			"@babel/preset-env"
+		]
+	},
 	"engines": {
 		"node": ">=10.0.0"
 	},
-  "devDependencies": {
-    "esdoc": "^1.1.0",
-    "esdoc-standard-plugin": "^1.0.0",
-    "eslint": "^5.6.0",
-    "eslint-config-standard": "^12.0.0",
-    "eslint-loader": "^2.1.1",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-node": "^7.0.1",
-    "eslint-plugin-promise": "^4.0.1",
-    "eslint-plugin-standard": "^4.0.0",
-    "istanbul": "^0.4.5",
-    "jasmine": "^3.2.0",
-    "karma": "^3.0.0",
-    "karma-coverage": "^1.1.2",
-    "karma-firefox-launcher": "^1.1.0",
-    "karma-jasmine": "^1.1.2",
-    "karma-mocha-reporter": "^2.2.5",
-    "webpack": "^4.18.0",
-    "webpack-cli": "^3.1.0",
-    "webpack-merge": "^4.1.4"
-  },
-  "dependencies": {
-    "davclient.js": "git+https://github.com/owncloud/davclient.js.git",
-    "compare-urls": "^2.0.0",
-    "normalize-url": "^3.3.0"
-  }
+	"devDependencies": {
+		"esdoc": "^1.1.0",
+		"esdoc-standard-plugin": "^1.0.0",
+		"eslint": "^5.6.0",
+		"eslint-config-standard": "^12.0.0",
+		"eslint-loader": "^2.1.1",
+		"eslint-plugin-import": "^2.14.0",
+		"eslint-plugin-node": "^7.0.1",
+		"eslint-plugin-promise": "^4.0.1",
+		"eslint-plugin-standard": "^4.0.0",
+		"istanbul": "^0.4.5",
+		"jasmine": "^3.2.0",
+		"karma": "^3.0.0",
+		"karma-coverage": "^1.1.2",
+		"karma-firefox-launcher": "^1.1.0",
+		"karma-jasmine": "^1.1.2",
+		"karma-mocha-reporter": "^2.2.5",
+		"webpack": "^4.18.0",
+		"webpack-cli": "^3.1.0",
+		"webpack-merge": "^4.1.4"
+	},
+	"dependencies": {
+		"davclient.js": "git+https://github.com/owncloud/davclient.js.git",
+		"compare-urls": "^2.0.0",
+		"normalize-url": "^3.3.0"
+	}
 }

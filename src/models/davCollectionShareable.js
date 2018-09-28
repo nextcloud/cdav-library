@@ -24,7 +24,7 @@ import * as NS from '../utility/namespaceUtility.js';
 import * as XMLUtility from '../utility/xmlUtility.js';
 import davCollectionShareableParser from '../parser/davCollectionShareableParser.js';
 
-import { debugFactory } from '../debug.js';
+import { debugFactory, } from '../debug.js';
 const debug = debugFactory('DavCollectionShareable');
 
 export function davCollectionShareable(Base) {
@@ -51,29 +51,29 @@ export function davCollectionShareable(Base) {
 		async share(principalUri, readWrite, summary) {
 			debug(`Sharing ${super.url} with ${principalUri}`);
 
-			const [skeleton, oSetChildren] = XMLUtility.getRootSkeleton(
-				[NS.OWNCLOUD, 'share'], [NS.OWNCLOUD, 'set']);
+			const [skeleton, oSetChildren, ] = XMLUtility.getRootSkeleton(
+				[NS.OWNCLOUD, 'share', ], [NS.OWNCLOUD, 'set', ]);
 
 			oSetChildren.push({
-				name: [NS.DAV, 'href'],
-				value: principalUri
+				name: [NS.DAV, 'href', ],
+				value: principalUri,
 			});
 
 			if (readWrite) {
 				oSetChildren.push({
-					name: [NS.OWNCLOUD, 'read-write']
+					name: [NS.OWNCLOUD, 'read-write', ],
 				});
 			}
 			if (summary) {
 				oSetChildren.push({
-					name: [NS.OWNCLOUD, 'summary'],
-					value: summary
+					name: [NS.OWNCLOUD, 'summary', ],
+					value: summary,
 				});
 			}
 
 			const xml = XMLUtility.serialize(skeleton);
 			return super._request.post(this._url, {
-				'Content-Type': 'application/xml; charset=utf-8'
+				'Content-Type': 'application/xml; charset=utf-8',
 			}, xml).then((res) => {
 				// TODO - add to existing data
 
@@ -90,17 +90,17 @@ export function davCollectionShareable(Base) {
 		async unshare(principalUri) {
 			debug(`Unsharing ${super.url} with ${principalUri}`);
 
-			const [skeleton, oSetChildren] = XMLUtility.getRootSkeleton(
-				[NS.OWNCLOUD, 'share'], [NS.OWNCLOUD, 'remove']);
+			const [skeleton, oSetChildren, ] = XMLUtility.getRootSkeleton(
+				[NS.OWNCLOUD, 'share', ], [NS.OWNCLOUD, 'remove', ]);
 
 			oSetChildren.push({
-				name: [NS.DAV, 'href'],
-				value: principalUri
+				name: [NS.DAV, 'href', ],
+				value: principalUri,
 			});
 
 			const xml = XMLUtility.serialize(skeleton);
 			return super._request.post(this._url, {
-				'Content-Type': 'application/xml; charset=utf-8'
+				'Content-Type': 'application/xml; charset=utf-8',
 			}, xml).then((res) => {
 				// TODO - add to existing data
 
@@ -127,8 +127,8 @@ export function davCollectionShareable(Base) {
 		 */
 		static getPropFindList() {
 			return super.getPropFindList().concat([
-				[NS.OWNCLOUD, 'invite'],
-				[NS.CALENDARSERVER, 'allowed-sharing-modes']
+				[NS.OWNCLOUD, 'invite', ],
+				[NS.CALENDARSERVER, 'allowed-sharing-modes', ],
 			]);
 		}
 

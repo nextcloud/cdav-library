@@ -24,7 +24,7 @@
 import DAVEventListener from './davEventListener.js';
 import * as NS from '../utility/namespaceUtility.js';
 
-import { debugFactory } from '../debug.js';
+import { debugFactory, } from '../debug.js';
 const debug = debugFactory('DavObject');
 
 /**
@@ -51,14 +51,14 @@ export class DavObject extends DAVEventListener {
 			_props: props,
 			// housekeeping
 			_isPartial: isPartial,
-			_isDirty: false
+			_isDirty: false,
 		});
 
 		this._exposeProperty('etag', NS.DAV, 'getetag');
 		this._exposeProperty('contenttype', NS.DAV, 'getcontenttype');
 
 		Object.defineProperty(this, 'url', {
-			get: () => this._url
+			get: () => this._url,
 		});
 	}
 
@@ -118,7 +118,7 @@ export class DavObject extends DAVEventListener {
 		}
 
 		const headers = {
-			'If-Match': this.etag
+			'If-Match': this.etag,
 		};
 
 		// TODO - update E-TAG
@@ -162,11 +162,11 @@ export class DavObject extends DAVEventListener {
 				set: (val) => {
 					this._isDirty = true;
 					this._props[`{${xmlNamespace}}${xmlName}`] = val;
-				}
+				},
 			});
 		} else {
 			Object.defineProperty(this, localName, {
-				get: () => this._props[`{${xmlNamespace}}${xmlName}`]
+				get: () => this._props[`{${xmlNamespace}}${xmlName}`],
 			});
 		}
 	}
@@ -176,9 +176,9 @@ export class DavObject extends DAVEventListener {
 	 */
 	static getPropFindList() {
 		return [
-			[NS.DAV, 'getcontenttype'],
-			[NS.DAV, 'getetag'],
-			[NS.DAV, 'resourcetype']
+			[NS.DAV, 'getcontenttype', ],
+			[NS.DAV, 'getetag', ],
+			[NS.DAV, 'resourcetype', ],
 		];
 	}
 
