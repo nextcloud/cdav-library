@@ -54,7 +54,7 @@ export class DavObject extends DAVEventListener {
 			_isDirty: false
 		});
 
-		this._exposeProperty('etag', NS.DAV, 'getetag');
+		this._exposeProperty('etag', NS.DAV, 'getetag', true);
 		this._exposeProperty('contenttype', NS.DAV, 'getcontenttype');
 
 		Object.defineProperty(this, 'url', {
@@ -121,10 +121,15 @@ export class DavObject extends DAVEventListener {
 			'If-Match': this.etag,
 		};
 
-		// TODO - update E-TAG
 		// TODO - update Content-Type? should stay the same but let's be on the safe side
 		return this._request.put(this.url, headers, this.data).then((res) => {
-			this._isDirty = false;
+			if (res.status === 412) {
+				// wrong etag do not update the new etag
+				this._isPartial = true;
+			} else {
+				this._isDirty = false;
+				this.etag = res.xhr.getResponseHeader('etag');
+			}
 			return res;
 		});
 	}
