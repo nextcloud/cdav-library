@@ -1,0 +1,185 @@
+/**
+ * CDAV Library
+ *
+ * This library is part of the Nextcloud project
+ *
+ * @author Georg Ehrke
+ * @copyright 2018 Georg Ehrke <oc.list@georgehrke.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU AFFERO GENERAL PUBLIC LICENSE for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public
+ * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ */
+import { DavCollection, } from './davCollection.js';
+import { Calendar, } from './calendar.js';
+import { Subscription, } from './subscription.js';
+import ScheduleInbox from './scheduleInbox.js';
+import ScheduleOutbox from './scheduleOutbox.js';
+import * as NS from '../utility/namespaceUtility.js';
+
+import { debugFactory, } from '../debug.js';
+const debug = debugFactory('CalendarHome');
+
+/**
+ * This class represents a calendar home as specified in
+ * https://tools.ietf.org/html/rfc4791#section-6.2.1
+ *
+ * As of this versions' release, the Nextcloud server will always
+ * return only one calendar home. Despite that, RFC4791 allows
+ * a server to return multiple calendar homes though.
+ */
+export class CalendarHome extends DavCollection {
+
+	/**
+	 * @inheritDoc
+	 */
+	constructor(...args) {
+		super(...args);
+
+		super._registerCollectionFactory('{' + NS.IETF_CALDAV + '}calendar', Calendar);
+		super._registerCollectionFactory('{' + NS.CALENDARSERVER + '}subscribed', Subscription);
+		super._registerCollectionFactory('{' + NS.IETF_CALDAV + '}schedule-inbox', ScheduleInbox);
+		super._registerCollectionFactory('{' + NS.IETF_CALDAV + '}schedule-outbox', ScheduleOutbox);
+	}
+
+	/**
+	 * finds all CalDAV-specific collections in this calendar home
+	 *
+	 * @returns {Promise<Calendar[]|Subscription[]|ScheduleInbox[]|ScheduleOutbox[]>}
+	 */
+	async findAllCalDAVCollections() {
+		return super.findAllByFilter((elm) => elm instanceof Calendar || elm instanceof Subscription
+			|| elm instanceof ScheduleInbox || elm instanceof ScheduleOutbox);
+	}
+
+	/**
+	 * finds all calendars in this calendar home
+	 *
+	 * @returns {Promise<Calendar[]>}
+	 */
+	async findAllCalendars() {
+		return super.findAllByFilter((elm) => elm instanceof Calendar);
+	}
+
+	/**
+	 * finds all subscriptions in this calendar home
+	 *
+	 * @returns {Promise<Subscription[]>}
+	 */
+	async findAllSubscriptions() {
+		return super.findAllByFilter((elm) => elm instanceof Subscription);
+	}
+
+	/**
+	 * finds all schedule inboxes in this calendar home
+	 *
+	 * @returns {Promise<ScheduleInbox[]>}
+	 */
+	async findAllScheduleInboxes() {
+		return super.findAllByFilter((elm) => elm instanceof ScheduleInbox);
+	}
+
+	/**
+	 * finds all schedule outboxes in this calendar home
+	 *
+	 * @returns {Promise<ScheduleOutbox[]>}
+	 */
+	async findAllScheduleOutboxes() {
+		return super.findAllByFilter((elm) => elm instanceof ScheduleOutbox);
+	}
+
+	/**
+     * creates a new calendar collection
+	 *
+     * @param {String} displayname
+     * @param {String} color
+     * @returns {Promise<Calendar>}
+     */
+	async createCalendarCollection(displayname, color) {
+		debug('creating a calendar collection');
+
+		const props = [{
+			name: [NS.DAV, 'resourcetype', ],
+			children: [{
+				name: [NS.DAV, 'collection', ],
+			}, {
+				name: [NS.IETF_CALDAV, 'calendar', ],
+			}, ],
+		}, {
+			name: [NS.DAV, 'displayname', ],
+			value: displayname,
+		}, {
+			name: [NS.APPLE, 'calendar-color', ],
+			value: color,
+		}, {
+			name: [NS.OWNCLOUD, 'calendar-enabled', ],
+			value: '1',
+		}, ];
+
+		const name = super._getAvailableNameFromToken(displayname);
+		return super.createCollection(name, props);
+	}
+
+	/**
+	 * creates a new subscription
+	 *
+     * @param {String} displayname
+     * @param {String} color
+     * @param {String} source
+     * @returns {Promise<Subscription>}
+     */
+	async createSubscribedCollection(displayname, color, source) {
+		debug('creating a subscribed collection');
+
+		const props = [{
+			name: [NS.DAV, 'resourcetype', ],
+			children: [{
+				name: [NS.DAV, 'collection', ],
+			}, {
+				name: [NS.CALENDARSERVER, 'subscribed', ],
+			}, ],
+		}, {
+			name: [NS.DAV, 'displayname', ],
+			value: displayname,
+		}, {
+			name: [NS.APPLE, 'calendar-color', ],
+			value: color,
+		}, {
+			name: [NS.OWNCLOUD, 'calendar-enabled', ],
+			value: '1',
+		}, {
+			name: [NS.CALENDARSERVER, 'source', ],
+			children: [{
+				name: [NS.DAV, 'href', ],
+				value: source,
+			}, ],
+		}, ];
+
+		const name = super._getAvailableNameFromToken(displayname);
+		return super.createCollection(name, props);
+	}
+
+	/**
+     * Search all calendars the user has access to
+     * This method makes use of Nextcloud's custom
+     * calendar Search API
+     *
+     * Documentation about that API can be found at: ...
+     *
+     * @returns {Promise<VObject[]>}
+     */
+	async search() {
+		// TODO - implement me
+	}
+
+}
