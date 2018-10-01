@@ -21,7 +21,7 @@
  *
  */
 
-import * as NS from "../utility/namespaceUtility.js";
+import * as NS from '../utility/namespaceUtility.js';
 
 /**
  *
@@ -39,55 +39,55 @@ import * as NS from "../utility/namespaceUtility.js";
 export default function calendarPropSet(props) {
 	const xmlified = [];
 
-	Object.entries(props).forEach(([key, value]) => {
+	Object.entries(props).forEach(([key, value, ]) => {
 		switch (key) {
-			case '{http://apple.com/ns/ical/}calendar-order':
-				xmlified.push({
-					name: [NS.APPLE, 'calendar-order'],
-					value: value
-				});
-				break;
+		case '{http://apple.com/ns/ical/}calendar-order':
+			xmlified.push({
+				name: [NS.APPLE, 'calendar-order', ],
+				value: value,
+			});
+			break;
 
-			case '{http://apple.com/ns/ical/}calendar-color':
-				xmlified.push({
-					name: [NS.APPLE, 'calendar-color'],
-					value: value
-				});
-				break;
+		case '{http://apple.com/ns/ical/}calendar-color':
+			xmlified.push({
+				name: [NS.APPLE, 'calendar-color', ],
+				value: value,
+			});
+			break;
 
-			case '{http://calendarserver.org/ns/}source':
-				xmlified.push({
-					name: [NS.CALENDARSERVER, 'source'],
-					children: [{
-						name: [NS.DAV, 'href'],
-						value: value
-					}]
-				});
-				break;
+		case '{http://calendarserver.org/ns/}source':
+			xmlified.push({
+				name: [NS.CALENDARSERVER, 'source', ],
+				children: [{
+					name: [NS.DAV, 'href', ],
+					value: value,
+				}, ],
+			});
+			break;
 
-			case '{urn:ietf:params:xml:ns:caldav}calendar-description':
-				xmlified.push({
-					name: [NS.IETF_CALDAV, 'calendar-description'],
-					value: value
-				});
-				break;
+		case '{urn:ietf:params:xml:ns:caldav}calendar-description':
+			xmlified.push({
+				name: [NS.IETF_CALDAV, 'calendar-description', ],
+				value: value,
+			});
+			break;
 
-			case '{urn:ietf:params:xml:ns:caldav}calendar-timezone':
-				xmlified.push({
-					name: [NS.IETF_CALDAV, 'calendar-timezone'],
-					value: value
-				});
-				break;
+		case '{urn:ietf:params:xml:ns:caldav}calendar-timezone':
+			xmlified.push({
+				name: [NS.IETF_CALDAV, 'calendar-timezone', ],
+				value: value,
+			});
+			break;
 
-			case '{http://owncloud.org/ns}calendar-enabled':
-				xmlified.push({
-					name: [NS.OWNCLOUD, 'calendar-enabled'],
-					value: value ? '1' : '0'
-				});
-				break;
+		case '{http://owncloud.org/ns}calendar-enabled':
+			xmlified.push({
+				name: [NS.OWNCLOUD, 'calendar-enabled', ],
+				value: value ? '1' : '0',
+			});
+			break;
 
-			default:
-				break;
+		default:
+			break;
 		}
 	});
 

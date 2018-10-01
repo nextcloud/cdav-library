@@ -29,9 +29,9 @@
 export function debugFactory(context) {
 	return (...args) => {
 		if (debugFactory.enabled) {
-			console.log(context, args);
+			console.debug(context, args);
 		}
-	}
+	};
 }
 
 debugFactory.enabled = false;

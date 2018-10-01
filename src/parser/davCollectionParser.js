@@ -21,7 +21,7 @@
  *
  */
 
-import * as NS from "../utility/namespaceUtility.js";
+import * as NS from '../utility/namespaceUtility.js';
 
 /**
  *
@@ -38,27 +38,27 @@ import * as NS from "../utility/namespaceUtility.js";
 export default function davCollectionParser(props) {
 	const parsed = {};
 
-	Object.entries(props).forEach(([key, value]) => {
+	Object.entries(props).forEach(([key, value, ]) => {
 		switch (key) {
-			case '{DAV:}acl':
-				parsed[key] = acl(value);
-				break;
+		case '{DAV:}acl':
+			parsed[key] = acl(value);
+			break;
 
-			case '{DAV:}displayname':
-			case '{DAV:}sync-token':
-				parsed[key] = simpleText(value);
-				break;
+		case '{DAV:}displayname':
+		case '{DAV:}sync-token':
+			parsed[key] = simpleText(value);
+			break;
 
-			case '{DAV:}owner':
-				parsed[key] = owner(value);
-				break;
+		case '{DAV:}owner':
+			parsed[key] = owner(value);
+			break;
 
-			case '{DAV:}resourcetype':
-				parsed[key] = resourceType(value);
-				break;
+		case '{DAV:}resourcetype':
+			parsed[key] = resourceType(value);
+			break;
 
-			default:
-				break;
+		default:
+			break;
 		}
 	});
 
@@ -78,7 +78,7 @@ function acl(props) {
 		const aceChildren = ace.childNodes;
 
 		const principal = {};
-		let obj = {principal, grant: [], deny: [], protect: [], inherit: []};
+		let obj = { principal, grant: [], deny: [], protect: [], inherit: [], };
 
 		aceChildren.forEach((aceChild) => {
 			if (aceChild.namespaceURI === 'DAV:' && aceChild.localName === 'principal') {
@@ -135,6 +135,6 @@ function owner(prop) {
 
 function resourceType(prop) {
 	return prop.map((prop) => {
-		return '{' + prop.namespaceURI + '}' + prop.localName
+		return '{' + prop.namespaceURI + '}' + prop.localName;
 	});
 }

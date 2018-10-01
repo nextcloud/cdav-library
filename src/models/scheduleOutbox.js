@@ -21,7 +21,7 @@
  *
  */
 
-import {DavCollection} from "./davCollection.js";
+import { DavCollection, } from './davCollection.js';
 
 export default class ScheduleOutbox extends DavCollection {
 	// TODO implement me

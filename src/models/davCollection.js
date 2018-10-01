@@ -20,15 +20,15 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-import * as NS from '../utility/namespaceUtility.js'
-import * as StringUtility from '../utility/stringUtility.js'
-import * as XMLUtility from '../utility/xmlUtility.js'
-import DAVEventListener from './davEventListener.js'
-import davCollectionParser from "../parser/davCollectionParser.js"
+import * as NS from '../utility/namespaceUtility.js';
+import * as StringUtility from '../utility/stringUtility.js';
+import * as XMLUtility from '../utility/xmlUtility.js';
+import DAVEventListener from './davEventListener.js';
+import davCollectionParser from '../parser/davCollectionParser.js';
 
-import {debugFactory} from "../debug.js";
-import davCollectionPropSet from "../propset/davCollectionPropSet.js";
-import {DavObject} from "./davObject.js";
+import { debugFactory, } from '../debug.js';
+import davCollectionPropSet from '../propset/davCollectionPropSet.js';
+import { DavObject, } from './davObject.js';
 const debug = debugFactory('DavCollection');
 
 export class DavCollection extends DAVEventListener {
@@ -74,7 +74,7 @@ export class DavCollection extends DAVEventListener {
 		this._exposeProperty('syncToken', NS.DAV, 'sync-token');
 
 		Object.defineProperty(this, 'url', {
-			get: () => this._url
+			get: () => this._url,
 		});
 	}
 
@@ -107,7 +107,7 @@ export class DavCollection extends DAVEventListener {
 	 */
 	async find(uri) {
 		const response = await this._request.propFind(this._url + uri, this._propFindList, 0);
-		return this._handleMultiStatusResponse({ [this._url + uri]: response }, false)[0];
+		return this._handleMultiStatusResponse({ [this._url + uri]: response, }, false)[0];
 	}
 
 	/**
@@ -127,10 +127,10 @@ export class DavCollection extends DAVEventListener {
 	async createCollection(name, props) {
 		debug('creating a collection');
 
-		const [skeleton, dPropChildren] = XMLUtility.getRootSkeleton(
-			[NS.DAV, 'mkcol'],
-			[NS.DAV, 'set'],
-			[NS.DAV, 'prop']
+		const [skeleton, dPropChildren, ] = XMLUtility.getRootSkeleton(
+			[NS.DAV, 'mkcol', ],
+			[NS.DAV, 'set', ],
+			[NS.DAV, 'prop', ]
 		);
 
 		props.forEach((prop) => {
@@ -176,14 +176,14 @@ export class DavCollection extends DAVEventListener {
 
 		const properties = {};
 		this._updatedProperties.forEach((updatedProperty) => {
-			properties[updatedProperty] = this._props[updatedProperty]
+			properties[updatedProperty] = this._props[updatedProperty];
 		});
-		const propSet = this._propSetFactory.reduce((arr, p) => [...arr, ...p(properties)], []);
+		const propSet = this._propSetFactory.reduce((arr, p) => [...arr, ...p(properties), ], []);
 
-		const [skeleton, dPropSet] = XMLUtility.getRootSkeleton(
-			[NS.DAV, 'propertyupdate'],
-			[NS.DAV, 'set'],
-			[NS.DAV, 'prop']);
+		const [skeleton, dPropSet, ] = XMLUtility.getRootSkeleton(
+			[NS.DAV, 'propertyupdate', ],
+			[NS.DAV, 'set', ],
+			[NS.DAV, 'prop', ]);
 
 		dPropSet.push(...propSet);
 
@@ -252,7 +252,7 @@ export class DavCollection extends DAVEventListener {
 	 * @param {boolean} mutable
 	 * @returns void
 	 */
-	_exposeProperty(localName, xmlNamespace, xmlName, mutable=false) {
+	_exposeProperty(localName, xmlNamespace, xmlName, mutable = false) {
 		if (mutable) {
 			Object.defineProperty(this, localName, {
 				get: () => this._props[`{${xmlNamespace}}${xmlName}`],
@@ -261,11 +261,11 @@ export class DavCollection extends DAVEventListener {
 					if (this._updatedProperties.indexOf(`{${xmlNamespace}}${xmlName}`) === -1) {
 						this._updatedProperties.push(`{${xmlNamespace}}${xmlName}`);
 					}
-				}
+				},
 			});
 		} else {
 			Object.defineProperty(this, localName, {
-				get: () => this._props[`{${xmlNamespace}}${xmlName}`]
+				get: () => this._props[`{${xmlNamespace}}${xmlName}`],
 			});
 		}
 	}
@@ -277,8 +277,8 @@ export class DavCollection extends DAVEventListener {
 	 */
 	_getAvailableNameFromToken(token) {
 		return StringUtility.uri(token, name => {
-			return this._childrenNames.indexOf(this._url + name) === -1 &&
-				this._childrenNames.indexOf(this._url + name + '/') === -1;
+			return this._childrenNames.indexOf(this._url + name) === -1
+				&& this._childrenNames.indexOf(this._url + name + '/') === -1;
 		});
 	}
 
@@ -288,11 +288,11 @@ export class DavCollection extends DAVEventListener {
 	 * @returns {Object}
 	 * @protected
 	 */
-	_handleMultiStatusResponse(response, isPartial=false) {
+	_handleMultiStatusResponse(response, isPartial = false) {
 		const index = [];
 		const children = [];
 
-		Object.entries(response).forEach(([path, props]) => {
+		Object.entries(response).forEach(([path, props, ]) => {
 			// The DAV Server will always return a propStat
 			// block containing properties of the current url
 			// we are not interested, so let's filter it out
@@ -347,14 +347,15 @@ export class DavCollection extends DAVEventListener {
 	 */
 	static getPropFindList() {
 		return [
-			[NS.DAV, 'acl'],
-			[NS.DAV, 'displayname'],
-			[NS.DAV, 'owner'],
-			[NS.DAV, 'resourcetype'],
-			[NS.DAV, 'sync-token'],
-			[NS.DAV, 'current-user-privilege-set']
+			[NS.DAV, 'acl', ],
+			[NS.DAV, 'displayname', ],
+			[NS.DAV, 'owner', ],
+			[NS.DAV, 'resourcetype', ],
+			[NS.DAV, 'sync-token', ],
+			[NS.DAV, 'current-user-privilege-set', ],
 		];
 	}
+
 }
 
 /**

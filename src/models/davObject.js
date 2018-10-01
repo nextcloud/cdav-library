@@ -21,10 +21,10 @@
  *
  */
 
-import DAVEventListener from "./davEventListener.js";
-import * as NS from "../utility/namespaceUtility.js";
+import DAVEventListener from './davEventListener.js';
+import * as NS from '../utility/namespaceUtility.js';
 
-import {debugFactory} from "../debug.js";
+import { debugFactory, } from '../debug.js';
 const debug = debugFactory('DavObject');
 
 /**
@@ -40,7 +40,7 @@ export class DavObject extends DAVEventListener {
 	 * @param {Object} props - Properties including etag, content-type, etc.
 	 * @param {boolean} isPartial - Are we dealing with the complete or just partial addressbook / calendar data
 	 */
-	constructor(parent, request, url, props, isPartial=false) {
+	constructor(parent, request, url, props, isPartial = false) {
 		super();
 
 		Object.assign(this, {
@@ -51,14 +51,14 @@ export class DavObject extends DAVEventListener {
 			_props: props,
 			// housekeeping
 			_isPartial: isPartial,
-			_isDirty: false
+			_isDirty: false,
 		});
 
 		this._exposeProperty('etag', NS.DAV, 'getetag', true);
 		this._exposeProperty('contenttype', NS.DAV, 'getcontenttype');
 
 		Object.defineProperty(this, 'url', {
-			get: () => this._url
+			get: () => this._url,
 		});
 	}
 
@@ -160,18 +160,18 @@ export class DavObject extends DAVEventListener {
 	 * @param {boolean} mutable
 	 * @returns void
 	 */
-	_exposeProperty(localName, xmlNamespace, xmlName, mutable=false) {
+	_exposeProperty(localName, xmlNamespace, xmlName, mutable = false) {
 		if (mutable) {
 			Object.defineProperty(this, localName, {
 				get: () => this._props[`{${xmlNamespace}}${xmlName}`],
 				set: (val) => {
 					this._isDirty = true;
 					this._props[`{${xmlNamespace}}${xmlName}`] = val;
-				}
+				},
 			});
 		} else {
 			Object.defineProperty(this, localName, {
-				get: () => this._props[`{${xmlNamespace}}${xmlName}`]
+				get: () => this._props[`{${xmlNamespace}}${xmlName}`],
 			});
 		}
 	}
@@ -181,9 +181,10 @@ export class DavObject extends DAVEventListener {
 	 */
 	static getPropFindList() {
 		return [
-			[NS.DAV, 'getcontenttype'],
-			[NS.DAV, 'getetag'],
-			[NS.DAV, 'resourcetype']
+			[NS.DAV, 'getcontenttype', ],
+			[NS.DAV, 'getetag', ],
+			[NS.DAV, 'resourcetype', ],
 		];
 	}
+
 }

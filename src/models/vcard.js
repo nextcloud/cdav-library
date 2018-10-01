@@ -21,8 +21,8 @@
  *
  */
 
-import {DavObject} from "./davObject.js";
-import * as NS from "../utility/namespaceUtility.js";
+import { DavObject, } from './davObject.js';
+import * as NS from '../utility/namespaceUtility.js';
 
 /**
  * @class
@@ -48,7 +48,8 @@ export class VCard extends DavObject {
 	 */
 	static getPropFindList() {
 		return super.getPropFindList().concat([
-			[NS.IETF_CARDDAV, 'address-data'],
+			[NS.IETF_CARDDAV, 'address-data', ],
 		]);
 	}
+
 }

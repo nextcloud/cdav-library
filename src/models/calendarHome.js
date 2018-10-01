@@ -20,14 +20,14 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-import {DavCollection} from "./davCollection.js";
-import {Calendar} from "./calendar.js";
-import {Subscription} from "./subscription.js";
-import ScheduleInbox from "./scheduleInbox.js";
-import ScheduleOutbox from "./scheduleOutbox.js";
-import * as NS from '../utility/namespaceUtility.js'
+import { DavCollection, } from './davCollection.js';
+import { Calendar, } from './calendar.js';
+import { Subscription, } from './subscription.js';
+import ScheduleInbox from './scheduleInbox.js';
+import ScheduleOutbox from './scheduleOutbox.js';
+import * as NS from '../utility/namespaceUtility.js';
 
-import {debugFactory} from "../debug.js";
+import { debugFactory, } from '../debug.js';
 const debug = debugFactory('CalendarHome');
 
 /**
@@ -46,11 +46,11 @@ export class CalendarHome extends DavCollection {
 	constructor(...args) {
 		super(...args);
 
-        super._registerCollectionFactory('{' + NS.IETF_CALDAV + '}calendar', Calendar);
-        super._registerCollectionFactory('{' + NS.CALENDARSERVER + '}subscribed', Subscription);
-        super._registerCollectionFactory('{' + NS.IETF_CALDAV + '}schedule-inbox', ScheduleInbox);
-        super._registerCollectionFactory('{' + NS.IETF_CALDAV + '}schedule-outbox', ScheduleOutbox);
-    }
+		super._registerCollectionFactory('{' + NS.IETF_CALDAV + '}calendar', Calendar);
+		super._registerCollectionFactory('{' + NS.CALENDARSERVER + '}subscribed', Subscription);
+		super._registerCollectionFactory('{' + NS.IETF_CALDAV + '}schedule-inbox', ScheduleInbox);
+		super._registerCollectionFactory('{' + NS.IETF_CALDAV + '}schedule-outbox', ScheduleOutbox);
+	}
 
 	/**
 	 * finds all CalDAV-specific collections in this calendar home
@@ -58,8 +58,8 @@ export class CalendarHome extends DavCollection {
 	 * @returns {Promise<Calendar[]|Subscription[]|ScheduleInbox[]|ScheduleOutbox[]>}
 	 */
 	async findAllCalDAVCollections() {
-		return super.findAllByFilter((elm) => elm instanceof Calendar || elm instanceof Subscription ||
-			elm instanceof ScheduleInbox || elm instanceof ScheduleOutbox);
+		return super.findAllByFilter((elm) => elm instanceof Calendar || elm instanceof Subscription
+			|| elm instanceof ScheduleInbox || elm instanceof ScheduleOutbox);
 	}
 
 	/**
@@ -98,39 +98,39 @@ export class CalendarHome extends DavCollection {
 		return super.findAllByFilter((elm) => elm instanceof ScheduleOutbox);
 	}
 
-    /**
+	/**
      * creates a new calendar collection
 	 *
      * @param {String} displayname
      * @param {String} color
      * @returns {Promise<Calendar>}
      */
-    async createCalendarCollection(displayname, color) {
-        debug('creating a calendar collection');
+	async createCalendarCollection(displayname, color) {
+		debug('creating a calendar collection');
 
-        const props = [{
-            name: [NS.DAV, 'resourcetype'],
-            children: [{
-                name: [NS.DAV, 'collection']
-            }, {
-                name: [NS.IETF_CALDAV, 'calendar']
-            }]
-        }, {
-            name: [NS.DAV, 'displayname'],
-            value: displayname
-        }, {
-            name: [NS.APPLE, 'calendar-color'],
-            value: color
-        }, {
-            name: [NS.OWNCLOUD, 'calendar-enabled'],
-            value: '1'
-        }];
+		const props = [{
+			name: [NS.DAV, 'resourcetype', ],
+			children: [{
+				name: [NS.DAV, 'collection', ],
+			}, {
+				name: [NS.IETF_CALDAV, 'calendar', ],
+			}, ],
+		}, {
+			name: [NS.DAV, 'displayname', ],
+			value: displayname,
+		}, {
+			name: [NS.APPLE, 'calendar-color', ],
+			value: color,
+		}, {
+			name: [NS.OWNCLOUD, 'calendar-enabled', ],
+			value: '1',
+		}, ];
 
-        const name = super._getAvailableNameFromToken(displayname);
-        return super.createCollection(name, props);
-    }
+		const name = super._getAvailableNameFromToken(displayname);
+		return super.createCollection(name, props);
+	}
 
-    /**
+	/**
 	 * creates a new subscription
 	 *
      * @param {String} displayname
@@ -138,38 +138,38 @@ export class CalendarHome extends DavCollection {
      * @param {String} source
      * @returns {Promise<Subscription>}
      */
-    async createSubscribedCollection(displayname, color, source) {
-        debug('creating a subscribed collection');
+	async createSubscribedCollection(displayname, color, source) {
+		debug('creating a subscribed collection');
 
-        const props = [{
-            name: [NS.DAV, 'resourcetype'],
-            children: [{
-                name: [NS.DAV, 'collection']
-            }, {
-                name: [NS.CALENDARSERVER, 'subscribed']
-            }]
-        }, {
-            name: [NS.DAV, 'displayname'],
-            value: displayname
-        }, {
-            name: [NS.APPLE, 'calendar-color'],
-            value: color
-        }, {
-            name: [NS.OWNCLOUD, 'calendar-enabled'],
-            value: '1'
-        }, {
-            name: [NS.CALENDARSERVER, 'source'],
-            children: [{
-                name: [NS.DAV, 'href'],
-                value: source
-            }]
-        }];
+		const props = [{
+			name: [NS.DAV, 'resourcetype', ],
+			children: [{
+				name: [NS.DAV, 'collection', ],
+			}, {
+				name: [NS.CALENDARSERVER, 'subscribed', ],
+			}, ],
+		}, {
+			name: [NS.DAV, 'displayname', ],
+			value: displayname,
+		}, {
+			name: [NS.APPLE, 'calendar-color', ],
+			value: color,
+		}, {
+			name: [NS.OWNCLOUD, 'calendar-enabled', ],
+			value: '1',
+		}, {
+			name: [NS.CALENDARSERVER, 'source', ],
+			children: [{
+				name: [NS.DAV, 'href', ],
+				value: source,
+			}, ],
+		}, ];
 
-        const name = super._getAvailableNameFromToken(displayname);
-        return super.createCollection(name, props);
-    }
+		const name = super._getAvailableNameFromToken(displayname);
+		return super.createCollection(name, props);
+	}
 
-    /**
+	/**
      * Search all calendars the user has access to
      * This method makes use of Nextcloud's custom
      * calendar Search API
@@ -178,7 +178,8 @@ export class CalendarHome extends DavCollection {
      *
      * @returns {Promise<VObject[]>}
      */
-    async search() {
-        // TODO - implement me
-    }
+	async search() {
+		// TODO - implement me
+	}
+
 }
