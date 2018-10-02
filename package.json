@@ -61,8 +61,6 @@
 		"webpack-merge": "^4.1.4"
 	},
 	"dependencies": {
-		"davclient.js": "git+https://github.com/owncloud/davclient.js.git",
-		"compare-urls": "^2.0.0",
-		"normalize-url": "^3.3.0"
+		"davclient.js": "git+https://github.com/owncloud/davclient.js.git"
 	}
 }
