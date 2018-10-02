@@ -24,7 +24,7 @@ import * as NS from '../utility/namespaceUtility.js';
 import * as XMLUtility from '../utility/xmlUtility.js';
 import davCollectionPublishableParser from '../parser/davCollectionPublishableParser.js';
 
-import { debugFactory, } from '../debug.js';
+import { debugFactory } from '../debug.js';
 const debug = debugFactory('DavCollectionPublishable');
 
 export function davCollectionPublishable(Base) {
@@ -47,12 +47,12 @@ export function davCollectionPublishable(Base) {
 		async publish() {
 			debug(`Publishing ${super.url}`);
 
-			const [skeleton, ] = XMLUtility.getRootSkeleton(
-				[NS.CALENDARSERVER, 'publish-calendar', ]);
+			const [skeleton] = XMLUtility.getRootSkeleton(
+				[NS.CALENDARSERVER, 'publish-calendar']);
 			const xml = XMLUtility.serialize(skeleton);
 
 			await super._request.post(this._url, {
-				'Content-Type': 'application/xml; charset=utf-8',
+				'Content-Type': 'application/xml; charset=utf-8'
 			}, xml);
 
 			return this;
@@ -66,12 +66,12 @@ export function davCollectionPublishable(Base) {
 		async unpublish() {
 			debug(`Unpublishing ${super.url}`);
 
-			const [skeleton, ] = XMLUtility.getRootSkeleton(
-				[NS.CALENDARSERVER, 'unpublish-calendar', ]);
+			const [skeleton] = XMLUtility.getRootSkeleton(
+				[NS.CALENDARSERVER, 'unpublish-calendar']);
 			const xml = XMLUtility.serialize(skeleton);
 
 			await super._request.post(this._url, {
-				'Content-Type': 'application/xml; charset=utf-8',
+				'Content-Type': 'application/xml; charset=utf-8'
 			}, xml);
 
 			return this;
@@ -82,7 +82,7 @@ export function davCollectionPublishable(Base) {
 		 */
 		static getPropFindList() {
 			return super.getPropFindList().concat([
-				[NS.CALENDARSERVER, 'publish-url', ],
+				[NS.CALENDARSERVER, 'publish-url']
 			]);
 		}
 

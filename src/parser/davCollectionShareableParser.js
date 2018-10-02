@@ -35,7 +35,7 @@ import * as NS from '../utility/namespaceUtility.js';
 export default function davCollectionShareableParser(props) {
 	const parsed = {};
 
-	Object.entries(props).forEach(([key, value, ]) => {
+	Object.entries(props).forEach(([key, value]) => {
 		switch (key) {
 		case '{http://owncloud.org/ns}invite':
 			parsed[key] = invite(value);
@@ -90,7 +90,7 @@ function invite(value) {
 		shares.push({
 			href,
 			displayName,
-			writable,
+			writable
 		});
 	});
 

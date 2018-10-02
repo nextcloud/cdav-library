@@ -47,7 +47,7 @@
 export default function calendarParser(props) {
 	const parsed = {};
 
-	Object.entries(props).forEach(([key, value, ]) => {
+	Object.entries(props).forEach(([key, value]) => {
 		switch (key) {
 		case '{http://apple.com/ns/ical/}calendar-color':
 			parsed[key] = calendarColor(value);
@@ -134,7 +134,7 @@ function supportedCalendarComponentSet(prop) {
 	const simpleComponents = {
 		vevent: false,
 		vjournal: false,
-		vtodo: false,
+		vtodo: false
 	};
 
 	prop.forEach(function(component) {
@@ -156,7 +156,7 @@ function supportedCalendarData(prop) {
 	return prop.map((v) => {
 		return {
 			'content-type': v.getAttribute('content-type'),
-			'version': v.getAttribute('version'),
+			'version': v.getAttribute('version')
 		};
 	});
 }

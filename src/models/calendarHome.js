@@ -20,14 +20,14 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-import { DavCollection, } from './davCollection.js';
-import { Calendar, } from './calendar.js';
-import { Subscription, } from './subscription.js';
+import { DavCollection } from './davCollection.js';
+import { Calendar } from './calendar.js';
+import { Subscription } from './subscription.js';
 import ScheduleInbox from './scheduleInbox.js';
 import ScheduleOutbox from './scheduleOutbox.js';
 import * as NS from '../utility/namespaceUtility.js';
 
-import { debugFactory, } from '../debug.js';
+import { debugFactory } from '../debug.js';
 const debug = debugFactory('CalendarHome');
 
 /**
@@ -109,22 +109,22 @@ export class CalendarHome extends DavCollection {
 		debug('creating a calendar collection');
 
 		const props = [{
-			name: [NS.DAV, 'resourcetype', ],
+			name: [NS.DAV, 'resourcetype'],
 			children: [{
-				name: [NS.DAV, 'collection', ],
+				name: [NS.DAV, 'collection']
 			}, {
-				name: [NS.IETF_CALDAV, 'calendar', ],
-			}, ],
+				name: [NS.IETF_CALDAV, 'calendar']
+			}]
 		}, {
-			name: [NS.DAV, 'displayname', ],
-			value: displayname,
+			name: [NS.DAV, 'displayname'],
+			value: displayname
 		}, {
-			name: [NS.APPLE, 'calendar-color', ],
-			value: color,
+			name: [NS.APPLE, 'calendar-color'],
+			value: color
 		}, {
-			name: [NS.OWNCLOUD, 'calendar-enabled', ],
-			value: '1',
-		}, ];
+			name: [NS.OWNCLOUD, 'calendar-enabled'],
+			value: '1'
+		}];
 
 		const name = super._getAvailableNameFromToken(displayname);
 		return super.createCollection(name, props);
@@ -142,28 +142,28 @@ export class CalendarHome extends DavCollection {
 		debug('creating a subscribed collection');
 
 		const props = [{
-			name: [NS.DAV, 'resourcetype', ],
+			name: [NS.DAV, 'resourcetype'],
 			children: [{
-				name: [NS.DAV, 'collection', ],
+				name: [NS.DAV, 'collection']
 			}, {
-				name: [NS.CALENDARSERVER, 'subscribed', ],
-			}, ],
+				name: [NS.CALENDARSERVER, 'subscribed']
+			}]
 		}, {
-			name: [NS.DAV, 'displayname', ],
-			value: displayname,
+			name: [NS.DAV, 'displayname'],
+			value: displayname
 		}, {
-			name: [NS.APPLE, 'calendar-color', ],
-			value: color,
+			name: [NS.APPLE, 'calendar-color'],
+			value: color
 		}, {
-			name: [NS.OWNCLOUD, 'calendar-enabled', ],
-			value: '1',
+			name: [NS.OWNCLOUD, 'calendar-enabled'],
+			value: '1'
 		}, {
-			name: [NS.CALENDARSERVER, 'source', ],
+			name: [NS.CALENDARSERVER, 'source'],
 			children: [{
-				name: [NS.DAV, 'href', ],
-				value: source,
-			}, ],
-		}, ];
+				name: [NS.DAV, 'href'],
+				value: source
+			}]
+		}];
 
 		const name = super._getAvailableNameFromToken(displayname);
 		return super.createCollection(name, props);

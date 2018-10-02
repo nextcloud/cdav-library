@@ -32,12 +32,12 @@ let prefixMap = {};
  */
 export function getRootSkeleton() {
 	if (arguments.length === 0) {
-		return [{}, null, ];
+		return [{}, null];
 	}
 
 	const skeleton = {
 		name: arguments[0],
-		children: [],
+		children: []
 	};
 
 	let childrenWrapper = skeleton.children;
@@ -46,13 +46,13 @@ export function getRootSkeleton() {
 	args.forEach(function(argument) {
 		const level = {
 			name: argument,
-			children: [],
+			children: []
 		};
 		childrenWrapper.push(level);
 		childrenWrapper = level.children;
 	});
 
-	return [skeleton, childrenWrapper, ];
+	return [skeleton, childrenWrapper];
 }
 
 /**
@@ -74,16 +74,16 @@ export function serialize(json) {
 }
 
 function xmlify(xmlDoc, parent, json) {
-	const [ns, localName, ] = json.name;
+	const [ns, localName] = json.name;
 	const element = xmlDoc.createElementNS(ns, getPrefixedNameForNamespace(ns, localName));
 
 	json.attributes = json.attributes || [];
 	json.attributes.forEach((attribute) => {
 		if (attribute.length === 2) {
-			const [name, value, ] = attribute;
+			const [name, value] = attribute;
 			element.setAttribute(name, value);
 		} else {
-			const [namespace, localName, value, ] = attribute;
+			const [namespace, localName, value] = attribute;
 			element.setAttributeNS(namespace, localName, value);
 		}
 	});

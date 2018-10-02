@@ -21,16 +21,16 @@
  *
  */
 
-import { davCollectionShareable, } from './davCollectionShareable.js';
-import { DavCollection, } from './davCollection.js';
+import { davCollectionShareable } from './davCollectionShareable.js';
+import { DavCollection } from './davCollection.js';
 import * as NS from '../utility/namespaceUtility.js';
 import * as StringUtility from '../utility/stringUtility.js';
 import * as XMLUtility from '../utility/xmlUtility.js';
 import addressBookParser from '../parser/addressbookParser.js';
 import addressBookPropSet from '../propset/addressBookPropSet.js';
-import { VCard, } from './vcard.js';
+import { VCard } from './vcard.js';
 
-import { debugFactory, } from '../debug.js';
+import { debugFactory } from '../debug.js';
 const debug = debugFactory('AddressBook');
 
 /**
@@ -86,21 +86,21 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 		const children = [];
 		props.forEach((prop) => {
 			children.push({
-				name: [NS.IETF_CARDDAV, 'prop', ],
-				attributes: [['name', prop, ], ],
+				name: [NS.IETF_CARDDAV, 'prop'],
+				attributes: [['name', prop]]
 			});
 		});
 
 		return this.addressbookQuery(null, [{
-			name: [NS.DAV, 'getetag', ],
+			name: [NS.DAV, 'getetag']
 		}, {
-			name: [NS.DAV, 'getcontenttype', ],
+			name: [NS.DAV, 'getcontenttype']
 		}, {
-			name: [NS.DAV, 'resourcetype', ],
+			name: [NS.DAV, 'resourcetype']
 		}, {
-			name: [NS.IETF_CARDDAV, 'address-data', ],
-			children: children,
-		}, ]);
+			name: [NS.IETF_CARDDAV, 'address-data'],
+			children: children
+		}]);
 	}
 
 	/**
@@ -114,7 +114,7 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 
 		const name = StringUtility.uid('', 'vcf');
 		const headers = {
-			'Content-Type': 'text/vcard; charset=utf-8',
+			'Content-Type': 'text/vcard; charset=utf-8'
 		};
 
 		return super.createObject(name, headers, data);
@@ -132,19 +132,19 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 	async addressbookQuery(filter, prop = null, limit = null) {
 		debug('sending an addressbook-query request');
 
-		const [skeleton, ] = XMLUtility.getRootSkeleton(
-			[NS.IETF_CARDDAV, 'addressbook-query', ]
+		const [skeleton] = XMLUtility.getRootSkeleton(
+			[NS.IETF_CARDDAV, 'addressbook-query']
 		);
 
 		if (!prop) {
 			skeleton.children.push({
-				name: [NS.DAV, 'prop', ],
-				children: super._propFindList,
+				name: [NS.DAV, 'prop'],
+				children: super._propFindList
 			});
 		} else {
 			skeleton.children.push({
-				name: [NS.DAV, 'prop', ],
-				children: prop,
+				name: [NS.DAV, 'prop'],
+				children: prop
 			});
 		}
 
@@ -156,16 +156,16 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 
 		if (limit) {
 			skeleton.children.push({
-				name: [NS.IETF_CARDDAV, 'limit', ],
+				name: [NS.IETF_CARDDAV, 'limit'],
 				children: [{
-					name: [NS.IETF_CARDDAV, 'nresults', ],
-					value: limit,
-				}, ],
+					name: [NS.IETF_CARDDAV, 'nresults'],
+					value: limit
+				}]
 			});
 		}
 
 		const headers = {
-			'Depth': '1',
+			'Depth': '1'
 		};
 		const body = XMLUtility.serialize(skeleton);
 		const response = await this._request.report(this.url, headers, body);
@@ -187,31 +187,31 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 			return [];
 		}
 
-		const [skeleton, ] = XMLUtility.getRootSkeleton(
-			[NS.IETF_CARDDAV, 'addressbook-multiget', ]
+		const [skeleton] = XMLUtility.getRootSkeleton(
+			[NS.IETF_CARDDAV, 'addressbook-multiget']
 		);
 
 		if (!prop) {
 			skeleton.children.push({
-				name: [NS.DAV, 'prop', ],
-				children: super._propFindList,
+				name: [NS.DAV, 'prop'],
+				children: super._propFindList
 			});
 		} else {
 			skeleton.children.push({
-				name: [NS.DAV, 'prop', ],
-				children: prop,
+				name: [NS.DAV, 'prop'],
+				children: prop
 			});
 		}
 
 		hrefs.forEach((href) => {
 			skeleton.children.push({
-				name: [NS.DAV, 'href', ],
-				value: href,
+				name: [NS.DAV, 'href'],
+				value: href
 			});
 		});
 
 		const headers = {
-			'Depth': '1',
+			'Depth': '1'
 		};
 		const body = XMLUtility.serialize(skeleton);
 		const response = await this._request.report(this.url, headers, body);
@@ -223,12 +223,12 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 	 */
 	static getPropFindList() {
 		return super.getPropFindList().concat([
-			[NS.IETF_CARDDAV, 'addressbook-description', ],
-			[NS.IETF_CARDDAV, 'supported-address-data', ],
-			[NS.IETF_CARDDAV, 'max-resource-size', ],
-			[NS.CALENDARSERVER, 'getctag', ],
-			[NS.OWNCLOUD, 'enabled', ],
-			[NS.OWNCLOUD, 'read-only', ],
+			[NS.IETF_CARDDAV, 'addressbook-description'],
+			[NS.IETF_CARDDAV, 'supported-address-data'],
+			[NS.IETF_CARDDAV, 'max-resource-size'],
+			[NS.CALENDARSERVER, 'getctag'],
+			[NS.OWNCLOUD, 'enabled'],
+			[NS.OWNCLOUD, 'read-only']
 		]);
 	}
 

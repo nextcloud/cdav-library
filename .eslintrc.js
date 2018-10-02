@@ -15,6 +15,7 @@ module.exports = {
 		'space-before-function-paren': ['error', 'never'],
 		// curly braces always space
 		'object-curly-spacing': ['error', 'always'],
+		'array-bracket-spacing': ['error', 'never'],
 		// stay consistent with array brackets
 		'array-bracket-newline': ['error', 'consistent'],
 		// 1tbs brace style
@@ -34,7 +35,5 @@ module.exports = {
 		'node/no-unsupported-features/es-syntax': ['off'],
 		// disable the recommended no-extra-semi
 		semi: ['error', 'always'],
-		// trailing commas
-		'comma-dangle': ['error', 'always']
 	}
 };
