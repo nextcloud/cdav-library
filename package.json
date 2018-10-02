@@ -30,16 +30,19 @@
 		"url": "https://github.com/nextcloud/cdav-library/issues"
 	},
 	"homepage": "https://github.com/nextcloud/cdav-library#readme",
-	"babel": {
-		"presets": [
-			"@babel/preset-stage-3",
-			"@babel/preset-env"
-		]
-	},
+	"browserslist": [
+		"last 2 versions",
+		"ie >= 11"
+	],
 	"engines": {
 		"node": ">=10.0.0"
 	},
 	"devDependencies": {
+		"@babel/core": "^7.1.2",
+		"@babel/plugin-syntax-dynamic-import": "^7.0.0",
+		"@babel/preset-env": "^7.1.0",
+		"babel-eslint": "^10.0.1",
+		"babel-loader": "^8.0.4",
 		"esdoc": "^1.1.0",
 		"esdoc-standard-plugin": "^1.0.0",
 		"eslint": "^5.6.0",
@@ -61,8 +64,9 @@
 		"webpack-merge": "^4.1.4"
 	},
 	"dependencies": {
-		"davclient.js": "git+https://github.com/owncloud/davclient.js.git",
+		"@babel/polyfill": "^7.0.0",
 		"compare-urls": "^2.0.0",
+		"davclient.js": "git+https://github.com/owncloud/davclient.js.git",
 		"normalize-url": "^3.3.0"
 	}
 }
