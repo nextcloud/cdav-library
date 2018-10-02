@@ -30,7 +30,7 @@ export default class DAVEvent {
 	 */
 	constructor(type, options = {}) {
 		Object.assign(this, {
-			type,
+			type
 		}, options);
 	}
 

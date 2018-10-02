@@ -20,10 +20,6 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-// import normalizeUrl from 'normalize-url';
-
-import { debugFactory, } from './debug.js';
-const debug = debugFactory('request.js');
 
 /**
  * wrapper class for davclient.js with url helper methods
@@ -36,7 +32,7 @@ export default class Request {
 	 */
 	constructor(baseUrl, xhrProvider = null) {
 		this.baseUrl = baseUrl;
-		this._davClient = new dav.Client({ baseUrl, });
+		this._davClient = new dav.Client({ baseUrl });
 		this._davClient.xhrProvider = xhrProvider || this._davClient.xhrProvider;
 	}
 
@@ -145,7 +141,7 @@ export default class Request {
 				return reducePropStats(filter200Responses(res.body.propStat));
 			} else {
 				const groupedPropStats = groupMultistatusByPath(res.body);
-				Object.entries(groupedPropStats).forEach(([key, value, ]) => {
+				Object.entries(groupedPropStats).forEach(([key, value]) => {
 					groupedPropStats[key] = reducePropStats(filter200Responses(value));
 				});
 
@@ -175,7 +171,7 @@ export default class Request {
 		url = this.absoluteUrl(url);
 
 		Object.assign(headers, {
-			'Content-Type': 'application/xml; charset=utf-8',
+			'Content-Type': 'application/xml; charset=utf-8'
 		});
 
 		return this._davClient.request('MKCOL', url, headers, body);
@@ -195,7 +191,7 @@ export default class Request {
 			}
 
 			const groupedPropStats = groupMultistatusByPath(res.body);
-			Object.entries(groupedPropStats).forEach(([key, value, ]) => {
+			Object.entries(groupedPropStats).forEach(([key, value]) => {
 				groupedPropStats[key] = reducePropStats(filter200Responses(value));
 			});
 
@@ -303,7 +299,7 @@ function getStatusCodeFromString(status) {
  * @return {Object}
  */
 function reducePropStats(propStats) {
-	const propObjects = [{}, ];
+	const propObjects = [{}];
 
 	propStats.forEach((propStat) => {
 		propObjects.push(propStat.properties);
