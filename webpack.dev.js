@@ -8,5 +8,5 @@ module.exports = merge(common, {
     noInfo: true,
     overlay: true
   },
-  devtool: '#eval-source-map',
+  devtool: '#eval-source-map'
 });
