@@ -20,6 +20,7 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+import Parser from './parser.js';
 import Request from './request.js';
 import * as NS from './utility/namespaceUtility.js';
 import { CalendarHome } from './models/calendarHome.js';
@@ -37,23 +38,77 @@ export default class DavClient {
 
 	/**
 	 * @param {Object} options
+	 * @property {String} rootUrl
 	 * @param {Function} xhrProvider
 	 * @param {Object} factories
 	 */
 	constructor(options, xhrProvider = null, factories = {}) {
-		Object.assign(this, {
-			rootUrl: null
-		}, options);
+		/**
+		 * root URL of DAV Server
+		 *
+		 * @type {String}
+		 */
+		this.rootUrl = null;
 
-		Object.assign(this, {
-			advertisedFeatures: [],
-			principalUrl: null,
-			principalCollections: [],
-			calendarHomes: [],
-			addressBookHomes: []
-		});
+		// overwrite rootUrl if passed as argument
+		Object.assign(this, options);
 
-		this._request = new Request(this.rootUrl, xhrProvider);
+		/**
+		 * List of advertised DAV features
+		 *
+		 * @type {String[]}
+		 */
+		this.advertisedFeatures = [];
+
+		/**
+		 * Current user principal
+		 *
+		 * @type {String}
+		 */
+		this.principalUrl = null;
+
+		/**
+		 * Array of links to principal collections
+		 *
+		 * @type {String[]}
+		 */
+		this.principalCollections = [];
+
+		/**
+		 * Array of calendar homes
+		 * will be filled after connect() was called
+		 *
+		 * @type {CalendarHome[]}
+		 */
+		this.calendarHomes = [];
+
+		/**
+		 * Array of address book homes
+		 * will be filled after connect() was called
+		 *
+		 * @type {AddressBookHome[]}
+		 */
+		this.addressBookHomes = [];
+
+		/**
+		 *
+		 * @type {Parser}
+		 */
+		this.parser = new Parser();
+
+		/**
+		 *
+		 * @type {boolean}
+		 * @private
+		 */
+		this._isConnected = false;
+
+		/**
+		 *
+		 * @type {Request}
+		 * @private
+		 */
+		this._request = new Request(this.rootUrl, this.parser, xhrProvider);
 	}
 
 	/**
@@ -62,7 +117,9 @@ export default class DavClient {
 	 * @returns {Promise<DavClient>}
 	 */
 	async connect(options = { enableCalDAV: false, enableCardDAV: false }) {
-		// TODO - check if already connected and don't connect again
+		if (this._isConnected) {
+			return this;
+		}
 
 		// we don't support rfc 6764 for now - Pull-requests welcome :)
 		if (!this.rootUrl) {
@@ -72,14 +129,43 @@ export default class DavClient {
 		await this._discoverPrincipalUri();
 		debug(`PrincipalURL: ${this.principalUrl}`);
 
+		const properties = [];
 		if (options.enableCalDAV) {
-			debug(`loading calendar-homes`);
-			await this._discoverCalendarHomes();
+			properties.push(...[
+				[NS.IETF_CALDAV, 'calendar-home-set'],
+				[NS.IETF_CALDAV, 'calendar-user-address-set'],
+				[NS.IETF_CALDAV, 'schedule-inbox-URL'],
+				[NS.IETF_CALDAV, 'schedule-outbox-URL']
+			]);
 		}
 		if (options.enableCardDAV) {
-			debug(`loading addressbook-homes`);
-			await this._discoverAddressBookHomes();
+			properties.push(...[
+				[NS.IETF_CARDDAV, 'addressbook-home-set']
+			]);
 		}
+		if (options.enableCalDAV || options.enableCardDAV) {
+			properties.push(...[
+				[NS.DAV, 'principal-collection-set'],
+				[NS.DAV, 'displayname'],
+				[NS.DAV, 'principal-URL'],
+				[NS.DAV, 'supported-report-set']
+			]);
+		}
+
+		if (properties.length === 0) {
+			return this;
+		}
+
+		const response = await this._request.propFind(this.rootUrl, properties, 0, {}, () => null, (xhr) => {
+			// store the advertised DAV features
+			const dav = xhr.getResponseHeader('DAV');
+			this.advertisedFeatures.push(...dav.split(',').map((s) => s.trim()));
+		});
+		this._extractAddressBookHomes(response.body);
+		this._extractCalendarHomes(response.body);
+		this._extractPrincipalCollectionSets(response.body);
+
+		this._isConnected = true;
 
 		return this;
 	}
@@ -115,15 +201,17 @@ export default class DavClient {
 
 	/**
 	 * discovers the accounts principal uri solely based on rootURL
+	 *
 	 * @returns {Promise<void>}
 	 * @private
 	 */
 	async _discoverPrincipalUri() {
-		const props = await this._request.propFind(this.rootUrl, [
+		const response = await this._request.propFind(this.rootUrl, [
 			[NS.DAV, 'current-user-principal']
 		], 0);
 
-		this.principalUrl = this._request.pathname(props['{DAV:}current-user-principal'][0].textContent);
+		this.principalUrl = this._request.pathname(
+			response.body['{DAV:}current-user-principal']);
 	}
 
 	/**
@@ -133,29 +221,20 @@ export default class DavClient {
 	 * a user will most commonly only have one calendar-home,
 	 * the CalDAV standard allows multiple calendar-homes though
 	 *
-	 * @returns {Promise<void>}
+	 * @param {Object} props
+	 * @returns void
 	 * @private
 	 */
-	async _discoverCalendarHomes() {
-		const props = await this._request.propFind(this.principalUrl, [
-			[NS.IETF_CALDAV, 'calendar-home-set'],
-			[NS.DAV, 'principal-collection-set'],
-			[NS.IETF_CALDAV, 'calendar-user-address-set'],
-			[NS.IETF_CALDAV, 'schedule-inbox-URL'],
-			[NS.IETF_CALDAV, 'schedule-outbox-URL'],
-			[NS.DAV, 'displayname'],
-			[NS.DAV, 'principal-URL'],
-			[NS.DAV, 'supported-report-set']
-		], 0);
-
-		// TODO - store advertised features
-
+	async _extractCalendarHomes(props) {
 		const calendarHomes = props[`{${NS.IETF_CALDAV}}calendar-home-set`];
+		if (!calendarHomes) {
+			return;
+		}
+
 		this.calendarHomes = calendarHomes.map((calendarHome) => {
-			const url = this._request.pathname(calendarHome.textContent);
+			const url = this._request.pathname(calendarHome);
 			return new CalendarHome(this, this._request, url, props);
 		});
-		this._extractPrincipalCollectionSets(props);
 	}
 
 	/**
@@ -165,23 +244,20 @@ export default class DavClient {
 	 * a user will most commonly only have one address-book-home,
 	 * the CardDAV standard allows multiple address-book-homes though
 	 *
-	 * @returns {Promise<void>}
+	 * @param {Object} props
+	 * @returns void
 	 * @private
 	 */
-	async _discoverAddressBookHomes() {
-		const props = await this._request.propFind(this.principalUrl, [
-			[NS.IETF_CARDDAV, 'addressbook-home-set'],
-			[NS.DAV, 'principal-collection-set']
-		], 0);
-
-		// TODO - store advertised features
-
+	async _extractAddressBookHomes(props) {
 		const addressBookHomes = props[`{${NS.IETF_CARDDAV}}addressbook-home-set`];
+		if (!addressBookHomes) {
+			return;
+		}
+
 		this.addressBookHomes = addressBookHomes.map((addressbookHome) => {
-			const url = this._request.pathname(addressbookHome.textContent);
+			const url = this._request.pathname(addressbookHome);
 			return new AddressBookHome(this, this._request, url, props);
 		});
-		this._extractPrincipalCollectionSets(props);
 	}
 
 	/**
@@ -195,7 +271,7 @@ export default class DavClient {
 	_extractPrincipalCollectionSets(props) {
 		const principalCollectionSets = props[`{${NS.DAV}}principal-collection-set`];
 		this.principalCollections = principalCollectionSets.map((principalCollection) => {
-			return this._request.pathname(principalCollection.textContent);
+			return this._request.pathname(principalCollection);
 		});
 	}
 

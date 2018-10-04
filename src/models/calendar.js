@@ -25,7 +25,6 @@ import { DavCollection } from './davCollection.js';
 import { davCollectionPublishable } from './davCollectionPublishable.js';
 import { davCollectionShareable } from './davCollectionShareable.js';
 import { VObject } from './vobject.js';
-import calendarParser from '../parser/calendarParser.js';
 import calendarPropSet from '../propset/calendarPropSet.js';
 import * as NS from '../utility/namespaceUtility.js';
 import * as StringUtility from '../utility/stringUtility.js';
@@ -60,7 +59,6 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 		super(...args);
 
 		super._registerObjectFactory('text/calendar', VObject);
-		super._registerPropFindParser(calendarParser);
 		super._registerPropSetFactory(calendarPropSet);
 
 		super._exposeProperty('color', NS.APPLE, 'calendar-color', true);

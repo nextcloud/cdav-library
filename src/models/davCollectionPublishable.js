@@ -22,22 +22,12 @@
  */
 import * as NS from '../utility/namespaceUtility.js';
 import * as XMLUtility from '../utility/xmlUtility.js';
-import davCollectionPublishableParser from '../parser/davCollectionPublishableParser.js';
 
 import { debugFactory } from '../debug.js';
 const debug = debugFactory('DavCollectionPublishable');
 
 export function davCollectionPublishable(Base) {
 	return class extends Base {
-
-		/**
-		 * @inheritDoc
-		 */
-		constructor(...args) {
-			super(...args);
-
-			super._registerPropFindParser(davCollectionPublishableParser);
-		}
 
 		/**
 		 * publishes the DavCollection

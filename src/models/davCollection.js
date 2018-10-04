@@ -24,7 +24,6 @@ import * as NS from '../utility/namespaceUtility.js';
 import * as StringUtility from '../utility/stringUtility.js';
 import * as XMLUtility from '../utility/xmlUtility.js';
 import DAVEventListener from './davEventListener.js';
-import davCollectionParser from '../parser/davCollectionParser.js';
 
 import { debugFactory } from '../debug.js';
 import davCollectionPropSet from '../propset/davCollectionPropSet.js';
@@ -64,7 +63,6 @@ export class DavCollection extends DAVEventListener {
 
 		});
 
-		this._registerPropFindParser(davCollectionParser);
 		this._registerPropSetFactory(davCollectionPropSet);
 
 		this._exposeProperty('displayname', NS.DAV, 'displayname', true);
@@ -224,15 +222,6 @@ export class DavCollection extends DAVEventListener {
 		if (typeof factory.getPropFindList === 'function') {
 			Array.prototype.push.apply(this._propFindList, factory.getPropFindList());
 		}
-	}
-
-	/**
-	 * @protected
-	 * @param {Function} parser
-	 * @returns void
-	 */
-	_registerPropFindParser(parser) {
-		Object.assign(this._props, parser(this._rawProps));
 	}
 
 	/**

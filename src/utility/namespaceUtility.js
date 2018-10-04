@@ -28,3 +28,25 @@ export const OWNCLOUD = 'http://owncloud.org/ns';
 export const NEXTCLOUD = 'http://nextcloud.com/ns';
 export const APPLE = 'http://apple.com/ns/ical/';
 export const CALENDARSERVER = 'http://calendarserver.org/ns/';
+export const SABREDAV = 'http://sabredav.org/ns';
+
+export const NS_MAP = {
+	d: DAV,
+	cl: IETF_CALDAV,
+	cr: IETF_CARDDAV,
+	oc: OWNCLOUD,
+	nc: NEXTCLOUD,
+	aapl: APPLE,
+	cs: CALENDARSERVER,
+	sd: SABREDAV
+};
+
+/**
+ * maps namespace like DAV: to it's short equivalent
+ *
+ * @param {String} short
+ * @returns {String}
+ */
+export function resolve(short) {
+	return NS_MAP[short] || null;
+}
