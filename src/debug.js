@@ -29,7 +29,7 @@
 export function debugFactory(context) {
 	return (...args) => {
 		if (debugFactory.enabled) {
-			console.debug(context, args);
+			console.log(context, ...args);
 		}
 	};
 }
