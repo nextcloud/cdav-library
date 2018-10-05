@@ -170,7 +170,7 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 			});
 		}
 
-		// According to the spec, every calendar query needs a filter,
+		// According to the spec, every calendar-query needs a filter,
 		// but Nextcloud just returns all elements without a filter.
 		if (filter) {
 			skeleton.children.push(filter);

@@ -50,6 +50,8 @@ export default class DavClient {
 		 */
 		this.rootUrl = null;
 
+		// TODO = always make sure rootUrl ends with /
+
 		// overwrite rootUrl if passed as argument
 		Object.assign(this, options);
 
@@ -156,7 +158,7 @@ export default class DavClient {
 			return this;
 		}
 
-		const response = await this._request.propFind(this.rootUrl, properties, 0, {}, () => null, (xhr) => {
+		const response = await this._request.propFind(this.principalUrl, properties, 0, {}, () => null, (xhr) => {
 			// store the advertised DAV features
 			const dav = xhr.getResponseHeader('DAV');
 			this.advertisedFeatures.push(...dav.split(',').map((s) => s.trim()));
@@ -210,8 +212,14 @@ export default class DavClient {
 			[NS.DAV, 'current-user-principal']
 		], 0);
 
+		if (!response.body['{DAV:}current-user-principal']) {
+			throw new Error('Error retrieving current user principal');
+		}
+		if (response.body['{DAV:}current-user-principal'].type === 'unauthenticated') {
+			throw new Error('Current user is not authenticated');
+		}
 		this.principalUrl = this._request.pathname(
-			response.body['{DAV:}current-user-principal']);
+			response.body['{DAV:}current-user-principal'].href);
 	}
 
 	/**

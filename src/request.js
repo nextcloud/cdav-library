@@ -24,6 +24,12 @@
 import * as NS from './utility/namespaceUtility.js';
 import * as XMLUtility from './utility/xmlUtility.js';
 
+import NetworkRequestAbortedError from './errors/networkRequestAbortedError.js';
+import NetworkRequestError from './errors/networkRequestError.js';
+import NetworkRequestServerError from './errors/networkRequestServerError.js';
+import NetworkRequestClientError from './errors/networkRequestClientError.js';
+import NetworkRequestHttpError from './errors/networkRequestHttpError.js';
+
 /**
  * Request class is used to send any kind of request to the DAV server
  * It also parses incoming XML responses
@@ -44,199 +50,258 @@ export default class Request {
 	}
 
 	/**
-	 * sends GET request
+	 * sends a GET request
 	 *
-	 * @param {String} url - URL to do the GET request on
+	 * @param {String} url - URL to do the request on
 	 * @param {Object} headers - additional HTTP headers to send
-	 * @param {String} body
+	 * @param {String} body - request body
 	 * @param {Function} beforeRequestHandler - custom function to be called before the request is made
 	 * @param {Function} afterRequestHandler - custom function to be called after the request was made
-	 * @returns {Promise<*>}
+	 * @returns {Promise<{Object}>}
+	 * @property {String|Object} body
+	 * @property {Number} status
+	 * @property {XMLHttpRequest} xhr
 	 */
-	async get(url, headers, body = null, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
+	async get(url, headers = {}, body = null, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
 		return this.request('GET', url, headers, body, beforeRequestHandler, afterRequestHandler);
 	}
 
 	/**
-	 * sends PATCH request
+	 * sends a PATCH request
 	 *
-	 * @param {String} url - URL to do the PATCH request on
+	 * @param {String} url - URL to do the request on
 	 * @param {Object} headers - additional HTTP headers to send
-	 * @param {String} body
+	 * @param {String} body - request body
 	 * @param {Function} beforeRequestHandler - custom function to be called before the request is made
 	 * @param {Function} afterRequestHandler - custom function to be called after the request was made
-	 * @returns {Promise<*>}
+	 * @returns {Promise<{Object}>}
+	 * @property {String|Object} body
+	 * @property {Number} status
+	 * @property {XMLHttpRequest} xhr
 	 */
 	async patch(url, headers, body, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
 		return this.request('PATCH', url, headers, body, beforeRequestHandler, afterRequestHandler);
 	}
 
 	/**
-	 * sends POST request
+	 * sends a POST request
 	 *
-	 * @param {String} url - URL to do the POST request on
+	 * @param {String} url - URL to do the request on
 	 * @param {Object} headers - additional HTTP headers to send
-	 * @param {String} body
+	 * @param {String} body - request body
 	 * @param {Function} beforeRequestHandler - custom function to be called before the request is made
 	 * @param {Function} afterRequestHandler - custom function to be called after the request was made
-	 * @returns {Promise<*>}
+	 * @returns {Promise<{Object}>}
+	 * @property {String|Object} body
+	 * @property {Number} status
+	 * @property {XMLHttpRequest} xhr
 	 */
 	async post(url, headers, body, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
 		return this.request('POST', url, headers, body, beforeRequestHandler, afterRequestHandler);
 	}
 
 	/**
-	 * sends PUT request
+	 * sends a PUT request
 	 *
-	 * @param {String} url - URL to do the PUT request on
+	 * @param {String} url - URL to do the request on
 	 * @param {Object} headers - additional HTTP headers to send
-	 * @param {String} body
+	 * @param {String} body - request body
 	 * @param {Function} beforeRequestHandler - custom function to be called before the request is made
 	 * @param {Function} afterRequestHandler - custom function to be called after the request was made
-	 * @returns {Promise<*>}
+	 * @returns {Promise<{Object}>}
+	 * @property {String|Object} body
+	 * @property {Number} status
+	 * @property {XMLHttpRequest} xhr
 	 */
 	async put(url, headers, body, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
 		return this.request('PUT', url, headers, body, beforeRequestHandler, afterRequestHandler);
 	}
 
 	/**
-	 * sends DELETE request
+	 * sends a DELETE request
 	 *
-	 * @param {String} url - URL to do the DELETE request on
+	 * @param {String} url - URL to do the request on
 	 * @param {Object} headers - additional HTTP headers to send
-	 * @param {String} body
+	 * @param {String} body - request body
 	 * @param {Function} beforeRequestHandler - custom function to be called before the request is made
 	 * @param {Function} afterRequestHandler - custom function to be called after the request was made
-	 * @returns {Promise<*>}
+	 * @returns {Promise<{Object}>}
+	 * @property {String|Object} body
+	 * @property {Number} status
+	 * @property {XMLHttpRequest} xhr
 	 */
 	async delete(url, headers = {}, body = null, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
 		return this.request('DELETE', url, headers, body, beforeRequestHandler, afterRequestHandler);
 	}
 
 	/**
-	 * sends COPY request
+	 * sends a COPY request
+	 * https://tools.ietf.org/html/rfc4918#section-9.8
 	 *
-	 * @param {String} url - URL to do the DELETE request on
-	 * @param {Object} headers - additional HTTP headers to send
-	 * @param {String} body
-	 * @param {Function} beforeRequestHandler - custom function to be called before the request is made
-	 * @param {Function} afterRequestHandler - custom function to be called after the request was made
-	 * @returns {Promise<void>}
-	 */
-	async copy(url, headers = {}, body = null, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
-		return this.request('COPY', url, headers, body, beforeRequestHandler, afterRequestHandler);
-	}
-
-	/**
-	 * sends MOVE request
-	 *
-	 * @param {String} url - URL to do the DELETE request on
-	 * @param {Object} headers - additional HTTP headers to send
-	 * @param {String} body
-	 * @param {Function} beforeRequestHandler - custom function to be called before the request is made
-	 * @param {Function} afterRequestHandler - custom function to be called after the request was made
-	 * @returns {Promise<void>}
-	 */
-	async move(url, headers = {}, body = null, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
-		// TODO destination
-		// TODO overwrite
-		return this.request('MOVE', url, headers, body, beforeRequestHandler, afterRequestHandler);
-	}
-
-	/**
-	 * sends LOCK request
-	 *
-	 * @param {String} url - URL to do the DELETE request on
-	 * @param {Object} headers - additional HTTP headers to send
-	 * @param {String} body
-	 * @param {Function} beforeRequestHandler - custom function to be called before the request is made
-	 * @param {Function} afterRequestHandler - custom function to be called after the request was made
-	 * @returns {Promise<void>}
-	 */
-	async lock(url, headers = {}, body = null, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
-		return this.request('LOCK', url, headers, body, beforeRequestHandler, afterRequestHandler);
-	}
-
-	/**
-	 * sends UNLOCK request
-	 *
-	 * @param {String} url - URL to do the DELETE request on
-	 * @param {Object} headers - additional HTTP headers to send
-	 * @param {String} body
-	 * @param {Function} beforeRequestHandler - custom function to be called before the request is made
-	 * @param {Function} afterRequestHandler - custom function to be called after the request was made
-	 * @returns {Promise<void>}
-	 */
-	async unlock(url, headers = {}, body = null, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
-		return this.request('UNLOCK', url, headers, body, beforeRequestHandler, afterRequestHandler);
-	}
-
-	/**
-	 * sends PROPFIND request
-	 *
-	 * @param {String} url - URL to do the PropFind request on
-	 * @param {String[][]} properties
-	 * @param {Number} depth
-	 * @param {Object} headers - additional HTTP headers to send
-	 * @param {Function} beforeRequestHandler - custom function to be called before the request is made
-	 * @param {Function} afterRequestHandler - custom function to be called after the request was made
-	 * @returns {Promise<*>}
-	 */
-	async propFind(url, properties, depth = 0, headers = {}, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
-		const [skeleton, dPropChildren] = XMLUtility.getRootSkeleton(
-			[NS.DAV, 'propfind'], [NS.DAV, 'prop']);
-
-		dPropChildren.push(...properties.map(p => {
-			return {
-				name: p
-			};
-		}));
-		const body = XMLUtility.serialize(skeleton);
-
-		headers['Depth'] = depth;
-
-		return this.request('PROPFIND', url, headers, body, beforeRequestHandler, afterRequestHandler);
-
-		// TODO - include propname in request to list all properties
-	}
-
-	/**
-	 * sends PROPPATCH request
-	 *
-	 * @param {String} url - URL to do the PropPatch request on
+	 * @param {String} url - URL to do the request on
+	 * @param {String} destination - place to copy the object/collection to
+	 * @param {Number|String} depth - 0 = copy collection without content, Infinity = copy collection with content
+	 * @param {Boolean} overwrite - whether or not to overwrite destination if existing
 	 * @param {Object} headers - additional HTTP headers to send
 	 * @param {String} body - request body
 	 * @param {Function} beforeRequestHandler - custom function to be called before the request is made
 	 * @param {Function} afterRequestHandler - custom function to be called after the request was made
-	 * @returns {Promise<*>}
+	 * @returns {Promise<{Object}>}
+	 * @property {String|Object} body
+	 * @property {Number} status
+	 * @property {XMLHttpRequest} xhr
+	 */
+	async copy(url, destination, depth = 0, overwrite = false, headers = {}, body = null, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
+		headers['Destination'] = destination;
+		headers['Depth'] = depth;
+		headers['Overwrite'] = overwrite ? 'T' : 'F';
+
+		return this.request('COPY', url, headers, body, beforeRequestHandler, afterRequestHandler);
+	}
+
+	/**
+	 * sends a MOVE request
+	 * https://tools.ietf.org/html/rfc4918#section-9.9
+	 *
+	 * @param {String} url - URL to do the request on
+	 * @param {String} destination - place to move the object/collection to
+	 * @param {Boolean} overwrite - whether or not to overwrite destination if existing
+	 * @param {Object} headers - additional HTTP headers to send
+	 * @param {String} body - request body
+	 * @param {Function} beforeRequestHandler - custom function to be called before the request is made
+	 * @param {Function} afterRequestHandler - custom function to be called after the request was made
+	 * @returns {Promise<{Object}>}
+	 * @property {String|Object} body
+	 * @property {Number} status
+	 * @property {XMLHttpRequest} xhr
+	 */
+	async move(url, destination, overwrite = false, headers = {}, body = null, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
+		headers['Destination'] = destination;
+		headers['Depth'] = 'Infinity';
+		headers['Overwrite'] = overwrite ? 'T' : 'F';
+
+		return this.request('MOVE', url, headers, body, beforeRequestHandler, afterRequestHandler);
+	}
+
+	/**
+	 * sends a LOCK request
+	 * https://tools.ietf.org/html/rfc4918#section-9.10
+	 *
+	 * @param {String} url - URL to do the request on
+	 * @param {Object} headers - additional HTTP headers to send
+	 * @param {String} body - request body
+	 * @param {Function} beforeRequestHandler - custom function to be called before the request is made
+	 * @param {Function} afterRequestHandler - custom function to be called after the request was made
+	 * @returns {Promise<{Object}>}
+	 * @property {String|Object} body
+	 * @property {Number} status
+	 * @property {XMLHttpRequest} xhr
+	 */
+	async lock(url, headers = {}, body = null, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
+
+		// TODO - add parameters for Depth and Timeout
+
+		return this.request('LOCK', url, headers, body, beforeRequestHandler, afterRequestHandler);
+	}
+
+	/**
+	 * sends an UNLOCK request
+	 * https://tools.ietf.org/html/rfc4918#section-9.11
+	 *
+	 * @param {String} url - URL to do the request on
+	 * @param {Object} headers - additional HTTP headers to send
+	 * @param {String} body - request body
+	 * @param {Function} beforeRequestHandler - custom function to be called before the request is made
+	 * @param {Function} afterRequestHandler - custom function to be called after the request was made
+	 * @returns {Promise<{Object}>}
+	 * @property {String|Object} body
+	 * @property {Number} status
+	 * @property {XMLHttpRequest} xhr
+	 */
+	async unlock(url, headers = {}, body = null, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
+
+		// TODO - add parameter for Lock-Token
+
+		return this.request('UNLOCK', url, headers, body, beforeRequestHandler, afterRequestHandler);
+	}
+
+	/**
+	 * sends a PROPFIND request
+	 * https://tools.ietf.org/html/rfc4918#section-9.1
+	 *
+	 * @param {String} url - URL to do the request on
+	 * @param {String[][]} properties - list of properties to search for, formatted as [namespace, localName]
+	 * @param {Number|String} depth - Depth header to send
+	 * @param {Object} headers - additional HTTP headers to send
+	 * @param {Function} beforeRequestHandler - custom function to be called before the request is made
+	 * @param {Function} afterRequestHandler - custom function to be called after the request was made
+	 * @returns {Promise<{Object}>}
+	 * @property {String|Object} body
+	 * @property {Number} status
+	 * @property {XMLHttpRequest} xhr
+	 */
+	async propFind(url, properties, depth = 0, headers = {}, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
+		// adjust headers
+		headers['Depth'] = depth;
+
+		// create request body
+		const [skeleton, dPropChildren] = XMLUtility.getRootSkeleton([NS.DAV, 'propfind'], [NS.DAV, 'prop']);
+		dPropChildren.push(...properties.map(p => ({ name: p })));
+		const body = XMLUtility.serialize(skeleton);
+
+		return this.request('PROPFIND', url, headers, body, beforeRequestHandler, afterRequestHandler);
+	}
+
+	/**
+	 * sends a PROPPATCH request
+	 * https://tools.ietf.org/html/rfc4918#section-9.2
+	 *
+	 * @param {String} url - URL to do the request on
+	 * @param {Object} headers - additional HTTP headers to send
+	 * @param {String} body - request body
+	 * @param {Function} beforeRequestHandler - custom function to be called before the request is made
+	 * @param {Function} afterRequestHandler - custom function to be called after the request was made
+	 * @returns {Promise<{Object}>}
+	 * @property {String|Object} body
+	 * @property {Number} status
+	 * @property {XMLHttpRequest} xhr
 	 */
 	async propPatch(url, headers, body, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
 		return this.request('PROPPATCH', url, headers, body, beforeRequestHandler, afterRequestHandler);
 	}
 
 	/**
-	 * sends MKCOL request
+	 * sends a MKCOL request
+	 * https://tools.ietf.org/html/rfc4918#section-9.3
+	 * https://tools.ietf.org/html/rfc5689
 	 *
-	 * @param {String} url - URL to do the MkCol request on
+	 * @param {String} url - URL to do the request on
 	 * @param {Object} headers - additional HTTP headers to send
 	 * @param {String} body - request body
 	 * @param {Function} beforeRequestHandler - custom function to be called before the request is made
 	 * @param {Function} afterRequestHandler - custom function to be called after the request was made
-	 * @returns {Promise<*>}
+	 * @returns {Promise<{Object}>}
+	 * @property {String|Object} body
+	 * @property {Number} status
+	 * @property {XMLHttpRequest} xhr
 	 */
 	async mkCol(url, headers, body, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
 		return this.request('MKCOL', url, headers, body, beforeRequestHandler, afterRequestHandler);
 	}
 
 	/**
-	 * sends REPORT request
+	 * sends a REPORT request
+	 * https://tools.ietf.org/html/rfc3253#section-3.6
 	 *
-	 * @param {String} url - URL to do the REPORT request on
+	 * @param {String} url - URL to do the request on
 	 * @param {Object} headers - additional HTTP headers to send
 	 * @param {String} body - request body
 	 * @param {Function} beforeRequestHandler - custom function to be called before the request is made
 	 * @param {Function} afterRequestHandler - custom function to be called after the request was made
-	 * @returns {Promise<*>}
+	 * @returns {Promise<{Object}>}
+	 * @property {String|Object} body
+	 * @property {Number} status
+	 * @property {XMLHttpRequest} xhr
 	 */
 	async report(url, headers, body, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
 		return this.request('REPORT', url, headers, body, beforeRequestHandler, afterRequestHandler);
@@ -284,7 +349,24 @@ export default class Request {
 
 				let responseBody = xhr.response;
 				if (!wasRequestSuccessful(xhr.status)) {
-					reject(new Error({
+					if (xhr.status >= 400 && xhr.status < 500) {
+						reject(new NetworkRequestClientError({
+							body: responseBody,
+							status: xhr.status,
+							xhr: xhr
+						}));
+						return;
+					}
+					if (xhr.status >= 500 && xhr.status < 600) {
+						reject(new NetworkRequestServerError({
+							body: responseBody,
+							status: xhr.status,
+							xhr: xhr
+						}));
+						return;
+					}
+
+					reject(new NetworkRequestHttpError({
 						body: responseBody,
 						status: xhr.status,
 						xhr: xhr
@@ -294,7 +376,7 @@ export default class Request {
 
 				if (xhr.status === 207) {
 					responseBody = this._parseMultiStatusResponse(responseBody);
-					if (headers['Depth'] === 0) {
+					if (parseInt(assignHeaders['Depth'], 10) === 0) {
 						responseBody = responseBody[Object.keys(responseBody)[0]];
 					}
 				}
@@ -306,13 +388,13 @@ export default class Request {
 				});
 			};
 
-			xhr.onerror = () => reject(new Error({
+			xhr.onerror = () => reject(new NetworkRequestError({
 				body: null,
 				status: -1,
 				xhr: xhr
 			}));
 
-			xhr.onabort = () => reject(new Error({
+			xhr.onabort = () => reject(new NetworkRequestAbortedError({
 				body: null,
 				status: -1,
 				xhr: xhr
@@ -431,7 +513,7 @@ function getStatusCodeFromString(status) {
  * get object with default headers to include in every request
  *
  * @returns {Object}
- * @property {Number} Depth
+ * @property {String} depth
  * @property {String} Content-Type
  * @private
  */
@@ -442,7 +524,7 @@ function getDefaultHeaders() {
 	// Should infinity be the default?
 
 	return {
-		'Depth': 0,
+		'Depth': '0',
 		'Content-Type': 'application/xml; charset=utf-8'
 	};
 }

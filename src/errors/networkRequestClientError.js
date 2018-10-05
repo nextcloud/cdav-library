@@ -21,18 +21,6 @@
  *
  */
 
-/**
- * creates a debug function bound to a context
- * @param {String} context
- * @returns {Function}
- */
-export function debugFactory(context) {
-	return (...args) => {
-		if (debugFactory.enabled) {
-			// eslint-disable-next-line no-console
-			console.log(context, ...args);
-		}
-	};
-}
+import NetworkRequestHttpError from './networkRequestHttpError.js';
 
-debugFactory.enabled = false;
+export default class NetworkRequestClientError extends NetworkRequestHttpError {}
