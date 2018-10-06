@@ -44,7 +44,7 @@ export default function calendarPropSet(props) {
 		case '{http://apple.com/ns/ical/}calendar-order':
 			xmlified.push({
 				name: [NS.APPLE, 'calendar-order'],
-				value: value
+				value: value.toString()
 			});
 			break;
 
