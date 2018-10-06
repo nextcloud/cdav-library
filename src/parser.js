@@ -104,7 +104,6 @@ export default class Parser {
 		this.registerParser('{DAV:}resourcetype', Parser.resourceType);
 
 		// RFC 3744 - Web Distributed Authoring and Versioning (WebDAV) Access Control Protocol
-		this.registerParser('{DAV:}acl', Parser.acl);
 		this.registerParser('{DAV:}inherited-acl-set', Parser.hrefs);
 		this.registerParser('{DAV:}group', Parser.href);
 		this.registerParser('{DAV:}owner', Parser.href);
