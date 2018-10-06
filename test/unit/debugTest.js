@@ -31,28 +31,28 @@ describe('Debug', () => {
 	});
 
 	it ('should log console messages including their context if debug is enabled', () => {
-		spyOn(window.console, 'log');
+		spyOn(window.console, 'debug');
 
 		debugFactory.enabled = true;
 
 		const debug = debugFactory('foo');
 
 		debug(123);
-		expect(window.console.log).toHaveBeenCalledWith('foo', 123);
+		expect(window.console.debug).toHaveBeenCalledWith('foo', 123);
 
 		debug(123, 456);
-		expect(window.console.log).toHaveBeenCalledWith('foo', 123, 456);
+		expect(window.console.debug).toHaveBeenCalledWith('foo', 123, 456);
 	});
 
 	it ('should not log console messages if debug is disabled', () => {
-		spyOn(window.console, 'log');
+		spyOn(window.console, 'debug');
 
 		debugFactory.enabled = false;
 
 		const debug = debugFactory('foo');
 		debug(123);
 
-		expect(window.console.log).not.toHaveBeenCalledWith('foo', 123);
+		expect(window.console.debug).not.toHaveBeenCalledWith('foo', 123);
 	});
 
 });

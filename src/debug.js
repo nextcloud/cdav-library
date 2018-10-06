@@ -30,7 +30,7 @@ export function debugFactory(context) {
 	return (...args) => {
 		if (debugFactory.enabled) {
 			// eslint-disable-next-line no-console
-			console.log(context, ...args);
+			console.debug(context, ...args);
 		}
 	};
 }
