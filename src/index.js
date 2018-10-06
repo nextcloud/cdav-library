@@ -50,7 +50,9 @@ export default class DavClient {
 		 */
 		this.rootUrl = null;
 
-		// TODO = always make sure rootUrl ends with /
+		if (options.rootUrl.substr(-1) !== '/') {
+			options.rootUrl += '/';
+		}
 
 		// overwrite rootUrl if passed as argument
 		Object.assign(this, options);
