@@ -46,9 +46,7 @@ export class DavCollection extends DAVEventListener {
 			_parent: parent,
 			_request: request,
 			_url: url,
-			_rawProps: props,
-			// parsed properties
-			_props: {},
+			_props: props,
 			// constructors
 			_collectionFactoryMapper: {},
 			_objectFactoryMapper: {},
@@ -66,7 +64,6 @@ export class DavCollection extends DAVEventListener {
 		this._registerPropSetFactory(davCollectionPropSet);
 
 		this._exposeProperty('displayname', NS.DAV, 'displayname', true);
-		this._exposeProperty('acl', NS.DAV, 'acl');
 		this._exposeProperty('owner', NS.DAV, 'owner');
 		this._exposeProperty('resourcetype', NS.DAV, 'resourcetype');
 		this._exposeProperty('syncToken', NS.DAV, 'sync-token');
@@ -281,7 +278,7 @@ export class DavCollection extends DAVEventListener {
 		const index = [];
 		const children = [];
 
-		Object.entries(response).forEach(([path, props]) => {
+		Object.entries(response.body).forEach(([path, props]) => {
 			// The DAV Server will always return a propStat
 			// block containing properties of the current url
 			// we are not interested, so let's filter it out
@@ -293,7 +290,7 @@ export class DavCollection extends DAVEventListener {
 			const url = this._request.pathname(path);
 
 			// empty resourcetype property => this is no collection
-			if (props['{DAV:}resourcetype'] === '') {
+			if (props['{DAV:}resourcetype'].length === 0) {
 				debug(`${path} was identified as a file`);
 
 				const contentType = props['{DAV:}getcontenttype'].split(';')[0];
@@ -307,7 +304,11 @@ export class DavCollection extends DAVEventListener {
 			} else {
 				debug(`${path} was identified as a collection`);
 
-				const collectionType = getCollectionType(props);
+				// get first collection type other than DAV collection
+				const collectionType = props['{DAV:}resourcetype'].find((r) => {
+					return r !== `{${NS.DAV}}collection`;
+				});
+
 				if (!collectionType) {
 					debug(`Collection-type of ${path} was not specified, treating as generic collection`);
 					children.push(new DavCollection(this, this._request, url, props));
@@ -336,7 +337,6 @@ export class DavCollection extends DAVEventListener {
 	 */
 	static getPropFindList() {
 		return [
-			[NS.DAV, 'acl'],
 			[NS.DAV, 'displayname'],
 			[NS.DAV, 'owner'],
 			[NS.DAV, 'resourcetype'],
@@ -345,31 +345,4 @@ export class DavCollection extends DAVEventListener {
 		];
 	}
 
-}
-
-/**
- *
- */
-function getCollectionType(props) {
-	if (!props['{' + NS.DAV + '}resourcetype']) {
-		return null;
-	}
-
-	const type = props['{' + NS.DAV + '}resourcetype'].find((e) => {
-		return (getNodesClarkeName(e) !== '{' + NS.DAV + '}collection');
-	});
-	if (!type) {
-		return null;
-	}
-
-	return getNodesClarkeName(type);
-}
-
-/**
- *
- * @param node
- * @returns {string}
- */
-function getNodesClarkeName(node) {
-	return '{' + node.namespaceURI + '}' + node.localName;
 }
