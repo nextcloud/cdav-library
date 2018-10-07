@@ -20,9 +20,44 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+import {DavObject} from "../../../src/models/davObject.js";
 
 describe('Dav object model', () => {
-	it('should ...', () => {
 
+	it('should inherit from DavEventListener', () => {
+		pending();
 	});
+
+	it('should fetch complete data', () => {
+		pending();
+	});
+
+	it('should fetch complete data only if data is partial', () => {
+		pending();
+	});
+
+	it('should update an object', () => {
+		pending();
+	});
+
+	it('should delete an object', () => {
+		pending();
+	});
+
+	it('should have function that tells whether a object is partial', () => {
+		pending();
+	});
+
+	it('should expose the etag as a property', () => {
+		pending();
+	});
+
+	it('should expose the content-type as a property', () => {
+		pending();
+	});
+
+	it('should expose the url as a property', () => {
+		pending();
+	});
+
 });

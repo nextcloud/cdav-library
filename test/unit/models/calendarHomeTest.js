@@ -23,6 +23,6 @@
 
 describe('Calendar home model', () => {
 	it('should ...', () => {
-
+		pending();
 	});
 });

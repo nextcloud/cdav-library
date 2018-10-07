@@ -23,6 +23,6 @@
 
 describe('Dav collection model', () => {
 	it('should ...', () => {
-
+		pending();
 	});
 });

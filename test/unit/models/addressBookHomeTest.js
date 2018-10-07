@@ -23,6 +23,6 @@
 
 describe('Address book home model', () => {
 	it('should ...', () => {
-
+		pending();
 	});
 });

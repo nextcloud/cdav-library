@@ -20,9 +20,25 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+import DAVEvent from "../../../src/models/davEvent.js";
 
 describe('Dav event model', () => {
-	it('should ...', () => {
+	it('should provide a constructor with type', () => {
+		const event1 = new DAVEvent('UPDATED_ON_SERVER');
 
+		expect(event1).toEqual(jasmine.any(DAVEvent));
+		expect(event1.type).toEqual('UPDATED_ON_SERVER');
+	});
+
+	it('should provide a constructor with type and more options', () => {
+		const event1 = new DAVEvent('UPDATED_ON_SERVER', {
+			'foo': 'bar',
+			'bar': 'baz',
+		});
+
+		expect(event1).toEqual(jasmine.any(DAVEvent));
+		expect(event1.type).toEqual('UPDATED_ON_SERVER');
+		expect(event1.foo).toEqual('bar');
+		expect(event1.bar).toEqual('baz');
 	});
 });

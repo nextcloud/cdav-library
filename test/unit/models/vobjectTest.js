@@ -22,7 +22,13 @@
  */
 
 describe('VObject model', () => {
-	it('should ...', () => {
 
+	it('should inherit from DavObject', () => {
+		pending();
 	});
+
+	it('should expose the calendar-data as a property', () => {
+		pending();
+	});
+
 });

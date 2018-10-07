@@ -23,6 +23,6 @@
 
 describe('Subscription model', () => {
 	it('should ...', () => {
-
+		pending();
 	});
 });

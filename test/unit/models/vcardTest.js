@@ -22,7 +22,13 @@
  */
 
 describe('VCard model', () => {
-	it('should ...', () => {
 
+	it('should inherit from DavObject', () => {
+		pending();
 	});
+
+	it('should expose the address-data as a property', () => {
+		pending();
+	});
+
 });

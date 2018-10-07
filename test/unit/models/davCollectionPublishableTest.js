@@ -23,6 +23,6 @@
 
 describe('Publishable dav collection model', () => {
 	it('should ...', () => {
-
+		pending();
 	});
 });
