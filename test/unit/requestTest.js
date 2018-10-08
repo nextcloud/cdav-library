@@ -600,11 +600,9 @@ describe('Request', () => {
 			fail('Promise was not supposed to succeed');
 		}).catch((res) => {
 			expect(res).toEqual(jasmine.any(NetworkRequestAbortedError));
-			expect(res.attach).toEqual({
-				body: null,
-				status: -1,
-				xhr: xhr
-			});
+			expect(res.body).toEqual(null);
+			expect(res.status).toEqual(-1);
+			expect(res.xhr).toEqual(xhr);
 		});
 	});
 
@@ -636,11 +634,9 @@ describe('Request', () => {
 			fail('Promise was not supposed to succeed');
 		}).catch((res) => {
 			expect(res).toEqual(jasmine.any(NetworkRequestError));
-			expect(res.attach).toEqual({
-				body: null,
-				status: -1,
-				xhr: xhr
-			});
+			expect(res.body).toEqual(null);
+			expect(res.status).toEqual(-1);
+			expect(res.xhr).toEqual(xhr);
 		});
 	});
 
@@ -672,11 +668,9 @@ describe('Request', () => {
 			fail('Promise was not supposed to succeed');
 		}).catch((res) => {
 			expect(res).toEqual(jasmine.any(NetworkRequestServerError));
-			expect(res.attach).toEqual({
-				body: 567,
-				status: 503,
-				xhr: xhr
-			});
+			expect(res.body).toEqual(567);
+			expect(res.status).toEqual(503);
+			expect(res.xhr).toEqual(xhr);
 		});
 	});
 
@@ -708,11 +702,9 @@ describe('Request', () => {
 			fail('Promise was not supposed to succeed');
 		}).catch((res) => {
 			expect(res).toEqual(jasmine.any(NetworkRequestClientError));
-			expect(res.attach).toEqual({
-				body: 567,
-				status: 403,
-				xhr: xhr
-			});
+			expect(res.body).toEqual(567);
+			expect(res.status).toEqual(403);
+			expect(res.xhr).toEqual(xhr);
 		});
 	});
 
@@ -744,11 +736,9 @@ describe('Request', () => {
 			fail('Promise was not supposed to succeed');
 		}).catch((res) => {
 			expect(res).toEqual(jasmine.any(NetworkRequestHttpError));
-			expect(res.attach).toEqual({
-				body: 567,
-				status: 666,
-				xhr: xhr
-			});
+			expect(res.body).toEqual(567);
+			expect(res.status).toEqual(666);
+			expect(res.xhr).toEqual(xhr);
 		});
 	});
 

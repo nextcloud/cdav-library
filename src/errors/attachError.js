@@ -35,11 +35,7 @@ export default class AttachError extends Error {
 	constructor(attach) {
 		super();
 
-		/**
-		 *
-		 * @type {Object}
-		 */
-		this.attach = attach;
+		Object.assign(this, attach);
 	}
 
 }
