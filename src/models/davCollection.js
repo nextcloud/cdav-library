@@ -67,6 +67,7 @@ export class DavCollection extends DAVEventListener {
 		this._exposeProperty('owner', NS.DAV, 'owner');
 		this._exposeProperty('resourcetype', NS.DAV, 'resourcetype');
 		this._exposeProperty('syncToken', NS.DAV, 'sync-token');
+		this._exposeProperty('currentUserPrivilegeSet', NS.DAV, 'current-user-privilege-set');
 
 		Object.defineProperty(this, 'url', {
 			get: () => this._url
@@ -196,6 +197,22 @@ export class DavCollection extends DAVEventListener {
 	}
 
 	/**
+	 *
+	 * @returns {boolean}
+	 */
+	isReadable() {
+		return this.currentUserPrivilegeSet.contains('{DAV:}read');
+	}
+
+	/**
+	 *
+	 * @returns {boolean}
+	 */
+	isWriteable() {
+		return this.currentUserPrivilegeSet.contains('{DAV:}write');
+	}
+
+	/**
 	 * @protected
 	 * @param {String} identifier
 	 * @param {Function} factory
@@ -271,7 +288,7 @@ export class DavCollection extends DAVEventListener {
 	/**
 	 * @param {Object} response
 	 * @param {Boolean} isPartial
-	 * @returns {Object}
+	 * @returns {DavObject[]|DavCollection[]}
 	 * @protected
 	 */
 	_handleMultiStatusResponse(response, isPartial = false) {
