@@ -121,6 +121,7 @@ export default class Parser {
 		this.registerParser('{DAV:}sync-token', Parser.text);
 
 		// RFC 6352 - CardDAV: vCard Extensions to Web Distributed Authoring and Versioning (WebDAV)
+		this.registerParser('{urn:ietf:params:xml:ns:carddav}address-data', Parser.text);
 		this.registerParser('{urn:ietf:params:xml:ns:carddav}addressbook-description', Parser.text);
 		this.registerParser('{urn:ietf:params:xml:ns:carddav}supported-address-data', Parser.addressDataTypes);
 		this.registerParser('{urn:ietf:params:xml:ns:carddav}max-resource-size', Parser.decInt);
@@ -129,6 +130,7 @@ export default class Parser {
 		this.registerParser('{urn:ietf:params:xml:ns:carddav}supported-collation-set', Parser.supportedCardDAVCollations);
 
 		// RFC 4791 - Calendaring Extensions to WebDAV (CalDAV)
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}calendar-data', Parser.text);
 		this.registerParser('{urn:ietf:params:xml:ns:caldav}calendar-home-set', Parser.hrefs);
 		this.registerParser('{urn:ietf:params:xml:ns:caldav}calendar-description', Parser.text);
 		this.registerParser('{urn:ietf:params:xml:ns:caldav}calendar-timezone', Parser.text);
