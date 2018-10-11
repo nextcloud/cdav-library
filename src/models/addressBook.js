@@ -137,7 +137,7 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 		if (!prop) {
 			skeleton.children.push({
 				name: [NS.DAV, 'prop'],
-				children: super._propFindList
+				children: this._propFindList.map((p) => ({ name: p }))
 			});
 		} else {
 			skeleton.children.push({
@@ -149,7 +149,7 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 		// According to the spec, every address-book query needs a filter,
 		// but Nextcloud just returns all elements without a filter.
 		if (filter) {
-			skeleton.children.push(filter);
+			skeleton.children.push(...filter);
 		}
 
 		if (limit) {
@@ -192,7 +192,7 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 		if (!prop) {
 			skeleton.children.push({
 				name: [NS.DAV, 'prop'],
-				children: super._propFindList
+				children: this._propFindList.map((p) => ({ name: p }))
 			});
 		} else {
 			skeleton.children.push({

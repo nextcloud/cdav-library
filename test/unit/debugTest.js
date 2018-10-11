@@ -25,6 +25,10 @@ import { debugFactory } from '../../src/debug.js';
 
 describe('Debug', () => {
 
+	afterEach(() => {
+		debugFactory.enabled = false;
+	});
+
 	it ('should provide a factory for a debugger', () => {
 		expect(debugFactory).toEqual(jasmine.any(Function));
 		expect(debugFactory('foo')).toEqual(jasmine.any(Function));

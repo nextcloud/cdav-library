@@ -41,6 +41,11 @@ export class DavCollection extends DAVEventListener {
 	constructor(parent, request, url, props) {
 		super();
 
+		// This is a collection, so always make sure to end with a /
+		if (url.substr(-1) !== '/') {
+			url += '/';
+		}
+
 		Object.assign(this, {
 			// parameters
 			_parent: parent,
@@ -51,7 +56,6 @@ export class DavCollection extends DAVEventListener {
 			_collectionFactoryMapper: {},
 			_objectFactoryMapper: {},
 			// house keeping
-			_isDirty: false,
 			_updatedProperties: [],
 			_childrenNames: [],
 
@@ -72,6 +76,9 @@ export class DavCollection extends DAVEventListener {
 		Object.defineProperty(this, 'url', {
 			get: () => this._url
 		});
+
+		this._propFindList.push(...DavObject.getPropFindList());
+		this._propFindList.push(...DavCollection.getPropFindList());
 	}
 
 	/**
@@ -103,7 +110,8 @@ export class DavCollection extends DAVEventListener {
 	 */
 	async find(uri) {
 		const response = await this._request.propFind(this._url + uri, this._propFindList, 0);
-		return this._handleMultiStatusResponse({ [this._url + uri]: response }, false)[0];
+		response.body = { [this._url + uri]: response.body };
+		return this._handleMultiStatusResponse(response, false)[0];
 	}
 
 	/**
@@ -117,11 +125,20 @@ export class DavCollection extends DAVEventListener {
 	 * - CalendarHome->createSubscribedCollection
 	 *
 	 * @param {string} name
-	 * @param {Array} props
+	 * @param {?Array} props
 	 * @returns {Promise<DavCollection>}
 	 */
-	async createCollection(name, props) {
+	async createCollection(name, props = null) {
 		debug('creating a collection');
+
+		if (!props) {
+			props = [{
+				name: [NS.DAV, 'resourcetype'],
+				children: [{
+					name: [NS.DAV, 'collection']
+				}]
+			}];
+		}
 
 		const [skeleton, dPropChildren] = XMLUtility.getRootSkeleton(
 			[NS.DAV, 'mkcol'],
@@ -129,9 +146,7 @@ export class DavCollection extends DAVEventListener {
 			[NS.DAV, 'prop']
 		);
 
-		props.forEach((prop) => {
-			dPropChildren.push(prop);
-		});
+		dPropChildren.push(...props);
 
 		const uri = this._getAvailableNameFromToken(name);
 		const data = XMLUtility.serialize(skeleton);
@@ -184,7 +199,7 @@ export class DavCollection extends DAVEventListener {
 		dPropSet.push(...propSet);
 
 		const body = XMLUtility.serialize(skeleton);
-		return this._request.propPatch(this._url, {}, body);
+		await this._request.propPatch(this._url, {}, body);
 	}
 
 	/**
@@ -193,7 +208,7 @@ export class DavCollection extends DAVEventListener {
 	 * @returns {Promise<void>}
 	 */
 	async delete() {
-		return this._request.delete(this._url);
+		await this._request.delete(this._url);
 	}
 
 	/**
@@ -201,7 +216,7 @@ export class DavCollection extends DAVEventListener {
 	 * @returns {boolean}
 	 */
 	isReadable() {
-		return this.currentUserPrivilegeSet.contains('{DAV:}read');
+		return this.currentUserPrivilegeSet.includes('{DAV:}read');
 	}
 
 	/**
@@ -209,7 +224,7 @@ export class DavCollection extends DAVEventListener {
 	 * @returns {boolean}
 	 */
 	isWriteable() {
-		return this.currentUserPrivilegeSet.contains('{DAV:}write');
+		return this.currentUserPrivilegeSet.includes('{DAV:}write');
 	}
 
 	/**
@@ -221,7 +236,7 @@ export class DavCollection extends DAVEventListener {
 	_registerCollectionFactory(identifier, factory) {
 		this._collectionFactoryMapper[identifier] = factory;
 		if (typeof factory.getPropFindList === 'function') {
-			Array.prototype.push.apply(this._propFindList, factory.getPropFindList());
+			this._propFindList.push(...factory.getPropFindList());
 		}
 	}
 
@@ -234,7 +249,7 @@ export class DavCollection extends DAVEventListener {
 	_registerObjectFactory(identifier, factory) {
 		this._objectFactoryMapper[identifier] = factory;
 		if (typeof factory.getPropFindList === 'function') {
-			Array.prototype.push.apply(this._propFindList, factory.getPropFindList());
+			this._propFindList.push(...factory.getPropFindList());
 		}
 	}
 
@@ -299,7 +314,7 @@ export class DavCollection extends DAVEventListener {
 			// The DAV Server will always return a propStat
 			// block containing properties of the current url
 			// we are not interested, so let's filter it out
-			if (path === this._url) {
+			if (path === this._url || path + '/' === this.url) {
 				return;
 			}
 
@@ -343,7 +358,6 @@ export class DavCollection extends DAVEventListener {
 
 		this._childrenNames.push(...index);
 		return children;
-
 	}
 
 	/**
