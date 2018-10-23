@@ -5,7 +5,6 @@ module.exports = function(config) {
 		// browsers: ['Firefox'],
 		frameworks: ['jasmine'],
 		files: [
-			{pattern: './node_modules/davclient.js/lib/client.js', type: 'js'},
 			{pattern: 'src/**/*.js', type: 'module'},
 			{pattern: 'test/unit/**/*.js', type: 'module'},
 		],

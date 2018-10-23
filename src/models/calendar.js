@@ -25,7 +25,6 @@ import { DavCollection } from './davCollection.js';
 import { davCollectionPublishable } from './davCollectionPublishable.js';
 import { davCollectionShareable } from './davCollectionShareable.js';
 import { VObject } from './vobject.js';
-import calendarParser from '../parser/calendarParser.js';
 import calendarPropSet from '../propset/calendarPropSet.js';
 import * as NS from '../utility/namespaceUtility.js';
 import * as StringUtility from '../utility/stringUtility.js';
@@ -60,7 +59,6 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 		super(...args);
 
 		super._registerObjectFactory('text/calendar', VObject);
-		super._registerPropFindParser(calendarParser);
 		super._registerPropSetFactory(calendarPropSet);
 
 		super._exposeProperty('color', NS.APPLE, 'calendar-color', true);
@@ -82,7 +80,7 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 	/**
      * find all VObjects filtered by type
 	 *
-     * @param {number} type
+     * @param {String} type
      * @returns {Promise<VObject[]>}
      */
 	async findByType(type) {
@@ -163,7 +161,7 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 		if (!prop) {
 			skeleton.children.push({
 				name: [NS.DAV, 'prop'],
-				children: super._propFindList
+				children: this._propFindList.map((p) => ({ name: p }))
 			});
 		} else {
 			skeleton.children.push({
@@ -172,10 +170,10 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 			});
 		}
 
-		// According to the spec, every calendar query needs a filter,
+		// According to the spec, every calendar-query needs a filter,
 		// but Nextcloud just returns all elements without a filter.
 		if (filter) {
-			skeleton.children.push(filter);
+			skeleton.children.push(...filter);
 		}
 
 		if (timezone) {
@@ -188,6 +186,7 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 		const headers = {
 			'Depth': '1'
 		};
+
 		const body = XMLUtility.serialize(skeleton);
 		const response = await this._request.report(this.url, headers, body);
 		return super._handleMultiStatusResponse(response, Calendar._isRetrievalPartial(prop));
@@ -215,7 +214,7 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 		if (!prop) {
 			skeleton.children.push({
 				name: [NS.DAV, 'prop'],
-				children: super._propFindList
+				children: this._propFindList.map((p) => ({ name: p }))
 			});
 		} else {
 			skeleton.children.push({

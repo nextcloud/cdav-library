@@ -68,11 +68,12 @@ export class DavObject extends DAVEventListener {
 	 * @returns {Promise<void>}
 	 */
 	async fetchCompleteData() {
-		if (!this._isPartial) {
+		if (!this.isPartial()) {
 			return;
 		}
 
-		this._props = await this._request.propFind(this._url, this.constructor.getPropFindList(), 0);
+		const request = await this._request.propFind(this._url, this.constructor.getPropFindList(), 0);
+		this._props = request.body;
 		this._isDirty = false;
 		this._isPartial = false;
 	}
@@ -106,31 +107,17 @@ export class DavObject extends DAVEventListener {
 	 * @returns {Promise<void>}
 	 */
 	async update() {
-		// don't update filtered object because we would
-		// delete all other properties on the server
-		if (this._isPartial) {
+		// 1. Do not update filtered objects, because we would be loosing data on the server
+		// 2. No need to update if object was never modified
+		// 3. Do not update if called directly on DavObject, because there is no data prop
+		if (this.isPartial() || !this.isDirty() || !this.data) {
 			return;
 		}
 
-		// no need to update the object if it was not modified
-		if (!this._isDirty) {
-			return;
-		}
-
-		const headers = {
-			'If-Match': this.etag
-		};
-
-		// TODO - update Content-Type? should stay the same but let's be on the safe side
-		return this._request.put(this.url, headers, this.data).then((res) => {
-			if (res.status === 412) {
-				// wrong etag do not update the new etag
-				this._isPartial = true;
-			} else {
-				this._isDirty = false;
-				this.etag = res.xhr.getResponseHeader('etag');
-			}
-			return res;
+		return this._request.put(this.url, { 'If-Match': this.etag }, this.data).then((res) => {
+			this._isDirty = false;
+			// Don't overwrite content-type, it's set to text/html in the response ...
+			this._props['{DAV:}getetag'] = res.xhr.getResponseHeader('etag');
 		});
 	}
 
@@ -150,6 +137,15 @@ export class DavObject extends DAVEventListener {
 	 */
 	isPartial() {
 		return this._isPartial;
+	}
+
+	/**
+	 * returns whether the data in this DavObject contains unsynced changes
+	 *
+	 * @returns {boolean}
+	 */
+	isDirty() {
+		return this._isDirty;
 	}
 
 	/**
@@ -177,6 +173,9 @@ export class DavObject extends DAVEventListener {
 	}
 
 	/**
+	 * A list of all property names that should be included
+	 * in propfind requests that may include this object
+	 *
 	 * @returns {string[][]}
 	 */
 	static getPropFindList() {

@@ -23,6 +23,6 @@
 
 describe('Shareable dav collection model', () => {
 	it('should ...', () => {
-
+		pending();
 	});
 });

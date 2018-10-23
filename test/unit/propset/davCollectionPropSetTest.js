@@ -21,12 +21,24 @@
  *
  */
 
+import davCollectionPropSet from "../../../src/propset/davCollectionPropSet.js";
+
 describe('Dav collection prop-set', () => {
 	it('should ignore unknown properties', () => {
-
+		expect(davCollectionPropSet({
+			'{Foo:}bar': 123
+		})).toEqual([]);
 	});
 
 	it('should serialize {DAV:}displayname correctly', () => {
-
+		expect(davCollectionPropSet({
+			'{Foo:}bar': 123,
+			'{DAV:}displayname': 'New displayname for collection'
+		})).toEqual([
+			{
+				name: ['DAV:', 'displayname'],
+				value: 'New displayname for collection'
+			}
+		]);
 	});
 });

@@ -23,6 +23,6 @@
 
 describe('Schedule outbox model', () => {
 	it('should ...', () => {
-
+		pending();
 	});
 });

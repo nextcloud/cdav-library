@@ -21,18 +21,6 @@
  *
  */
 
-/**
- * creates a debug function bound to a context
- * @param {String} context
- * @returns {Function}
- */
-export function debugFactory(context) {
-	return (...args) => {
-		if (debugFactory.enabled) {
-			// eslint-disable-next-line no-console
-			console.debug(context, ...args);
-		}
-	};
-}
+import AttachError from './attachError.js';
 
-debugFactory.enabled = false;
+export default class NetworkRequestAbortedError extends AttachError {}

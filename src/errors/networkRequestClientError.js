@@ -21,32 +21,6 @@
  *
  */
 
-describe('Address Book Parser', () => {
-	it('should ignore unknown properties', () => {
+import NetworkRequestHttpError from './networkRequestHttpError.js';
 
-	});
-
-	it('should parse {urn:ietf:params:xml:ns:carddav}addressbook-description correctly', () => {
-
-	});
-
-	it('should parse {urn:ietf:params:xml:ns:carddav}supported-address-data correctly', () => {
-
-	});
-
-	it('should parse {urn:ietf:params:xml:ns:carddav}max-resource-size correctly', () => {
-
-	});
-
-	it('should parse {http://calendarserver.org/ns/}getctag correctly', () => {
-
-	});
-
-	it('should parse {http://owncloud.org/ns}enabled correctly', () => {
-
-	});
-
-	it('should parse {http://owncloud.org/ns}read-only correctly', () => {
-
-	});
-});
+export default class NetworkRequestClientError extends NetworkRequestHttpError {}

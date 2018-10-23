@@ -21,43 +21,6 @@
  *
  */
 
-/**
- *
- * This parser is capable of parsing:
- * - {http://calendarserver.org/ns/}publish-url
- *
- * @param {Object} props
- * @return {Object}
- */
-export default function davCollectionPublishableParser(props) {
-	const parsed = {};
+import AttachError from './attachError.js';
 
-	Object.entries(props).forEach(([key, value]) => {
-		switch (key) {
-		case '{http://calendarserver.org/ns/}publish-url':
-			parsed[key] = publishUrl(value);
-			break;
-
-		default:
-			break;
-		}
-	});
-
-	return parsed;
-}
-
-/**
- *
- * @param value property node for {http://calendarserver.org/ns/}publish-url
- * @returns {*}
- */
-function publishUrl(value) {
-	if (!Array.isArray(value)) {
-		return;
-	}
-	if (value.length < 1) {
-		return;
-	}
-
-	return value[0].textContent;
-}
+export default class NetworkRequestError extends AttachError {}

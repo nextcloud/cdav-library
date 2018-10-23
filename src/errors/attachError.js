@@ -22,17 +22,20 @@
  */
 
 /**
- * creates a debug function bound to a context
- * @param {String} context
- * @returns {Function}
+ * Generic error class that allows attaching more than just a message
+ *
+ * @abstract
  */
-export function debugFactory(context) {
-	return (...args) => {
-		if (debugFactory.enabled) {
-			// eslint-disable-next-line no-console
-			console.debug(context, ...args);
-		}
-	};
-}
+export default class AttachError extends Error {
 
-debugFactory.enabled = false;
+	/**
+	 *
+	 * @param {Object} attach
+	 */
+	constructor(attach) {
+		super();
+
+		Object.assign(this, attach);
+	}
+
+}

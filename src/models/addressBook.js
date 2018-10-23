@@ -26,7 +26,6 @@ import { DavCollection } from './davCollection.js';
 import * as NS from '../utility/namespaceUtility.js';
 import * as StringUtility from '../utility/stringUtility.js';
 import * as XMLUtility from '../utility/xmlUtility.js';
-import addressBookParser from '../parser/addressbookParser.js';
 import addressBookPropSet from '../propset/addressBookPropSet.js';
 import { VCard } from './vcard.js';
 
@@ -56,7 +55,6 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 		super(...args);
 
 		super._registerObjectFactory('text/vcard', VCard);
-		super._registerPropFindParser(addressBookParser);
 		super._registerPropSetFactory(addressBookPropSet);
 
 		super._exposeProperty('description', NS.IETF_CARDDAV, 'addressbook-description', true);
@@ -139,7 +137,7 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 		if (!prop) {
 			skeleton.children.push({
 				name: [NS.DAV, 'prop'],
-				children: super._propFindList
+				children: this._propFindList.map((p) => ({ name: p }))
 			});
 		} else {
 			skeleton.children.push({
@@ -151,7 +149,7 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 		// According to the spec, every address-book query needs a filter,
 		// but Nextcloud just returns all elements without a filter.
 		if (filter) {
-			skeleton.children.push(filter);
+			skeleton.children.push(...filter);
 		}
 
 		if (limit) {
@@ -194,7 +192,7 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 		if (!prop) {
 			skeleton.children.push({
 				name: [NS.DAV, 'prop'],
-				children: super._propFindList
+				children: this._propFindList.map((p) => ({ name: p }))
 			});
 		} else {
 			skeleton.children.push({

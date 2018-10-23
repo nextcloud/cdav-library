@@ -22,23 +22,12 @@
  */
 import * as NS from '../utility/namespaceUtility.js';
 import * as XMLUtility from '../utility/xmlUtility.js';
-import davCollectionShareableParser from '../parser/davCollectionShareableParser.js';
 
 import { debugFactory } from '../debug.js';
 const debug = debugFactory('DavCollectionShareable');
 
 export function davCollectionShareable(Base) {
 	return class extends Base {
-
-		/**
-		 * @inheritDoc
-		 */
-		constructor(...args) {
-			super(...args);
-
-			super._registerPropFindParser(davCollectionShareableParser);
-
-		}
 
 		/**
 		 * shares a DavCollection

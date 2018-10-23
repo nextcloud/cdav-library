@@ -34,7 +34,7 @@ export default class DAVEventListener {
 	 * @param {function} listener
 	 * @param {object} options
 	 */
-	addEventListener(type, listener, options = {}) {
+	addEventListener(type, listener, options = null) {
 		this._eventListeners[type] = this._eventListeners[type] || [];
 		this._eventListeners[type].push({ listener, options });
 	}
@@ -43,17 +43,15 @@ export default class DAVEventListener {
 	 * removes an event listener
 	 *
 	 * @param {string} type
-	 * @param {function} listener
-	 * @param {object} options
+	 * @param {function} dListener
 	 */
-	removeEventListener(type, listener, options = {}) {
+	removeEventListener(type, dListener) {
 		if (!this._eventListeners[type]) {
 			return;
 		}
 
-		const index = this._eventListeners[type].findIndex(({ sListener, sOptions }) => {
-			return listener === sListener && options === sOptions;
-		});
+		const index = this._eventListeners[type]
+			.findIndex(({ listener }) => listener === dListener);
 		if (index === -1) {
 			return;
 		}
@@ -71,11 +69,21 @@ export default class DAVEventListener {
 			return;
 		}
 
+		const listenersToCall = [];
+		const listenersToCallAndRemove = [];
 		this._eventListeners[type].forEach(({ listener, options }) => {
-			if (options.once) {
-				this.removeEventListener(type, listener, options);
+			if (options && options.once) {
+				listenersToCallAndRemove.push(listener);
+			} else {
+				listenersToCall.push(listener);
 			}
+		});
 
+		listenersToCallAndRemove.forEach(listener => {
+			this.removeEventListener(type, listener);
+			listener(event);
+		});
+		listenersToCall.forEach(listener => {
 			listener(event);
 		});
 	}

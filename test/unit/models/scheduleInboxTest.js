@@ -23,6 +23,6 @@
 
 describe('Schedule inbox model', () => {
 	it('should ...', () => {
-
+		pending();
 	});
 });
