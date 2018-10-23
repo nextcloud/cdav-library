@@ -890,4 +890,52 @@ describe('Dav collection model', () => {
 		expect(collection4.isSameCollectionTypeAs(collection1)).toEqual(false);
 	});
 
+	it('should provide an _updatePropsFromServer method', () => {
+		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
+			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
+		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const url = '/foo/bar/folder';
+		const props = {
+			'{DAV:}displayname': 'Foo Bar Bla Blub',
+			'{DAV:}owner': 'https://foo/bar/',
+			'{DAV:}resourcetype': ['{DAV:}collection'],
+			'{DAV:}sync-token': 'https://foo/bar/token/3',
+			'{DAV:}current-user-privilege-set': ['{DAV:}write',
+				'{DAV:}write-properties', '{DAV:}write-content',
+				'{DAV:}unlock', '{DAV:}bind', '{DAV:}unbind',
+				'{DAV:}write-acl', '{DAV:}read', '{DAV:}read-acl',
+				'{DAV:}read-current-user-privilege-set'],
+		};
+
+		const collection = new DavCollection(parent, request, url, props);
+
+		request.propFind.and.callFake(() => {
+			return Promise.resolve({
+				status: 207,
+				body: {
+					'{DAV:}displayname': 'Foo Bar Bla Blub updated',
+					'{DAV:}owner': 'https://foo/bar/',
+					'{DAV:}resourcetype': ['{DAV:}collection'],
+					'{DAV:}sync-token': 'https://foo/bar/token/3',
+					'{DAV:}current-user-privilege-set': ['{DAV:}write',
+						'{DAV:}write-properties', '{DAV:}write-content',
+						'{DAV:}unlock', '{DAV:}bind', '{DAV:}unbind',
+						'{DAV:}write-acl', '{DAV:}read', '{DAV:}read-acl',
+						'{DAV:}read-current-user-privilege-set'],
+				},
+				xhr: null
+			});
+		});
+
+		expect(collection.displayname).toEqual('Foo Bar Bla Blub');
+
+		return collection._updatePropsFromServer().then(() => {
+			expect(collection.displayname).toEqual('Foo Bar Bla Blub updated');
+
+			expect(request.propFind).toHaveBeenCalledTimes(1);
+			expect(request.propFind).toHaveBeenCalledWith('/foo/bar/folder/',
+					[['DAV:', 'displayname'], ['DAV:', 'owner'], ['DAV:', 'resourcetype'],
+					['DAV:', 'sync-token'], ['DAV:', 'current-user-privilege-set']]);
+		});
+	});
 });

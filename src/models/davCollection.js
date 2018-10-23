@@ -315,6 +315,16 @@ export class DavCollection extends DAVEventListener {
 	}
 
 	/**
+	 * get updated properties for this collection from server
+	 * @protected
+	 * @returns {Object}
+	 */
+	async _updatePropsFromServer() {
+		const response = await this._request.propFind(this.url, this.constructor.getPropFindList());
+		this._props = response.body;
+	}
+
+	/**
 	 * @param {Object} response
 	 * @param {Boolean} isPartial
 	 * @returns {DavObject[]|DavCollection[]}

@@ -30,41 +30,46 @@ export function davCollectionPublishable(Base) {
 	return class extends Base {
 
 		/**
+		 * @inheritDoc
+		 */
+		constructor(...args) {
+			super(...args);
+
+			super._exposeProperty('publishURL', NS.CALENDARSERVER, 'publish-url');
+		}
+
+		/**
 		 * publishes the DavCollection
 		 *
-		 * @returns {Promise<Base>}
+		 * @returns {Promise<void>}
 		 */
 		async publish() {
-			debug(`Publishing ${super.url}`);
+			debug(`Publishing ${this.url}`);
 
 			const [skeleton] = XMLUtility.getRootSkeleton(
 				[NS.CALENDARSERVER, 'publish-calendar']);
 			const xml = XMLUtility.serialize(skeleton);
 
-			await super._request.post(this._url, {
-				'Content-Type': 'application/xml; charset=utf-8'
-			}, xml);
+			// TODO - ideally the server should return a 'pre-publish-url' as described in the standard
 
-			return this;
+			await this._request.post(this._url, { 'Content-Type': 'application/xml; charset=utf-8' }, xml);
+			await this._updatePropsFromServer();
 		}
 
 		/**
 		 * unpublishes the DavCollection
 		 *
-		 * @returns {Promise<Base>}
+		 * @returns {Promise<void>}
 		 */
 		async unpublish() {
-			debug(`Unpublishing ${super.url}`);
+			debug(`Unpublishing ${this.url}`);
 
 			const [skeleton] = XMLUtility.getRootSkeleton(
 				[NS.CALENDARSERVER, 'unpublish-calendar']);
 			const xml = XMLUtility.serialize(skeleton);
 
-			await super._request.post(this._url, {
-				'Content-Type': 'application/xml; charset=utf-8'
-			}, xml);
-
-			return this;
+			await this._request.post(this._url, { 'Content-Type': 'application/xml; charset=utf-8' }, xml);
+			delete this._props['{http://calendarserver.org/ns/}publish-url'];
 		}
 
 		/**

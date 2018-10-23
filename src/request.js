@@ -376,7 +376,7 @@ export default class Request {
 
 				if (xhr.status === 207) {
 					responseBody = this._parseMultiStatusResponse(responseBody);
-					if (parseInt(assignHeaders['Depth'], 10) === 0) {
+					if (parseInt(assignHeaders['Depth'], 10) === 0 && method === 'PROPFIND') {
 						responseBody = responseBody[Object.keys(responseBody)[0]];
 					}
 				}
