@@ -26,8 +26,6 @@ module.exports = function(config) {
 			'karma-coverage',
 			'karma-firefox-launcher',
 			'karma-mocha-reporter'
-		],
-		customContextFile: 'test/context.html',
-		customDebugFile: 'test/debug.html'
+		]
 	});
 };
