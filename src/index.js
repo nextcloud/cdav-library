@@ -38,7 +38,7 @@ export default class DavClient {
 
 	/**
 	 * @param {Object} options
-	 * @property {String} rootUrl
+	 * @param {String} options.rootUrl
 	 * @param {Function} xhrProvider
 	 * @param {Object} factories
 	 */
