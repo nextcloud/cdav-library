@@ -201,7 +201,7 @@ END:VCALENDAR
 
 			expect(request.report).toHaveBeenCalledTimes(1);
 			expect(request.report).toHaveBeenCalledWith('/foo/bar/folder/', { Depth: '1' },
-				'<x0:calendar-query xmlns:x0="urn:ietf:params:xml:ns:caldav"><x1:prop xmlns:x1="DAV:"><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x1:displayname/><x1:owner/><x1:resourcetype/><x1:sync-token/><x1:current-user-privilege-set/><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x0:calendar-data/></x1:prop><x0:comp-filter name="VCALENDAR"><x0:comp-filter name="VEVENT"/></x0:comp-filter></x0:calendar-query>');
+				'<x0:calendar-query xmlns:x0="urn:ietf:params:xml:ns:caldav"><x1:prop xmlns:x1="DAV:"><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x1:displayname/><x1:owner/><x1:resourcetype/><x1:sync-token/><x1:current-user-privilege-set/><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x0:calendar-data/></x1:prop><x0:filter><x0:comp-filter name="VCALENDAR"><x0:comp-filter name="VEVENT"/></x0:comp-filter></x0:filter></x0:calendar-query>');
 		}).catch(() => {
 			fail('Calendar findByType was not supposed to fail');
 		});
@@ -234,7 +234,7 @@ END:VCALENDAR
 
 			expect(request.report).toHaveBeenCalledTimes(1);
 			expect(request.report).toHaveBeenCalledWith('/foo/bar/folder/', { Depth: '1' },
-				'<x0:calendar-query xmlns:x0="urn:ietf:params:xml:ns:caldav"><x1:prop xmlns:x1="DAV:"><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x1:displayname/><x1:owner/><x1:resourcetype/><x1:sync-token/><x1:current-user-privilege-set/><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x0:calendar-data/></x1:prop><x0:comp-filter name="VCALENDAR"><x0:comp-filter name="VEVENT"><x0:time-range start="20181001T000000Z" end="20181031T000000Z"/></x0:comp-filter></x0:comp-filter></x0:calendar-query>');
+				'<x0:calendar-query xmlns:x0="urn:ietf:params:xml:ns:caldav"><x1:prop xmlns:x1="DAV:"><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x1:displayname/><x1:owner/><x1:resourcetype/><x1:sync-token/><x1:current-user-privilege-set/><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x0:calendar-data/></x1:prop><x0:filter><x0:comp-filter name="VCALENDAR"><x0:comp-filter name="VEVENT"><x0:time-range start="20181001T000000Z" end="20181031T000000Z"/></x0:comp-filter></x0:comp-filter></x0:filter></x0:calendar-query>');
 		}).catch((e) => {
 			console.log(e);
 			fail('Calendar findByTypeInTimeRange was not supposed to fail');
@@ -349,7 +349,7 @@ END:VCALENDAR
 
 			expect(request.report).toHaveBeenCalledTimes(1);
 			expect(request.report).toHaveBeenCalledWith('/foo/bar/folder/', { Depth: '1' },
-				'<x0:calendar-query xmlns:x0="urn:ietf:params:xml:ns:caldav"><x1:prop xmlns:x1="DAV:"><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x1:displayname/><x1:owner/><x1:resourcetype/><x1:sync-token/><x1:current-user-privilege-set/><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x0:calendar-data/></x1:prop><x0:comp-filter name="VCALENDAR"><x0:comp-filter name="VEVENT"><x0:prop-filter name="ATTENDEE"><x0:text-match collation="i;ascii-casemap">mailto:lisa@example.com</x0:text-match><x0:param-filter name="PARTSTAT"><x0:text-match collation="i;ascii-casemap">NEEDS-ACTION</x0:text-match></x0:param-filter></x0:prop-filter></x0:comp-filter></x0:comp-filter></x0:calendar-query>');
+				'<x0:calendar-query xmlns:x0="urn:ietf:params:xml:ns:caldav"><x1:prop xmlns:x1="DAV:"><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x1:displayname/><x1:owner/><x1:resourcetype/><x1:sync-token/><x1:current-user-privilege-set/><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x0:calendar-data/></x1:prop><x0:filter><x0:comp-filter name="VCALENDAR"><x0:comp-filter name="VEVENT"><x0:prop-filter name="ATTENDEE"><x0:text-match collation="i;ascii-casemap">mailto:lisa@example.com</x0:text-match><x0:param-filter name="PARTSTAT"><x0:text-match collation="i;ascii-casemap">NEEDS-ACTION</x0:text-match></x0:param-filter></x0:prop-filter></x0:comp-filter></x0:comp-filter></x0:filter></x0:calendar-query>');
 		}).catch(() => {
 			fail('Calendar calendarQuery was not supposed to fail');
 		});
