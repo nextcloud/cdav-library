@@ -225,36 +225,30 @@ describe('Address book model', () => {
 		// https://tools.ietf.org/html/rfc6352#section-8.6.4
 		const addressbook = new AddressBook(parent, request, url, props);
 		return addressbook.addressbookQuery([{
-			name: [NS.IETF_CARDDAV, 'filter'],
+			name: [NS.IETF_CARDDAV, 'prop-filter'],
 			attributes: [
-				['test', 'anyof']
+				['name', 'FN']
 			],
 			children: [{
-				name: [NS.IETF_CARDDAV, 'prop-filter'],
+				name: [NS.IETF_CARDDAV, 'text-match'],
 				attributes: [
-					['name', 'FN']
+					['collation', 'i;unicode-casemap'],
+					['match-type', 'contains'],
 				],
-				children: [{
-					name: [NS.IETF_CARDDAV, 'text-match'],
-					attributes: [
-						['collation', 'i;unicode-casemap'],
-						['match-type', 'contains'],
-					],
-					value: 'daboo'
-				}]
-			}, {
-				name: [NS.IETF_CARDDAV, 'prop-filter'],
+				value: 'daboo'
+			}]
+		}, {
+			name: [NS.IETF_CARDDAV, 'prop-filter'],
+			attributes: [
+				['name', 'EMAIL']
+			],
+			children: [{
+				name: [NS.IETF_CARDDAV, 'text-match'],
 				attributes: [
-					['name', 'EMAIL']
+					['collation', 'i;unicode-casemap'],
+					['match-type', 'contains'],
 				],
-				children: [{
-					name: [NS.IETF_CARDDAV, 'text-match'],
-					attributes: [
-						['collation', 'i;unicode-casemap'],
-						['match-type', 'contains'],
-					],
-					value: 'daboo'
-				}]
+				value: 'daboo'
 			}]
 		}]).then((res) => {
 			expect(res.length).toEqual(1);

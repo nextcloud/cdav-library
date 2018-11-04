@@ -125,9 +125,10 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 	 * @param {Object[]} filter
 	 * @param {Object[]} prop
 	 * @param {Number} limit
+	 * @param {String} test Either anyof or allof
 	 * @returns {Promise<VCard[]>}
 	 */
-	async addressbookQuery(filter, prop = null, limit = null) {
+	async addressbookQuery(filter, prop = null, limit = null, test = 'anyof') {
 		debug('sending an addressbook-query request');
 
 		const [skeleton] = XMLUtility.getRootSkeleton(
@@ -149,7 +150,13 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 		// According to the spec, every address-book query needs a filter,
 		// but Nextcloud just returns all elements without a filter.
 		if (filter) {
-			skeleton.children.push(...filter);
+			skeleton.children.push({
+				name: [NS.IETF_CARDDAV, 'filter'],
+				attributes: [
+					['test', test]
+				],
+				children: filter
+			});
 		}
 
 		if (limit) {
