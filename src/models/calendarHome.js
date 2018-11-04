@@ -103,9 +103,11 @@ export class CalendarHome extends DavCollection {
 	 *
      * @param {String} displayname
      * @param {String} color
+	 * @param {String[]} supportedComponentSet
+	 * @param {Number} order
      * @returns {Promise<Calendar>}
      */
-	async createCalendarCollection(displayname, color) {
+	async createCalendarCollection(displayname, color, supportedComponentSet = null, order = null) {
 		debug('creating a calendar collection');
 
 		const props = [{
@@ -126,6 +128,27 @@ export class CalendarHome extends DavCollection {
 			value: '1'
 		}];
 
+		if (supportedComponentSet) {
+			props.push({
+				name: [NS.IETF_CALDAV, 'supported-calendar-component-set'],
+				children: supportedComponentSet.map((supportedComponent) => {
+					return {
+						name: [NS.IETF_CALDAV, 'comp'],
+						attributes: [
+							['name', supportedComponent]
+						]
+					};
+				})
+			});
+		}
+
+		if (order) {
+			props.push({
+				name: [NS.APPLE, 'calendar-order'],
+				value: order
+			});
+		}
+
 		const name = super._getAvailableNameFromToken(displayname);
 		return super.createCollection(name, props);
 	}
@@ -136,9 +159,10 @@ export class CalendarHome extends DavCollection {
      * @param {String} displayname
      * @param {String} color
      * @param {String} source
+	 * @param {Number} order
      * @returns {Promise<Subscription>}
      */
-	async createSubscribedCollection(displayname, color, source) {
+	async createSubscribedCollection(displayname, color, source, order = null) {
 		debug('creating a subscribed collection');
 
 		const props = [{
@@ -164,6 +188,13 @@ export class CalendarHome extends DavCollection {
 				value: source
 			}]
 		}];
+
+		if (order) {
+			props.push({
+				name: [NS.APPLE, 'calendar-order'],
+				value: order
+			});
+		}
 
 		const name = super._getAvailableNameFromToken(displayname);
 		return super.createCollection(name, props);
