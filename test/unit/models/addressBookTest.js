@@ -298,6 +298,36 @@ describe('Address book model', () => {
 			fail('AddressBook addressbook-multiget was not supposed to fail');
 		});
 	});
+
+	it('should send an addressbook-multiget and request export of data', () => {
+		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
+			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
+		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'report', 'pathname']);
+		const url = '/foo/bar/folder';
+		const props = returnDefaultProps();
+
+		request.report.and.callFake(() => {
+			return Promise.resolve({
+				status: 200,
+				body: 'RAW DATA',
+				xhr: null
+			});
+		});
+
+		request.pathname.and.callFake((p) => p);
+
+		const addressbook = new AddressBook(parent, request, url, props);
+		return addressbook.addressbookMultigetExport(['/foo/bar/folder/a', '/foo/bar/folder/b']).then((res) => {
+			expect(res.status).toEqual(200);
+			expect(res.body).toEqual('RAW DATA');
+
+			expect(request.report).toHaveBeenCalledTimes(1);
+			expect(request.report).toHaveBeenCalledWith('/foo/bar/folder/?export', { Depth: '1' },
+				'<x0:addressbook-multiget xmlns:x0="urn:ietf:params:xml:ns:carddav"><x1:prop xmlns:x1="DAV:"><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x1:displayname/><x1:owner/><x1:resourcetype/><x1:sync-token/><x1:current-user-privilege-set/><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x0:address-data/></x1:prop><x1:href xmlns:x1="DAV:">/foo/bar/folder/a</x1:href><x1:href xmlns:x1="DAV:">/foo/bar/folder/b</x1:href></x0:addressbook-multiget>');
+		}).catch(() => {
+			fail('AddressBook addressbook-multiget was not supposed to fail');
+		});
+	});
 });
 
 function returnDefaultProps() {

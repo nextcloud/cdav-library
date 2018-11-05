@@ -192,6 +192,48 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 			return [];
 		}
 
+		const headers = {
+			'Depth': '1'
+		};
+		const body = this._buildMultiGetBody(hrefs, prop);
+		const response = await this._request.report(this.url, headers, body);
+		return super._handleMultiStatusResponse(response, AddressBook._isRetrievalPartial(prop));
+	}
+
+	/**
+	 * sends an addressbook multiget query as defined in
+	 * https://tools.ietf.org/html/rfc6352#section-8.7
+	 * and requests a download of the result
+	 *
+	 * @param {String[]} hrefs
+	 * @param {Object[]} prop
+	 * @returns {Promise<{Object}>}
+	 * @property {String|Object} body
+	 * @property {Number} status
+	 * @property {XMLHttpRequest} xhr
+	 */
+	async addressbookMultigetExport(hrefs = [], prop) {
+		debug('sending an addressbook-multiget request and request download');
+
+		if (hrefs.length === 0) {
+			return '';
+		}
+
+		const headers = {
+			'Depth': '1'
+		};
+		const body = this._buildMultiGetBody(hrefs, prop);
+		return this._request.report(this.url + '?export', headers, body);
+	}
+
+	/**
+	 *
+	 * @param {String[]} hrefs
+	 * @param {Object[]} prop
+	 * @returns String
+	 * @private
+	 */
+	_buildMultiGetBody(hrefs, prop) {
 		const [skeleton] = XMLUtility.getRootSkeleton(
 			[NS.IETF_CARDDAV, 'addressbook-multiget']
 		);
@@ -215,12 +257,7 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 			});
 		});
 
-		const headers = {
-			'Depth': '1'
-		};
-		const body = XMLUtility.serialize(skeleton);
-		const response = await this._request.report(this.url, headers, body);
-		return super._handleMultiStatusResponse(response, AddressBook._isRetrievalPartial(prop));
+		return XMLUtility.serialize(skeleton);
 	}
 
 	/**
