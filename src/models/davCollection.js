@@ -228,6 +228,20 @@ export class DavCollection extends DAVEventListener {
 	}
 
 	/**
+	 * checks whether this is of the same type as another collection
+	 * @param {DavCollection} collection
+	 */
+	isSameCollectionTypeAs(collection) {
+		const ownResourceType = this.resourcetype;
+		const foreignResourceType = collection.resourcetype;
+
+		const ownDiff = ownResourceType.find((r) => foreignResourceType.indexOf(r) === -1);
+		const foreignDiff = foreignResourceType.find((r) => ownResourceType.indexOf(r) === -1);
+
+		return ownDiff === undefined && foreignDiff === undefined;
+	}
+
+	/**
 	 * @protected
 	 * @param {String} identifier
 	 * @param {Function} factory
