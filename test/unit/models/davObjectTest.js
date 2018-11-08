@@ -165,15 +165,6 @@ describe('Dav object model', () => {
 		});
 	});
 
-
-	it('should copy an object', () => {
-		pending('not implemented yet');
-	});
-
-	it('should move an object', () => {
-		pending('not implemented yet');
-	});
-
 	it('should update an object', () => {
 		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
 			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
@@ -438,4 +429,232 @@ describe('Dav object model', () => {
 		expect(davObject.url).toEqual('/foo/bar/file');
 	});
 
+	it('should copy a DavObject into a different collection', () => {
+		const davCollection1 = jasmine.createSpyObj('DavCollection1', ['findAll', 'findAllByFilter', 'find',
+			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable', 'isSameCollectionTypeAs']);
+		davCollection1.url = '/foo/bar/';
+		const davCollection2 = jasmine.createSpyObj('DavCollection2', ['findAll', 'findAllByFilter', 'find',
+			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
+		davCollection2.url = '/foo/bla/';
+		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'copy']);
+		const url = '/foo/bar/file-tri-tra-tralala';
+		const props = {
+			'{DAV:}getetag': '"etag foo bar"',
+			'{DAV:}getcontenttype': 'text/blub',
+			'{DAV:}resourcetype': [],
+			'{FOO:}bar': 'data1'
+		};
+
+		davCollection1.isSameCollectionTypeAs.and.callFake(() => true);
+		davCollection2.isWriteable.and.callFake(() => true);
+		davCollection2.find.and.callFake(() => 'copied_object');
+
+		const davObject = new DavObject(davCollection1, request, url, props, false);
+		return davObject.copy(davCollection2, true).then(() => {
+			expect(davCollection1.isSameCollectionTypeAs).toHaveBeenCalledTimes(1);
+			expect(davCollection1.isSameCollectionTypeAs).toHaveBeenCalledWith(davCollection2);
+
+			expect(davCollection2.isWriteable).toHaveBeenCalledTimes(1);
+
+			expect(request.copy).toHaveBeenCalledTimes(1);
+			expect(request.copy).toHaveBeenCalledWith('/foo/bar/file-tri-tra-tralala', '/foo/bla/file-tri-tra-tralala', 0, true);
+
+			expect(davCollection2.find).toHaveBeenCalledTimes(1);
+			expect(davCollection2.find).toHaveBeenCalledWith('file-tri-tra-tralala');
+		});
+	});
+
+	it('should copy a DavObject into a different collection, but not if destination is the same as the current collection', () => {
+		const davCollection1 = jasmine.createSpyObj('DavCollection1', ['findAll', 'findAllByFilter', 'find',
+			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable', 'isSameCollectionTypeAs']);
+		davCollection1.url = '/foo/bar/';
+		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'copy']);
+		const url = '/foo/bar/file-tri-tra-tralala';
+		const props = {
+			'{DAV:}getetag': '"etag foo bar"',
+			'{DAV:}getcontenttype': 'text/blub',
+			'{DAV:}resourcetype': [],
+			'{FOO:}bar': 'data1'
+		};
+
+		davCollection1.isSameCollectionTypeAs.and.callFake(() => true);
+
+		const davObject = new DavObject(davCollection1, request, url, props, false);
+		return davObject.copy(davCollection1, true).then(() => {
+			fail('Copy was not supposed to succeed')
+		}).catch((e) => {
+			expect(e.message).toEqual('Copying an object to the collection it\'s already part of is not supported');
+		});
+	});
+
+	it('should copy a DavObject into a different collection, but not if destination is of a different collection type', () => {
+		const davCollection1 = jasmine.createSpyObj('DavCollection1', ['findAll', 'findAllByFilter', 'find',
+			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable', 'isSameCollectionTypeAs']);
+		davCollection1.url = '/foo/bar/';
+		const davCollection2 = jasmine.createSpyObj('DavCollection2', ['findAll', 'findAllByFilter', 'find',
+			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
+		davCollection2.url = '/foo/bla/';
+		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'copy']);
+		const url = '/foo/bar/file-tri-tra-tralala';
+		const props = {
+			'{DAV:}getetag': '"etag foo bar"',
+			'{DAV:}getcontenttype': 'text/blub',
+			'{DAV:}resourcetype': [],
+			'{FOO:}bar': 'data1'
+		};
+
+		davCollection1.isSameCollectionTypeAs.and.callFake(() => false);
+		davCollection2.isWriteable.and.callFake(() => true);
+		davCollection2.find.and.callFake(() => 'copied_object');
+
+		const davObject = new DavObject(davCollection1, request, url, props, false);
+		return davObject.copy(davCollection2, true).then(() => {
+			fail('Copy was not supposed to succeed')
+		}).catch((e) => {
+			expect(e.message).toEqual('Copying an object to a collection of a different type is not supported');
+		});
+	});
+
+	it('should copy a DavObject into a different collection, but not if destination is read-only', () => {
+		const davCollection1 = jasmine.createSpyObj('DavCollection1', ['findAll', 'findAllByFilter', 'find',
+			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable', 'isSameCollectionTypeAs']);
+		davCollection1.url = '/foo/bar/';
+		const davCollection2 = jasmine.createSpyObj('DavCollection2', ['findAll', 'findAllByFilter', 'find',
+			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
+		davCollection2.url = '/foo/bla/';
+		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'copy']);
+		const url = '/foo/bar/file-tri-tra-tralala';
+		const props = {
+			'{DAV:}getetag': '"etag foo bar"',
+			'{DAV:}getcontenttype': 'text/blub',
+			'{DAV:}resourcetype': [],
+			'{FOO:}bar': 'data1'
+		};
+
+		davCollection1.isSameCollectionTypeAs.and.callFake(() => true);
+		davCollection2.isWriteable.and.callFake(() => false);
+		davCollection2.find.and.callFake(() => 'copied_object');
+
+		const davObject = new DavObject(davCollection1, request, url, props, false);
+		return davObject.copy(davCollection2, true).then(() => {
+			fail('Copy was not supposed to succeed')
+		}).catch((e) => {
+			expect(e.message).toEqual('Can not copy object into read-only destination collection');
+		});
+	});
+
+	it('should move a DavObject into a different collection', () => {
+		const davCollection1 = jasmine.createSpyObj('DavCollection1', ['findAll', 'findAllByFilter', 'find',
+			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable', 'isSameCollectionTypeAs']);
+		davCollection1.url = '/foo/bar/';
+		const davCollection2 = jasmine.createSpyObj('DavCollection2', ['findAll', 'findAllByFilter', 'find',
+			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
+		davCollection2.url = '/foo/bla/';
+		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'move']);
+		const url = '/foo/bar/file-tri-tra-tralala';
+		const props = {
+			'{DAV:}getetag': '"etag foo bar"',
+			'{DAV:}getcontenttype': 'text/blub',
+			'{DAV:}resourcetype': [],
+			'{FOO:}bar': 'data1'
+		};
+
+		davCollection1.isSameCollectionTypeAs.and.callFake(() => true);
+		davCollection2.isWriteable.and.callFake(() => true);
+		davCollection2.find.and.callFake(() => 'copied_object');
+
+		const davObject = new DavObject(davCollection1, request, url, props, false);
+		return davObject.move(davCollection2, true).then(() => {
+			expect(davCollection1.isSameCollectionTypeAs).toHaveBeenCalledTimes(1);
+			expect(davCollection1.isSameCollectionTypeAs).toHaveBeenCalledWith(davCollection2);
+
+			expect(davCollection2.isWriteable).toHaveBeenCalledTimes(1);
+
+			expect(request.move).toHaveBeenCalledTimes(1);
+			expect(request.move).toHaveBeenCalledWith('/foo/bar/file-tri-tra-tralala', '/foo/bla/file-tri-tra-tralala', true);
+
+			expect(davCollection2.find).toHaveBeenCalledTimes(0);
+			expect(davObject._parent).toEqual(davCollection2);
+			expect(davObject.url).toEqual('/foo/bla/file-tri-tra-tralala');
+		});
+	});
+
+	it('should move a DavObject into a different collection, but not if destination is the same as the current collection', () => {
+		const davCollection1 = jasmine.createSpyObj('DavCollection1', ['findAll', 'findAllByFilter', 'find',
+			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable', 'isSameCollectionTypeAs']);
+		davCollection1.url = '/foo/bar/';
+		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'move']);
+		const url = '/foo/bar/file-tri-tra-tralala';
+		const props = {
+			'{DAV:}getetag': '"etag foo bar"',
+			'{DAV:}getcontenttype': 'text/blub',
+			'{DAV:}resourcetype': [],
+			'{FOO:}bar': 'data1'
+		};
+
+		davCollection1.isSameCollectionTypeAs.and.callFake(() => true);
+
+		const davObject = new DavObject(davCollection1, request, url, props, false);
+		return davObject.move(davCollection1, true).then(() => {
+			fail('Copy was not supposed to succeed')
+		}).catch((e) => {
+			expect(e.message).toEqual('Moving an object to the collection it\'s already part of is not supported');
+		});
+	});
+
+	it('should move a DavObject into a different collection, but not if destination is of a different collection type', () => {
+		const davCollection1 = jasmine.createSpyObj('DavCollection1', ['findAll', 'findAllByFilter', 'find',
+			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable', 'isSameCollectionTypeAs']);
+		davCollection1.url = '/foo/bar/';
+		const davCollection2 = jasmine.createSpyObj('DavCollection2', ['findAll', 'findAllByFilter', 'find',
+			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
+		davCollection2.url = '/foo/bla/';
+		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'move']);
+		const url = '/foo/bar/file-tri-tra-tralala';
+		const props = {
+			'{DAV:}getetag': '"etag foo bar"',
+			'{DAV:}getcontenttype': 'text/blub',
+			'{DAV:}resourcetype': [],
+			'{FOO:}bar': 'data1'
+		};
+
+		davCollection1.isSameCollectionTypeAs.and.callFake(() => false);
+		davCollection2.isWriteable.and.callFake(() => true);
+		davCollection2.find.and.callFake(() => 'copied_object');
+
+		const davObject = new DavObject(davCollection1, request, url, props, false);
+		return davObject.move(davCollection2, true).then(() => {
+			fail('Copy was not supposed to succeed')
+		}).catch((e) => {
+			expect(e.message).toEqual('Moving an object to a collection of a different type is not supported');
+		});
+	});
+
+	it('should move a DavObject into a different collection, but not if destination is read-only', () => {
+		const davCollection1 = jasmine.createSpyObj('DavCollection1', ['findAll', 'findAllByFilter', 'find',
+			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable', 'isSameCollectionTypeAs']);
+		davCollection1.url = '/foo/bar/';
+		const davCollection2 = jasmine.createSpyObj('DavCollection2', ['findAll', 'findAllByFilter', 'find',
+			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
+		davCollection2.url = '/foo/bla/';
+		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'move']);
+		const url = '/foo/bar/file-tri-tra-tralala';
+		const props = {
+			'{DAV:}getetag': '"etag foo bar"',
+			'{DAV:}getcontenttype': 'text/blub',
+			'{DAV:}resourcetype': [],
+			'{FOO:}bar': 'data1'
+		};
+
+		davCollection1.isSameCollectionTypeAs.and.callFake(() => true);
+		davCollection2.isWriteable.and.callFake(() => false);
+		davCollection2.find.and.callFake(() => 'copied_object');
+
+		const davObject = new DavObject(davCollection1, request, url, props, false);
+		return davObject.move(davCollection2, true).then(() => {
+			fail('Copy was not supposed to succeed')
+		}).catch((e) => {
+			expect(e.message).toEqual('Can not move object into read-only destination collection');
+		});
+	});
 });
