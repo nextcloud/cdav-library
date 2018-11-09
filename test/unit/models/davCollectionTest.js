@@ -851,4 +851,43 @@ describe('Dav collection model', () => {
 		expect(collection.url).toEqual('/foo/bar/folder/')
 	});
 
+	it('should check whether two collections are of the same type', () => {
+		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+
+		const collection1 = new DavCollection(null, request, 'a', {
+			'{DAV:}displayname': 'Foo Bar Bla Blub col1',
+			'{DAV:}owner': 'https://foo/bar/',
+			'{DAV:}resourcetype': ['{DAV:}collection', '{test}collection1'],
+			'{DAV:}sync-token': 'https://foo/bar/token/3',
+		});
+		const collection2 = new DavCollection(null, request, 'b', {
+			'{DAV:}displayname': 'Foo Bar Bla Blub col1',
+			'{DAV:}owner': 'https://foo/bar/',
+			'{DAV:}resourcetype': ['{DAV:}collection', '{test}collection1'],
+			'{DAV:}sync-token': 'https://foo/bar/token/3',
+		});
+		const collection3 = new DavCollection(null, request, 'b', {
+			'{DAV:}displayname': 'Foo Bar Bla Blub col1',
+			'{DAV:}owner': 'https://foo/bar/',
+			'{DAV:}resourcetype': ['{DAV:}collection', '{test}collection99'],
+			'{DAV:}sync-token': 'https://foo/bar/token/3',
+		});
+		const collection4 = new DavCollection(null, request, 'b', {
+			'{DAV:}displayname': 'Foo Bar Bla Blub col1',
+			'{DAV:}owner': 'https://foo/bar/',
+			'{DAV:}resourcetype': ['{DAV:}collection'],
+			'{DAV:}sync-token': 'https://foo/bar/token/3',
+		});
+
+
+		expect(collection1.isSameCollectionTypeAs(collection2)).toEqual(true);
+		expect(collection2.isSameCollectionTypeAs(collection1)).toEqual(true);
+
+		expect(collection1.isSameCollectionTypeAs(collection3)).toEqual(false);
+		expect(collection3.isSameCollectionTypeAs(collection1)).toEqual(false);
+
+		expect(collection1.isSameCollectionTypeAs(collection4)).toEqual(false);
+		expect(collection4.isSameCollectionTypeAs(collection1)).toEqual(false);
+	});
+
 });

@@ -81,25 +81,54 @@ export class DavObject extends DAVEventListener {
 	/**
 	 * copies a DavObject to a different DavCollection
 	 * @param {DavCollection} collection
+	 * @param {Boolean} overwrite
 	 * @returns {Promise<DavObject>} Promise that resolves to the copied DavObject
 	 */
-	async copy(collection) {
+	async copy(collection, overwrite = false) {
 		debug(`copying ${this.url} from ${this._parent.url} to ${collection.url}`);
 
-		// TODO: implement me
-		// TODO: compare resourcetype of both collections, current and destination
+		if (this._parent === collection) {
+			throw new Error('Copying an object to the collection it\'s already part of is not supported');
+		}
+		if (!this._parent.isSameCollectionTypeAs(collection)) {
+			throw new Error('Copying an object to a collection of a different type is not supported');
+		}
+		if (!collection.isWriteable()) {
+			throw new Error('Can not copy object into read-only destination collection');
+		}
+
+		const uri = this.url.split('/').splice(-1, 1)[0];
+		const destination = collection.url + uri;
+
+		await this._request.copy(this.url, destination, 0, overwrite);
+		return collection.find(uri);
 	}
 
 	/**
 	 * moves a DavObject to a different DavCollection
 	 * @param {DavCollection} collection
+	 * @param {Boolean} overwrite
 	 * @returns {Promise<void>}
 	 */
-	async move(collection) {
+	async move(collection, overwrite = false) {
 		debug(`moving ${this.url} from ${this._parent.url} to ${collection.url}`);
 
-		// TODO: implement me
-		// TODO: compare resourcetype of both collections, current and destination
+		if (this._parent === collection) {
+			throw new Error('Moving an object to the collection it\'s already part of is not supported');
+		}
+		if (!this._parent.isSameCollectionTypeAs(collection)) {
+			throw new Error('Moving an object to a collection of a different type is not supported');
+		}
+		if (!collection.isWriteable()) {
+			throw new Error('Can not move object into read-only destination collection');
+		}
+
+		const uri = this.url.split('/').splice(-1, 1)[0];
+		const destination = collection.url + uri;
+
+		await this._request.move(this.url, destination, overwrite);
+		this._parent = collection;
+		this._url = destination;
 	}
 
 	/**
