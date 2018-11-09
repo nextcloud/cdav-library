@@ -52,15 +52,53 @@ export class Principal extends DavObject {
 
 		super._exposeProperty('addressBookHomes', NS.IETF_CARDDAV, 'addressbook-home-set');
 
-		Object.defineProperty(this, 'principalScheme', {
-			get: () => {
-				const baseUrl = this._request.pathname(this._request.baseUrl);
-				let principalURI = this.url.substr(baseUrl.length);
-				if (principalURI.substr(-1) === '/') {
-					principalURI = principalURI.substr(0, principalURI.length - 1);
-				}
+		Object.defineProperties(this, {
+			'principalScheme': {
+				get: () => {
+					const baseUrl = this._request.pathname(this._request.baseUrl);
+					let principalURI = this.url.substr(baseUrl.length);
+					if (principalURI.substr(-1) === '/') {
+						principalURI = principalURI.substr(0, principalURI.length - 1);
+					}
 
-				return 'principal:' + principalURI;
+					return 'principal:' + principalURI;
+				}
+			},
+			userId: {
+				get: () => {
+					if (this.calendarUserType !== 'INDIVIDUAL') {
+						return null;
+					}
+
+					return this.url.split('/').splice(-2, 2)[this.url.endsWith('/') ? 0 : 1];
+				}
+			},
+			groupId: {
+				get: () => {
+					if (this.calendarUserType !== 'GROUP') {
+						return null;
+					}
+
+					return this.url.split('/').splice(-2, 2)[this.url.endsWith('/') ? 0 : 1];
+				}
+			},
+			resourceId: {
+				get: () => {
+					if (this.calendarUserType !== 'RESOURCE') {
+						return null;
+					}
+
+					return this.url.split('/').splice(-2, 2)[this.url.endsWith('/') ? 0 : 1];
+				}
+			},
+			roomId: {
+				get: () => {
+					if (this.calendarUserType !== 'ROOM') {
+						return null;
+					}
+
+					return this.url.split('/').splice(-2, 2)[this.url.endsWith('/') ? 0 : 1];
+				}
 			}
 		});
 	}

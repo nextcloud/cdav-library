@@ -263,6 +263,91 @@ describe('Principal model', () => {
 		expect(principal.principalScheme).toEqual('principal:foo/bar/baz');
 	});
 
+	it('should expose userId as property if principal is a user', () => {
+		const parent = null;
+		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav/';
+		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
+		const props = {
+			'{DAV:}displayname': 'Umberto',
+			'{urn:ietf:params:xml:ns:caldav}calendar-user-type': 'INDIVIDUAL'
+		};
+
+		const principal = new Principal(parent, request, url, props);
+		expect(principal.userId).toEqual('baz');
+		expect(principal.groupId).toEqual(null);
+		expect(principal.resourceId).toEqual(null);
+		expect(principal.roomId).toEqual(null);
+	});
+
+	it('should expose groupId as property if principal is a group', () => {
+		const parent = null;
+		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav/';
+		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
+		const props = {
+			'{DAV:}displayname': 'Umberto',
+			'{urn:ietf:params:xml:ns:caldav}calendar-user-type': 'GROUP'
+		};
+
+		const principal = new Principal(parent, request, url, props);
+		expect(principal.userId).toEqual(null);
+		expect(principal.groupId).toEqual('baz');
+		expect(principal.resourceId).toEqual(null);
+		expect(principal.roomId).toEqual(null);
+	});
+
+	it('should expose resourceId as property if principal is a resource', () => {
+		const parent = null;
+		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav/';
+		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
+		const props = {
+			'{DAV:}displayname': 'Umberto',
+			'{urn:ietf:params:xml:ns:caldav}calendar-user-type': 'RESOURCE'
+		};
+
+		const principal = new Principal(parent, request, url, props);
+		expect(principal.userId).toEqual(null);
+		expect(principal.groupId).toEqual(null);
+		expect(principal.resourceId).toEqual('baz');
+		expect(principal.roomId).toEqual(null);
+	});
+
+	it('should expose roomId as property if principal is a room', () => {
+		const parent = null;
+		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav/';
+		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
+		const props = {
+			'{DAV:}displayname': 'Umberto',
+			'{urn:ietf:params:xml:ns:caldav}calendar-user-type': 'ROOM'
+		};
+
+		const principal = new Principal(parent, request, url, props);
+		expect(principal.userId).toEqual(null);
+		expect(principal.groupId).toEqual(null);
+		expect(principal.resourceId).toEqual(null);
+		expect(principal.roomId).toEqual('baz');
+	});
+
+	it('should expose userId as property if principal is a user even if url ends without slash', () => {
+		const parent = null;
+		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav/';
+		const url = '/nextcloud/remote.php/dav/foo/bar/baz';
+		const props = {
+			'{DAV:}displayname': 'Umberto',
+			'{urn:ietf:params:xml:ns:caldav}calendar-user-type': 'INDIVIDUAL'
+		};
+
+		const principal = new Principal(parent, request, url, props);
+		expect(principal.userId).toEqual('baz');
+		expect(principal.groupId).toEqual(null);
+		expect(principal.resourceId).toEqual(null);
+		expect(principal.roomId).toEqual(null);
+	});
+
 	it('should provide a static method getPropFindList', () => {
 		expect(Principal.getPropFindList()).toEqual([
 			['DAV:', 'displayname'],
