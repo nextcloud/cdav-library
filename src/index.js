@@ -23,8 +23,10 @@
 import Parser from './parser.js';
 import Request from './request.js';
 import * as NS from './utility/namespaceUtility.js';
+import * as XMLUtility from './utility/xmlUtility';
 import { CalendarHome } from './models/calendarHome.js';
 import { AddressBookHome } from './models/addressBookHome.js';
+import { Principal } from './models/principal.js';
 
 import { debugFactory } from './debug.js';
 const debug = debugFactory('index.js');
@@ -65,11 +67,11 @@ export default class DavClient {
 		this.advertisedFeatures = [];
 
 		/**
-		 * Current user principal
+		 * Principal object of current user
 		 *
-		 * @type {String}
+		 * @type {Principal}
 		 */
-		this.principalUrl = null;
+		this.currentUserPrincipal = null;
 
 		/**
 		 * Array of links to principal collections
@@ -130,41 +132,21 @@ export default class DavClient {
 			throw new Error('No rootUrl configured');
 		}
 
-		await this._discoverPrincipalUri();
-		debug(`PrincipalURL: ${this.principalUrl}`);
+		const principalUrl = await this._discoverPrincipalUri();
+		debug(`PrincipalURL: ${principalUrl}`);
 
-		const properties = [];
-		if (options.enableCalDAV) {
-			properties.push(...[
-				[NS.IETF_CALDAV, 'calendar-home-set'],
-				[NS.IETF_CALDAV, 'calendar-user-address-set'],
-				[NS.IETF_CALDAV, 'schedule-inbox-URL'],
-				[NS.IETF_CALDAV, 'schedule-outbox-URL']
-			]);
-		}
-		if (options.enableCardDAV) {
-			properties.push(...[
-				[NS.IETF_CARDDAV, 'addressbook-home-set']
-			]);
-		}
+		const propFindList = Principal.getPropFindList(options);
 		if (options.enableCalDAV || options.enableCardDAV) {
-			properties.push(...[
+			propFindList.push(
 				[NS.DAV, 'principal-collection-set'],
-				[NS.DAV, 'displayname'],
-				[NS.DAV, 'principal-URL'],
 				[NS.DAV, 'supported-report-set']
-			]);
+			);
 		}
 
-		if (properties.length === 0) {
-			return this;
-		}
+		const response = await this._request.propFind(principalUrl, propFindList);
 
-		const response = await this._request.propFind(this.principalUrl, properties, 0, {}, () => null, (xhr) => {
-			// store the advertised DAV features
-			const dav = xhr.getResponseHeader('DAV');
-			this.advertisedFeatures.push(...dav.split(',').map((s) => s.trim()));
-		});
+		this.currentUserPrincipal = new Principal(null, this._request, principalUrl, response.body);
+		this._extractAdvertisedDavFeatures(response.xhr);
 		this._extractAddressBookHomes(response.body);
 		this._extractCalendarHomes(response.body);
 		this._extractPrincipalCollectionSets(response.body);
@@ -196,17 +178,71 @@ export default class DavClient {
 	// }
 
 	/**
+	 * performs a principal property search based on a principal's displayname
 	 *
-	 * @returns {Promise<void>}
+	 * @param {String} name
+	 * @returns {Promise<Principal[]>}
 	 */
-	async principalPropertySearch() {
-		// TODO - implement me
+	async principalPropertySearchByDisplayname(name) {
+		return this.principalPropertySearch([
+			{ name: [NS.DAV, 'displayname'] }
+		], name);
+	}
+
+	/**
+	 * performs a principal property search
+	 * @see https://tools.ietf.org/html/rfc3744#section-9.4
+	 *
+	 * @param {Array} props
+	 * @param {String} match
+	 * @returns {Promise<Principal[]>}
+	 */
+	async principalPropertySearch(props, match) {
+		const [skeleton, propSearch] = XMLUtility.getRootSkeleton(
+			[NS.DAV, 'principal-property-search'], [NS.DAV, 'property-search']);
+
+		propSearch.push({
+			name: [NS.DAV, 'prop'],
+			children: props
+		}, {
+			name: [NS.DAV, 'match'],
+			value: match
+		});
+
+		skeleton.children.push({
+			name: [NS.DAV, 'prop'],
+			children: Principal.getPropFindList().map((propFindListItem) => ({ name: propFindListItem }))
+		});
+
+		// We are searching all principal collections, not just one
+		skeleton.children.push({ name: [NS.DAV, 'apply-to-principal-collection-set'] });
+
+		const xml = XMLUtility.serialize(skeleton);
+		return this._request.report(this.rootUrl, { 'Depth': 0 }, xml).then((response) => {
+			const result = [];
+
+			Object.entries(response.body).forEach(([path, props]) => {
+				const url = this._request.pathname(path);
+				result.push(new Principal(null, this._request, url, props));
+			});
+
+			return result;
+		});
+	}
+
+	/**
+	 * finds one principal at a given principalUrl
+	 * @param {String} principalUrl
+	 * @returns {Promise<Principal>}
+	 */
+	async findPrincipal(principalUrl) {
+
 	}
 
 	/**
 	 * discovers the accounts principal uri solely based on rootURL
 	 *
-	 * @returns {Promise<void>}
+	 * @returns {Promise<string>}
 	 * @private
 	 */
 	async _discoverPrincipalUri() {
@@ -220,8 +256,7 @@ export default class DavClient {
 		if (response.body['{DAV:}current-user-principal'].type === 'unauthenticated') {
 			throw new Error('Current user is not authenticated');
 		}
-		this.principalUrl = this._request.pathname(
-			response.body['{DAV:}current-user-principal'].href);
+		return this._request.pathname(response.body['{DAV:}current-user-principal'].href);
 	}
 
 	/**
@@ -283,6 +318,18 @@ export default class DavClient {
 		this.principalCollections = principalCollectionSets.map((principalCollection) => {
 			return this._request.pathname(principalCollection);
 		});
+	}
+
+	/**
+	 * extracts the advertised features supported by the DAV server
+	 *
+	 * @param {XMLHttpRequest} xhr
+	 * @returns void
+	 * @private
+	 */
+	_extractAdvertisedDavFeatures(xhr) {
+		const dav = xhr.getResponseHeader('DAV');
+		this.advertisedFeatures.push(...dav.split(',').map((s) => s.trim()));
 	}
 
 }

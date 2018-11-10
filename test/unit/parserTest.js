@@ -1918,6 +1918,28 @@ END:VALARM`);
 		expect(parser.canParse('{http://nextcloud.com/ns}owner-displayname')).toEqual(true);
 		expect(parser.parse(document, node, resolver)).toEqual('Administrator');
 	});
+
+	it('should properly handle {http://sabredav.org/ns}email-address', () => {
+		const parser = new Parser();
+
+		const xml = `<?xml version="1.0" encoding="utf-8" ?>
+<D:multistatus xmlns:D="DAV:" xmlns:s="http://sabredav.org/ns">
+	<D:response>
+		<D:href>/foo</D:href>
+		<D:propstat>
+			<D:prop>
+				<s:email-address>foo@bar.com</s:email-address>
+			</D:prop>
+			<D:status>HTTP/1.1 200 OK</D:status>
+		</D:propstat>
+	</D:response>
+</D:multistatus>`;
+
+		const [document, node, resolver] = getDocumentNodeResolverFromXML(xml);
+
+		expect(parser.canParse('{http://sabredav.org/ns}email-address')).toEqual(true);
+		expect(parser.parse(document, node, resolver)).toEqual('foo@bar.com');
+	});
 });
 
 function getDocumentNodeResolverFromXML(xml) {

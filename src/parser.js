@@ -193,6 +193,9 @@ export default class Parser {
 		this.registerParser('{http://owncloud.org/ns}enabled', Parser.bool);
 		this.registerParser('{http://owncloud.org/ns}read-only', Parser.bool);
 		this.registerParser('{http://nextcloud.com/ns}owner-displayname', Parser.text);
+
+		// Sabre/Dav specific
+		this.registerParser('{http://sabredav.org/ns}email-address', Parser.text);
 	}
 
 	/**

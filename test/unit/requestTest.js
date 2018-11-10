@@ -751,18 +751,18 @@ describe('Request', () => {
 		parser.parse.and.returnValues('value1', 'value2');
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
-		const promise = request.get('fooBar');
+		const promise = request.propFind('fooBar', []);
 
 		expect(xhrProvider).toHaveBeenCalledTimes(1);
 		expect(xhr.open).toHaveBeenCalledTimes(1);
-		expect(xhr.open).toHaveBeenCalledWith('GET', 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar', true);
+		expect(xhr.open).toHaveBeenCalledWith('PROPFIND', 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar', true);
 
 		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(2);
-		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Depth', '0');
+		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Depth', 0);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/xml; charset=utf-8');
 
 		expect(xhr.send).toHaveBeenCalledTimes(1);
-		expect(xhr.send).toHaveBeenCalledWith();
+		expect(xhr.send).toHaveBeenCalledWith('<x0:propfind xmlns:x0="DAV:"><x0:prop/></x0:propfind>');
 
 		xhr.readyState = 4;
 		xhr.status = 207;

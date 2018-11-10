@@ -30,85 +30,115 @@ export function davCollectionShareable(Base) {
 	return class extends Base {
 
 		/**
+		 * @inheritDoc
+		 */
+		constructor(...args) {
+			super(...args);
+
+			super._exposeProperty('shares', NS.OWNCLOUD, 'invite');
+			super._exposeProperty('allowedSharingModes', NS.CALENDARSERVER, 'allowed-sharing-modes');
+		}
+
+		/**
 		 * shares a DavCollection
 		 *
-		 * @param {string} principalUri
-		 * @param {boolean} readWrite
+		 * @param {String} principalScheme
+		 * @param {boolean} writeable
 		 * @param {string} summary
-		 * @returns {Promise<Base>}
+		 * @returns {Promise<void>}
 		 */
-		async share(principalUri, readWrite, summary) {
-			debug(`Sharing ${super.url} with ${principalUri}`);
-
-			const [skeleton, oSetChildren] = XMLUtility.getRootSkeleton(
+		async share(principalScheme, writeable = false, summary = '') {
+			debug(`Sharing ${this.url} with ${principalScheme}`);
+			const [skeleton, setProp] = XMLUtility.getRootSkeleton(
 				[NS.OWNCLOUD, 'share'], [NS.OWNCLOUD, 'set']);
 
-			oSetChildren.push({
+			setProp.push({
 				name: [NS.DAV, 'href'],
-				value: principalUri
+				value: principalScheme
 			});
 
-			if (readWrite) {
-				oSetChildren.push({
+			if (writeable) {
+				setProp.push({
 					name: [NS.OWNCLOUD, 'read-write']
 				});
 			}
-			if (summary) {
-				oSetChildren.push({
+			if (summary !== '') {
+				setProp.push({
 					name: [NS.OWNCLOUD, 'summary'],
 					value: summary
 				});
 			}
 
 			const xml = XMLUtility.serialize(skeleton);
-			return super._request.post(this._url, {
-				'Content-Type': 'application/xml; charset=utf-8'
-			}, xml).then((res) => {
-				// TODO - add to existing data
+			return this._request.post(this._url, { 'Content-Type': 'application/xml; charset=utf-8' }, xml).then(() => {
+				const index = this.shares.findIndex((e) => e.href === principalScheme);
 
-				return this;
+				if (index === -1) {
+					this.shares.push({
+						href: principalScheme,
+						access: [writeable ? '{http://owncloud.org/ns}read-write' : '{http://owncloud.org/ns}read'],
+						'common-name': null,
+						'invite-accepted': true
+					});
+				} else {
+					this.shares[index].access
+						= [writeable ? '{http://owncloud.org/ns}read-write' : '{http://owncloud.org/ns}read'];
+				}
 			});
 		}
 
 		/**
 		 * unshares a DAVCollection
 		 *
-		 * @param {string} principalUri
-		 * @returns {Promise<Base>}
+		 * @param {string} principalScheme
+		 * @returns {Promise<void>}
 		 */
-		async unshare(principalUri) {
-			debug(`Unsharing ${super.url} with ${principalUri}`);
+		async unshare(principalScheme) {
+			debug(`Unsharing ${this.url} with ${principalScheme}`);
 
 			const [skeleton, oSetChildren] = XMLUtility.getRootSkeleton(
 				[NS.OWNCLOUD, 'share'], [NS.OWNCLOUD, 'remove']);
 
 			oSetChildren.push({
 				name: [NS.DAV, 'href'],
-				value: principalUri
+				value: principalScheme
 			});
 
 			const xml = XMLUtility.serialize(skeleton);
-			return super._request.post(this._url, {
-				'Content-Type': 'application/xml; charset=utf-8'
-			}, xml).then((res) => {
-				// TODO - add to existing data
+			return this._request.post(this._url, { 'Content-Type': 'application/xml; charset=utf-8' }, xml).then(() => {
+				const index = this.shares.findIndex((e) => e.href === principalScheme);
+				if (index === -1) {
+					return;
+				}
 
-				return this;
+				this.shares.splice(index, 1);
 			});
 		}
 
 		/**
+		 * checks whether a collection is shareable
+		 *
 		 * @returns {Boolean}
 		 */
 		isShareable() {
-			// TODO implement me
+			if (!Array.isArray(this.allowedSharingModes)) {
+				return false;
+			}
+
+			return this.allowedSharingModes.includes(`{${NS.CALENDARSERVER}}can-be-shared`);
 		}
 
 		/**
+		 * checks whether a collection is publishable
+		 *
 		 * @returns {Boolean}
 		 */
 		isPublishable() {
-			// TODO implement me
+			if (!Array.isArray(this.allowedSharingModes)) {
+				return false;
+			}
+
+			return this.allowedSharingModes.includes(`{${NS.CALENDARSERVER}}can-be-published`);
 		}
 
 		/**
