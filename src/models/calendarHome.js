@@ -26,6 +26,7 @@ import { Subscription } from './subscription.js';
 import ScheduleInbox from './scheduleInbox.js';
 import ScheduleOutbox from './scheduleOutbox.js';
 import * as NS from '../utility/namespaceUtility.js';
+import * as XMLUtility from '../utility/xmlUtility.js';
 
 import { debugFactory } from '../debug.js';
 const debug = debugFactory('CalendarHome');
@@ -211,6 +212,20 @@ export class CalendarHome extends DavCollection {
      */
 	async search() {
 		// TODO - implement me
+	}
+
+	/**
+	 * enables the birthday calendar for the Calendar Home that belongs to this user
+	 *
+	 * @returns {Promise<void>}
+	 */
+	async enableBirthdayCalendar() {
+		const [skeleton] = XMLUtility.getRootSkeleton(
+			[NS.NEXTCLOUD, 'enable-birthday-calendar']
+		);
+		const xmlBody = XMLUtility.serialize(skeleton);
+
+		await this._request.post(this.url, {}, xmlBody);
 	}
 
 }

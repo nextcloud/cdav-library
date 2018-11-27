@@ -428,6 +428,27 @@ describe('Calendar home model', () => {
 		pending('to be implemeneted ... ');
 	});
 
+	it('should allow to enable the birthday-calendar', () => {
+		const parent = null;
+		const request = jasmine.createSpyObj('Request', ['post']);
+		const url = '/nextcloud/remote.php/dav/calendars/admin/';
+
+		request.post.and.returnValue(Promise.resolve({
+				status: 204,
+				body: null,
+				xhr: null
+			})
+		);
+
+		const calendarHome = new CalendarHome(parent, request, url, {});
+		return calendarHome.enableBirthdayCalendar().then((res) => {
+			expect(request.post).toHaveBeenCalledTimes(1);
+			expect(request.post).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/', {}, '<x0:enable-birthday-calendar xmlns:x0="http://nextcloud.com/ns"/>');
+
+			expect(res).toEqual(undefined)
+		});
+	})
+
 });
 
 function getDefaultPropFind() {
