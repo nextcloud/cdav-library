@@ -112,6 +112,7 @@ export class Principal extends DavObject {
 			[NS.IETF_CALDAV, 'calendar-user-type'],
 			[NS.IETF_CALDAV, 'calendar-user-address-set'],
 			[NS.DAV, 'principal-URL'],
+			[NS.DAV, 'alternate-URI-set'],
 			[NS.SABREDAV, 'email-address']
 		];
 

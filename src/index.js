@@ -236,7 +236,11 @@ export default class DavClient {
 	 * @returns {Promise<Principal>}
 	 */
 	async findPrincipal(principalUrl) {
-
+		return this._request.propFind(principalUrl, Principal.getPropFindList()).then(({ body }) => {
+			return new Principal(null, this._request, principalUrl, body);
+		}).catch((err) => {
+			console.debug(err);
+		});
 	}
 
 	/**
