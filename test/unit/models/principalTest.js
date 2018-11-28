@@ -354,6 +354,7 @@ describe('Principal model', () => {
 			['urn:ietf:params:xml:ns:caldav', 'calendar-user-type'],
 			['urn:ietf:params:xml:ns:caldav', 'calendar-user-address-set'],
 			['DAV:', 'principal-URL'],
+			['DAV:', 'alternate-URI-set'],
 			['http://sabredav.org/ns', 'email-address']
 		]);
 	});
@@ -364,6 +365,7 @@ describe('Principal model', () => {
 			['urn:ietf:params:xml:ns:caldav', 'calendar-user-type'],
 			['urn:ietf:params:xml:ns:caldav', 'calendar-user-address-set'],
 			['DAV:', 'principal-URL'],
+			['DAV:', 'alternate-URI-set'],
 			['http://sabredav.org/ns', 'email-address'],
 			['urn:ietf:params:xml:ns:caldav', 'calendar-home-set'],
 			['urn:ietf:params:xml:ns:caldav', 'schedule-inbox-URL'],
@@ -377,6 +379,7 @@ describe('Principal model', () => {
 			['urn:ietf:params:xml:ns:caldav', 'calendar-user-type'],
 			['urn:ietf:params:xml:ns:caldav', 'calendar-user-address-set'],
 			['DAV:', 'principal-URL'],
+			['DAV:', 'alternate-URI-set'],
 			['http://sabredav.org/ns', 'email-address'],
 			['urn:ietf:params:xml:ns:carddav', 'addressbook-home-set']
 
