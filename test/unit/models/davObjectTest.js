@@ -22,6 +22,7 @@
  */
 import {DavObject} from "../../../src/models/davObject.js";
 import DAVEventListener from "../../../src/models/davEventListener.js";
+import NetworkRequestClientError from "../../../src/errors/networkRequestClientError.js";
 
 describe('Dav object model', () => {
 
@@ -345,6 +346,44 @@ describe('Dav object model', () => {
 
 			expect(davObject.etag).toEqual('"etag foo bar tralala"');
 			expect(davObject.isDirty()).toEqual(true);
+		});
+	});
+
+	it('should update an object and passthru rejected promises and set partial on 412', () => {
+		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
+			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
+		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const url = '/foo/bar/file';
+		const props = {
+			'{DAV:}getetag': '"etag foo bar tralala"',
+			'{DAV:}getcontenttype': 'text/blub',
+			'{DAV:}resourcetype': [],
+			'{FOO:}bar': 'data1'
+		};
+
+		const davObject = new DavObject(parent, request, url, props, false);
+		// DavObject doesnt have it's own data property, so this is kind of a hack:
+		davObject.data = 'FooBar';
+		davObject._isDirty = true;
+		davObject._isPartial = false;
+
+		const xhr = jasmine.createSpyObj('XHR', ['getResponseHeader']);
+		xhr.getResponseHeader.and.returnValues('"new etag foo bar tralala"');
+
+		const error = new NetworkRequestClientError({status: 412});
+		request.put.and.callFake(() => Promise.reject(error));
+
+		return davObject.update().then(() => {
+			fail('Update was not supposed to succeed');
+		}).catch((e) => {
+			expect(e).toEqual(error);
+
+			expect(request.put).toHaveBeenCalledTimes(1);
+			expect(xhr.getResponseHeader).toHaveBeenCalledTimes(0);
+
+			expect(davObject.etag).toEqual('"etag foo bar tralala"');
+			expect(davObject.isDirty()).toEqual(true);
+			expect(davObject.isPartial()).toEqual(true);
 		});
 	});
 

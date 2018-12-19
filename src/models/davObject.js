@@ -22,6 +22,7 @@
  */
 
 import DAVEventListener from './davEventListener.js';
+import NetworkRequestClientError from '../errors/networkRequestClientError.js';
 import * as NS from '../utility/namespaceUtility.js';
 
 import { debugFactory } from '../debug.js';
@@ -147,6 +148,14 @@ export class DavObject extends DAVEventListener {
 			this._isDirty = false;
 			// Don't overwrite content-type, it's set to text/html in the response ...
 			this._props['{DAV:}getetag'] = res.xhr.getResponseHeader('etag');
+		}).catch((ex) => {
+			this._isDirty = true;
+
+			if (ex instanceof NetworkRequestClientError && ex.status === 412) {
+				this._isPartial = true;
+			}
+
+			throw ex;
 		});
 	}
 
