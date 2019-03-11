@@ -152,7 +152,7 @@ describe('Address book model', () => {
 
 			expect(request.report).toHaveBeenCalledTimes(1);
 			expect(request.report).toHaveBeenCalledWith('/foo/bar/folder/', { Depth: '1' },
-				'<x0:addressbook-query xmlns:x0="urn:ietf:params:xml:ns:carddav"><x1:prop xmlns:x1="DAV:"><x1:getetag/><x1:getcontenttype/><x1:resourcetype/><x0:address-data><x0:prop name="EMAIL"/><x0:prop name="UID"/><x0:prop name="CATEGORIES"/></x0:address-data></x1:prop></x0:addressbook-query>');
+				'<x0:addressbook-query xmlns:x0="urn:ietf:params:xml:ns:carddav"><x1:prop xmlns:x1="DAV:"><x1:getetag/><x1:getcontenttype/><x1:resourcetype/><x0:address-data><x0:prop name="EMAIL"/><x0:prop name="UID"/><x0:prop name="CATEGORIES"/></x0:address-data><x2:has-photo xmlns:x2="http://nextcloud.com/ns"/></x1:prop></x0:addressbook-query>');
 		}).catch(() => {
 			fail('AddressBook findAllAndFilterBySimpleProperties was not supposed to fail');
 		});

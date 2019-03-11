@@ -98,6 +98,8 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 		}, {
 			name: [NS.IETF_CARDDAV, 'address-data'],
 			children: children
+		}, {
+			name: [NS.NEXTCLOUD, 'has-photo']
 		}]);
 	}
 
