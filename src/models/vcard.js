@@ -41,6 +41,7 @@ export class VCard extends DavObject {
 		super(...args);
 
 		super._exposeProperty('data', NS.IETF_CARDDAV, 'address-data', true);
+		super._exposeProperty('hasphoto', NS.NEXTCLOUD, 'has-photo', false);
 	}
 
 	/**
