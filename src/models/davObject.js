@@ -144,7 +144,12 @@ export class DavObject extends DAVEventListener {
 			return;
 		}
 
-		return this._request.put(this.url, { 'If-Match': this.etag }, this.data).then((res) => {
+		const headers = {};
+		if (this.etag) {
+			headers['If-Match'] = this.etag;
+		}
+
+		return this._request.put(this.url, headers, this.data).then((res) => {
 			this._isDirty = false;
 			// Don't overwrite content-type, it's set to text/html in the response ...
 			this._props['{DAV:}getetag'] = res.xhr.getResponseHeader('etag');
