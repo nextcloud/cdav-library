@@ -279,6 +279,45 @@ describe('Dav object model', () => {
 		});
 	});
 
+	it('should not send a null etag', () => {
+		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
+			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
+		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const url = '/foo/bar/file';
+		const props = {
+			'{DAV:}getcontenttype': 'text/blub',
+			'{DAV:}resourcetype': [],
+			'{FOO:}bar': 'data1'
+		};
+
+		const davObject = new DavObject(parent, request, url, props, false);
+		// DavObject doesnt have it's own data property, so this is kind of a hack:
+		davObject.data = 'FooBar';
+		davObject._isDirty = true;
+
+		const xhr = jasmine.createSpyObj('XHR', ['getResponseHeader']);
+		xhr.getResponseHeader.and.returnValues('"new etag foo bar tralala"');
+
+		request.put.and.callFake(() => {
+			return Promise.resolve({
+				body: null,
+				status: 204,
+				xhr: xhr
+			});
+		});
+
+		return davObject.update().then(() => {
+			expect(request.put).toHaveBeenCalledTimes(1);
+			expect(request.put).toHaveBeenCalledWith('/foo/bar/file', {}, 'FooBar');
+
+			expect(xhr.getResponseHeader).toHaveBeenCalledTimes(1);
+			expect(xhr.getResponseHeader).toHaveBeenCalledWith('etag');
+
+			expect(davObject.etag).toEqual('"new etag foo bar tralala"');
+			expect(davObject.isDirty()).toEqual(false);
+		});
+	})
+
 	it('should not update if no data is given', () => {
 		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
 			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
