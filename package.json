@@ -59,7 +59,7 @@
 		"karma-jasmine": "^2.0.1",
 		"karma-mocha-reporter": "^2.2.5",
 		"webpack": "^4.36.1",
-		"webpack-cli": "^3.3.5",
+		"webpack-cli": "^3.3.6",
 		"webpack-merge": "^4.2.1"
 	},
 	"dependencies": {
