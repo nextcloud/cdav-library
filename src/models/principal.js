@@ -4,7 +4,7 @@
  * This library is part of the Nextcloud project
  *
  * @author Georg Ehrke
- * @copyright 2018 Georg Ehrke <oc.list@georgehrke.com>
+ * @copyright 2019 Georg Ehrke <oc.list@georgehrke.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
@@ -120,7 +120,23 @@ export class Principal extends DavObject {
 			list.push(
 				[NS.IETF_CALDAV, 'calendar-home-set'],
 				[NS.IETF_CALDAV, 'schedule-inbox-URL'],
-				[NS.IETF_CALDAV, 'schedule-outbox-URL']
+				[NS.IETF_CALDAV, 'schedule-outbox-URL'],
+				// Room and Resource booking related
+				[NS.NEXTCLOUD, 'resource-type'],
+				[NS.NEXTCLOUD, 'resource-vehicle-type'],
+				[NS.NEXTCLOUD, 'resource-vehicle-make'],
+				[NS.NEXTCLOUD, 'resource-vehicle-model'],
+				[NS.NEXTCLOUD, 'resource-vehicle-is-electric'],
+				[NS.NEXTCLOUD, 'resource-vehicle-range'],
+				[NS.NEXTCLOUD, 'resource-vehicle-seating-capacity'],
+				[NS.NEXTCLOUD, 'resource-contact-person'],
+				[NS.NEXTCLOUD, 'resource-contact-person-vcard'],
+				[NS.NEXTCLOUD, 'room-type'],
+				[NS.NEXTCLOUD, 'room-seating-capacity'],
+				[NS.NEXTCLOUD, 'room-building-address'],
+				[NS.NEXTCLOUD, 'room-building-story'],
+				[NS.NEXTCLOUD, 'room-building-room-number'],
+				[NS.NEXTCLOUD, 'room-features']
 			);
 		}
 		if (options.enableCardDAV) {

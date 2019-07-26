@@ -369,7 +369,22 @@ describe('Principal model', () => {
 			['http://sabredav.org/ns', 'email-address'],
 			['urn:ietf:params:xml:ns:caldav', 'calendar-home-set'],
 			['urn:ietf:params:xml:ns:caldav', 'schedule-inbox-URL'],
-			['urn:ietf:params:xml:ns:caldav', 'schedule-outbox-URL']
+			['urn:ietf:params:xml:ns:caldav', 'schedule-outbox-URL'],
+			[ 'http://nextcloud.com/ns', 'resource-type'],
+			[ 'http://nextcloud.com/ns', 'resource-vehicle-type'],
+			[ 'http://nextcloud.com/ns', 'resource-vehicle-make'],
+			[ 'http://nextcloud.com/ns', 'resource-vehicle-model'],
+			[ 'http://nextcloud.com/ns', 'resource-vehicle-is-electric'],
+			[ 'http://nextcloud.com/ns', 'resource-vehicle-range'],
+			[ 'http://nextcloud.com/ns', 'resource-vehicle-seating-capacity'],
+			[ 'http://nextcloud.com/ns', 'resource-contact-person'],
+			[ 'http://nextcloud.com/ns', 'resource-contact-person-vcard'],
+			[ 'http://nextcloud.com/ns', 'room-type'],
+			[ 'http://nextcloud.com/ns', 'room-seating-capacity'],
+			[ 'http://nextcloud.com/ns', 'room-building-address'],
+			[ 'http://nextcloud.com/ns', 'room-building-story'],
+			[ 'http://nextcloud.com/ns', 'room-building-room-number'],
+			[ 'http://nextcloud.com/ns', 'room-features']
 		]);
 	});
 
