@@ -48,7 +48,7 @@ export default class Parser {
 	 * @returns {boolean}
 	 */
 	canParse(propertyName) {
-		return this._parser.hasOwnProperty(propertyName);
+		return Object.prototype.hasOwnProperty.call(this._parser, propertyName);
 	}
 
 	/**
