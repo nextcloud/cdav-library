@@ -63,7 +63,7 @@ export function getRootSkeleton() {
  */
 export function serialize(json) {
 	json = json || {};
-	if (typeof json !== 'object' || !json.hasOwnProperty('name')) {
+	if (typeof json !== 'object' || !Object.prototype.hasOwnProperty.call(json, 'name')) {
 		return '';
 	}
 
@@ -104,7 +104,7 @@ export function resetPrefixMap() {
 }
 
 function getPrefixedNameForNamespace(ns, localName) {
-	if (!prefixMap.hasOwnProperty(ns)) {
+	if (!Object.prototype.hasOwnProperty.call(prefixMap, ns)) {
 		prefixMap[ns] = 'x' + Object.keys(prefixMap).length;
 	}
 
