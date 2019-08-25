@@ -43,7 +43,7 @@ export default class Request {
 	 * @param {Parser} parser - instance of Parser class
 	 * @param {Function} xhrProvider - Function that returns new XMLHttpRequest objects
 	 */
-	constructor(baseUrl, parser, xhrProvider = (() => new XMLHttpRequest())) {
+	constructor(baseUrl, parser, xhrProvider = () => new XMLHttpRequest()) {
 		this.baseUrl = baseUrl;
 		this.parser = parser;
 		this.xhrProvider = xhrProvider;
@@ -62,7 +62,7 @@ export default class Request {
 	 * @property {Number} status
 	 * @property {XMLHttpRequest} xhr
 	 */
-	async get(url, headers = {}, body = null, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
+	async get(url, headers = {}, body = null, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 		return this.request('GET', url, headers, body, beforeRequestHandler, afterRequestHandler);
 	}
 
@@ -79,7 +79,7 @@ export default class Request {
 	 * @property {Number} status
 	 * @property {XMLHttpRequest} xhr
 	 */
-	async patch(url, headers, body, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
+	async patch(url, headers, body, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 		return this.request('PATCH', url, headers, body, beforeRequestHandler, afterRequestHandler);
 	}
 
@@ -96,7 +96,7 @@ export default class Request {
 	 * @property {Number} status
 	 * @property {XMLHttpRequest} xhr
 	 */
-	async post(url, headers, body, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
+	async post(url, headers, body, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 		return this.request('POST', url, headers, body, beforeRequestHandler, afterRequestHandler);
 	}
 
@@ -113,7 +113,7 @@ export default class Request {
 	 * @property {Number} status
 	 * @property {XMLHttpRequest} xhr
 	 */
-	async put(url, headers, body, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
+	async put(url, headers, body, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 		return this.request('PUT', url, headers, body, beforeRequestHandler, afterRequestHandler);
 	}
 
@@ -130,7 +130,7 @@ export default class Request {
 	 * @property {Number} status
 	 * @property {XMLHttpRequest} xhr
 	 */
-	async delete(url, headers = {}, body = null, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
+	async delete(url, headers = {}, body = null, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 		return this.request('DELETE', url, headers, body, beforeRequestHandler, afterRequestHandler);
 	}
 
@@ -151,7 +151,7 @@ export default class Request {
 	 * @property {Number} status
 	 * @property {XMLHttpRequest} xhr
 	 */
-	async copy(url, destination, depth = 0, overwrite = false, headers = {}, body = null, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
+	async copy(url, destination, depth = 0, overwrite = false, headers = {}, body = null, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 		headers['Destination'] = destination;
 		headers['Depth'] = depth;
 		headers['Overwrite'] = overwrite ? 'T' : 'F';
@@ -175,7 +175,7 @@ export default class Request {
 	 * @property {Number} status
 	 * @property {XMLHttpRequest} xhr
 	 */
-	async move(url, destination, overwrite = false, headers = {}, body = null, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
+	async move(url, destination, overwrite = false, headers = {}, body = null, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 		headers['Destination'] = destination;
 		headers['Depth'] = 'Infinity';
 		headers['Overwrite'] = overwrite ? 'T' : 'F';
@@ -197,7 +197,7 @@ export default class Request {
 	 * @property {Number} status
 	 * @property {XMLHttpRequest} xhr
 	 */
-	async lock(url, headers = {}, body = null, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
+	async lock(url, headers = {}, body = null, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 
 		// TODO - add parameters for Depth and Timeout
 
@@ -218,7 +218,7 @@ export default class Request {
 	 * @property {Number} status
 	 * @property {XMLHttpRequest} xhr
 	 */
-	async unlock(url, headers = {}, body = null, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
+	async unlock(url, headers = {}, body = null, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 
 		// TODO - add parameter for Lock-Token
 
@@ -240,7 +240,7 @@ export default class Request {
 	 * @property {Number} status
 	 * @property {XMLHttpRequest} xhr
 	 */
-	async propFind(url, properties, depth = 0, headers = {}, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
+	async propFind(url, properties, depth = 0, headers = {}, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 		// adjust headers
 		headers['Depth'] = depth;
 
@@ -266,7 +266,7 @@ export default class Request {
 	 * @property {Number} status
 	 * @property {XMLHttpRequest} xhr
 	 */
-	async propPatch(url, headers, body, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
+	async propPatch(url, headers, body, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 		return this.request('PROPPATCH', url, headers, body, beforeRequestHandler, afterRequestHandler);
 	}
 
@@ -285,7 +285,7 @@ export default class Request {
 	 * @property {Number} status
 	 * @property {XMLHttpRequest} xhr
 	 */
-	async mkCol(url, headers, body, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
+	async mkCol(url, headers, body, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 		return this.request('MKCOL', url, headers, body, beforeRequestHandler, afterRequestHandler);
 	}
 
@@ -303,7 +303,7 @@ export default class Request {
 	 * @property {Number} status
 	 * @property {XMLHttpRequest} xhr
 	 */
-	async report(url, headers, body, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
+	async report(url, headers, body, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 		return this.request('REPORT', url, headers, body, beforeRequestHandler, afterRequestHandler);
 	}
 
@@ -321,7 +321,7 @@ export default class Request {
 	 * @property {Number} status
 	 * @property {XMLHttpRequest} xhr
 	 */
-	async request(method, url, headers, body, beforeRequestHandler = (() => null), afterRequestHandler = (() => null)) {
+	async request(method, url, headers, body, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 		const xhr = this.xhrProvider();
 		const assignHeaders = Object.assign({}, getDefaultHeaders(), headers);
 
