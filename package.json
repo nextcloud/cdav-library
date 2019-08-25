@@ -54,7 +54,7 @@
 		"istanbul": "^0.4.5",
 		"jasmine": "^3.4.0",
 		"karma": "^4.2.0",
-		"karma-coverage": "^1.1.2",
+		"karma-coverage": "^2.0.1",
 		"karma-firefox-launcher": "^1.2.0",
 		"karma-jasmine": "^2.0.1",
 		"karma-mocha-reporter": "^2.2.5",
