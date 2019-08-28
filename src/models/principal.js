@@ -53,7 +53,7 @@ export class Principal extends DavObject {
 		super._exposeProperty('addressBookHomes', NS.IETF_CARDDAV, 'addressbook-home-set');
 
 		Object.defineProperties(this, {
-			'principalScheme': {
+			principalScheme: {
 				get: () => {
 					const baseUrl = this._request.pathname(this._request.baseUrl);
 					let principalURI = this.url.substr(baseUrl.length);

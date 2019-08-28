@@ -327,7 +327,7 @@ export default class Request {
 
 		xhr.open(method, this.absoluteUrl(url), true);
 
-		for (let header in assignHeaders) {
+		for (const header in assignHeaders) {
 			xhr.setRequestHeader(header, assignHeaders[header]);
 		}
 
@@ -524,7 +524,7 @@ function getDefaultHeaders() {
 	// Should infinity be the default?
 
 	return {
-		'Depth': '0',
+		Depth: '0',
 		'Content-Type': 'application/xml; charset=utf-8'
 	};
 }

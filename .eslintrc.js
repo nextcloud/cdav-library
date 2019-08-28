@@ -35,5 +35,7 @@ module.exports = {
 		'node/no-unsupported-features/es-syntax': ['off'],
 		// disable the recommended no-extra-semi
 		semi: ['error', 'always'],
+		// dot notation exclusion for uppercase first letters variables
+		'dot-notation': ['error', { allowPattern: '^[A-Z][a-zA-Z]+$' }]
 	}
 };

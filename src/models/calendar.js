@@ -187,7 +187,7 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 		}
 
 		const headers = {
-			'Depth': '1'
+			Depth: '1'
 		};
 
 		const body = XMLUtility.serialize(skeleton);
@@ -234,7 +234,7 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 		});
 
 		const headers = {
-			'Depth': '1'
+			Depth: '1'
 		};
 		const body = XMLUtility.serialize(skeleton);
 		const response = await this._request.report(this.url, headers, body);

@@ -218,7 +218,7 @@ export default class DavClient {
 		skeleton.children.push({ name: [NS.DAV, 'apply-to-principal-collection-set'] });
 
 		const xml = XMLUtility.serialize(skeleton);
-		return this._request.report(this.rootUrl, { 'Depth': 0 }, xml).then((response) => {
+		return this._request.report(this.rootUrl, { Depth: 0 }, xml).then((response) => {
 			const result = [];
 
 			Object.entries(response.body).forEach(([path, props]) => {
