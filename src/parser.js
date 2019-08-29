@@ -396,7 +396,7 @@ export default class Parser {
 		while ((addressDataNode = addressDatas.iterateNext()) !== null) {
 			result.push({
 				'content-type': document.evaluate('string(@content-type)', addressDataNode, resolver, XPathResult.ANY_TYPE, null).stringValue,
-				'version': document.evaluate('string(@version)', addressDataNode, resolver, XPathResult.ANY_TYPE, null).stringValue
+				version: document.evaluate('string(@version)', addressDataNode, resolver, XPathResult.ANY_TYPE, null).stringValue
 			});
 		}
 
@@ -479,7 +479,7 @@ export default class Parser {
 		while ((calendarDataNode = calendarDatas.iterateNext()) !== null) {
 			result.push({
 				'content-type': document.evaluate('string(@content-type)', calendarDataNode, resolver, XPathResult.ANY_TYPE, null).stringValue,
-				'version': document.evaluate('string(@version)', calendarDataNode, resolver, XPathResult.ANY_TYPE, null).stringValue
+				version: document.evaluate('string(@version)', calendarDataNode, resolver, XPathResult.ANY_TYPE, null).stringValue
 			});
 		}
 
@@ -496,7 +496,7 @@ export default class Parser {
 	 */
 	static scheduleCalendarTransp(document, node, resolver) {
 		const children = document.evaluate('//cl:opaque | //cl:transparent', node, resolver, XPathResult.ANY_TYPE, null);
-		let childNode = children.iterateNext();
+		const childNode = children.iterateNext();
 		if (childNode) {
 			return document.evaluate('local-name(.)', childNode, resolver, XPathResult.ANY_TYPE, null).stringValue;
 		}

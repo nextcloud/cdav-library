@@ -172,7 +172,7 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 		}
 
 		const headers = {
-			'Depth': '1'
+			Depth: '1'
 		};
 		const body = XMLUtility.serialize(skeleton);
 		const response = await this._request.report(this.url, headers, body);
@@ -195,7 +195,7 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 		}
 
 		const headers = {
-			'Depth': '1'
+			Depth: '1'
 		};
 		const body = this._buildMultiGetBody(hrefs, prop);
 		const response = await this._request.report(this.url, headers, body);
@@ -222,7 +222,7 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 		}
 
 		const headers = {
-			'Depth': '1'
+			Depth: '1'
 		};
 		const body = this._buildMultiGetBody(hrefs, prop);
 		return this._request.report(this.url + '?export', headers, body);
