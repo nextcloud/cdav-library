@@ -4,7 +4,7 @@
  * This library is part of the Nextcloud project
  *
  * @author Georg Ehrke
- * @copyright 2018 Georg Ehrke <oc.list@georgehrke.com>
+ * @copyright 2019 Georg Ehrke <oc.list@georgehrke.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
@@ -190,6 +190,75 @@ export default class DavClient {
 	}
 
 	/**
+	 * Performs a principal property based on the address of a room
+	 *
+	 * @param {String} address Address of the building the room is in
+	 * @returns {Promise<Principal[]>}
+	 */
+	async principalPropertySearchByAddress(address) {
+		return this.principalPropertySearch([
+			{ name: [NS.NEXTCLOUD, 'room-building-address'] }
+		], address);
+	}
+
+	/**
+	 * Performs a principal property search based on the address and story of a room
+	 *
+	 * @param {String} address Address of the building the room is in
+	 * @param {String} story Story inside the building the room is in
+	 * @returns {Promise<[]>}
+	 */
+	async principalPropertySearchByAddressAndStory(address, story) {
+		const [skeleton] = XMLUtility.getRootSkeleton(
+			[NS.DAV, 'principal-property-search']);
+
+		skeleton.children.push({
+			name: [NS.DAV, 'property-search'],
+			children: [{
+				name: [NS.DAV, 'prop'],
+				children: [{
+					name: [NS.NEXTCLOUD, 'room-building-address']
+				}]
+			}, {
+				name: [NS.DAV, 'match'],
+				value: address
+			}]
+		});
+		skeleton.children.push({
+			name: [NS.DAV, 'property-search'],
+			children: [{
+				name: [NS.DAV, 'prop'],
+				children: [{
+					name: [NS.NEXTCLOUD, 'room-building-story']
+				}]
+			}, {
+				name: [NS.DAV, 'match'],
+				value: story
+			}]
+		});
+
+		skeleton.children.push({
+			name: [NS.DAV, 'prop'],
+			children: Principal.getPropFindList().map((propFindListItem) => ({ name: propFindListItem }))
+		});
+
+		// We are searching all principal collections, not just one
+		skeleton.children.push({ name: [NS.DAV, 'apply-to-principal-collection-set'] });
+
+		const xml = XMLUtility.serialize(skeleton);
+		return this._request.report(this.rootUrl, { Depth: 0 }, xml).then((response) => {
+			const result = [];
+
+			Object.entries(response.body).forEach(([path, props]) => {
+				const url = this._request.pathname(path);
+				result.push(new Principal(null, this._request, url, props));
+			});
+
+			return result;
+		});
+	}
+
+	/**
 	 * performs a principal property search
 	 * @see https://tools.ietf.org/html/rfc3744#section-9.4
 	 *
@@ -232,6 +301,7 @@ export default class DavClient {
 
 	/**
 	 * finds one principal at a given principalUrl
+	 *
 	 * @param {String} principalUrl
 	 * @returns {Promise<Principal>}
 	 */
