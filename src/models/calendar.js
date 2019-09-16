@@ -277,7 +277,6 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 			[NS.APPLE, 'calendar-order'],
 			[NS.APPLE, 'calendar-color'],
 			[NS.CALENDARSERVER, 'getctag'],
-			[NS.CALENDARSERVER, 'source'],
 			[NS.IETF_CALDAV, 'calendar-description'],
 			[NS.IETF_CALDAV, 'calendar-timezone'],
 			[NS.IETF_CALDAV, 'supported-calendar-component-set'],

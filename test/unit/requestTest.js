@@ -50,9 +50,10 @@ describe('Request', () => {
 		expect(xhr.open).toHaveBeenCalledTimes(1);
 		expect(xhr.open).toHaveBeenCalledWith('GET', 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar', true);
 
-		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(4);
+		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(5);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Depth', '0');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/xml; charset=utf-8');
+		expect(xhr.setRequestHeader).toHaveBeenCalledWith('X-NC-CalDAV-Webcal-Caching', 'On');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Foo', 'Bar');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Bla', 'Blub');
 
@@ -93,9 +94,10 @@ describe('Request', () => {
 		expect(xhr.open).toHaveBeenCalledTimes(1);
 		expect(xhr.open).toHaveBeenCalledWith('PATCH', 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar', true);
 
-		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(4);
+		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(5);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Depth', '0');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/xml; charset=utf-8');
+		expect(xhr.setRequestHeader).toHaveBeenCalledWith('X-NC-CalDAV-Webcal-Caching', 'On');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Foo', 'Bar');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Bla', 'Blub');
 
@@ -133,9 +135,10 @@ describe('Request', () => {
 		expect(xhr.open).toHaveBeenCalledTimes(1);
 		expect(xhr.open).toHaveBeenCalledWith('POST', 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar', true);
 
-		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(4);
+		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(5);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Depth', '0');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/xml; charset=utf-8');
+		expect(xhr.setRequestHeader).toHaveBeenCalledWith('X-NC-CalDAV-Webcal-Caching', 'On');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Foo', 'Bar');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Bla', 'Blub');
 
@@ -173,9 +176,10 @@ describe('Request', () => {
 		expect(xhr.open).toHaveBeenCalledTimes(1);
 		expect(xhr.open).toHaveBeenCalledWith('PUT', 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar', true);
 
-		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(4);
+		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(5);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Depth', '0');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/xml; charset=utf-8');
+		expect(xhr.setRequestHeader).toHaveBeenCalledWith('X-NC-CalDAV-Webcal-Caching', 'On');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Foo', 'Bar');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Bla', 'Blub');
 
@@ -210,9 +214,10 @@ describe('Request', () => {
 		expect(xhr.open).toHaveBeenCalledTimes(1);
 		expect(xhr.open).toHaveBeenCalledWith('DELETE', 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar', true);
 
-		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(2);
+		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(3);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Depth', '0');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/xml; charset=utf-8');
+		expect(xhr.setRequestHeader).toHaveBeenCalledWith('X-NC-CalDAV-Webcal-Caching', 'On');
 
 		expect(xhr.send).toHaveBeenCalledTimes(1);
 		expect(xhr.send).toHaveBeenCalledWith();
@@ -245,9 +250,10 @@ describe('Request', () => {
 		expect(xhr.open).toHaveBeenCalledTimes(1);
 		expect(xhr.open).toHaveBeenCalledWith('COPY', 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar', true);
 
-		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(4);
+		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(5);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Depth', 'Infinity');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Destination', 'barFoo');
+		expect(xhr.setRequestHeader).toHaveBeenCalledWith('X-NC-CalDAV-Webcal-Caching', 'On');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Overwrite', 'T');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/xml; charset=utf-8');
 
@@ -282,9 +288,10 @@ describe('Request', () => {
 		expect(xhr.open).toHaveBeenCalledTimes(1);
 		expect(xhr.open).toHaveBeenCalledWith('MOVE', 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar', true);
 
-		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(4);
+		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(5);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Depth', 'Infinity');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Destination', 'barFoo');
+		expect(xhr.setRequestHeader).toHaveBeenCalledWith('X-NC-CalDAV-Webcal-Caching', 'On');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Overwrite', 'F');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/xml; charset=utf-8');
 
@@ -319,9 +326,10 @@ describe('Request', () => {
 		expect(xhr.open).toHaveBeenCalledTimes(1);
 		expect(xhr.open).toHaveBeenCalledWith('LOCK', 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar', true);
 
-		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(2);
+		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(3);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Depth', '0');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/xml; charset=utf-8');
+		expect(xhr.setRequestHeader).toHaveBeenCalledWith('X-NC-CalDAV-Webcal-Caching', 'On');
 
 		expect(xhr.send).toHaveBeenCalledTimes(1);
 		expect(xhr.send).toHaveBeenCalledWith();
@@ -354,9 +362,10 @@ describe('Request', () => {
 		expect(xhr.open).toHaveBeenCalledTimes(1);
 		expect(xhr.open).toHaveBeenCalledWith('UNLOCK', 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar', true);
 
-		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(2);
+		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(3);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Depth', '0');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/xml; charset=utf-8');
+		expect(xhr.setRequestHeader).toHaveBeenCalledWith('X-NC-CalDAV-Webcal-Caching', 'On');
 
 		expect(xhr.send).toHaveBeenCalledTimes(1);
 		expect(xhr.send).toHaveBeenCalledWith();
@@ -389,9 +398,10 @@ describe('Request', () => {
 		expect(xhr.open).toHaveBeenCalledTimes(1);
 		expect(xhr.open).toHaveBeenCalledWith('PROPFIND', 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar', true);
 
-		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(2);
+		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(3);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Depth', 1);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/xml; charset=utf-8');
+		expect(xhr.setRequestHeader).toHaveBeenCalledWith('X-NC-CalDAV-Webcal-Caching', 'On');
 
 		expect(xhr.send).toHaveBeenCalledTimes(1);
 		expect(xhr.send).toHaveBeenCalledWith('<x0:propfind xmlns:x0="DAV:"><x0:prop><x1:local1 xmlns:x1="NS1"/><x2:local2 xmlns:x2="NS2"/></x0:prop></x0:propfind>');
@@ -427,9 +437,10 @@ describe('Request', () => {
 		expect(xhr.open).toHaveBeenCalledTimes(1);
 		expect(xhr.open).toHaveBeenCalledWith('PROPPATCH', 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar', true);
 
-		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(4);
+		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(5);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Depth', '0');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/xml; charset=utf-8');
+		expect(xhr.setRequestHeader).toHaveBeenCalledWith('X-NC-CalDAV-Webcal-Caching', 'On');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Foo', 'Bar');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Bla', 'Blub');
 
@@ -467,9 +478,10 @@ describe('Request', () => {
 		expect(xhr.open).toHaveBeenCalledTimes(1);
 		expect(xhr.open).toHaveBeenCalledWith('MKCOL', 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar', true);
 
-		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(4);
+		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(5);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Depth', '0');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/xml; charset=utf-8');
+		expect(xhr.setRequestHeader).toHaveBeenCalledWith('X-NC-CalDAV-Webcal-Caching', 'On');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Foo', 'Bar');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Bla', 'Blub');
 
@@ -507,9 +519,10 @@ describe('Request', () => {
 		expect(xhr.open).toHaveBeenCalledTimes(1);
 		expect(xhr.open).toHaveBeenCalledWith('REPORT', 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar', true);
 
-		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(4);
+		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(5);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Depth', '0');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/xml; charset=utf-8');
+		expect(xhr.setRequestHeader).toHaveBeenCalledWith('X-NC-CalDAV-Webcal-Caching', 'On');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Foo', 'Bar');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Bla', 'Blub');
 
@@ -547,9 +560,10 @@ describe('Request', () => {
 		expect(xhr.open).toHaveBeenCalledTimes(1);
 		expect(xhr.open).toHaveBeenCalledWith('METHOD123', 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar', true);
 
-		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(4);
+		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(5);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Depth', '0');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/xml; charset=utf-8');
+		expect(xhr.setRequestHeader).toHaveBeenCalledWith('X-NC-CalDAV-Webcal-Caching', 'On');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Foo', 'Bar');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Bla', 'Blub');
 
@@ -584,9 +598,10 @@ describe('Request', () => {
 		expect(xhr.open).toHaveBeenCalledTimes(1);
 		expect(xhr.open).toHaveBeenCalledWith('GET', 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar', true);
 
-		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(2);
+		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(3);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Depth', '0');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/xml; charset=utf-8');
+		expect(xhr.setRequestHeader).toHaveBeenCalledWith('X-NC-CalDAV-Webcal-Caching', 'On');
 
 		expect(xhr.send).toHaveBeenCalledTimes(1);
 		expect(xhr.send).toHaveBeenCalledWith();
@@ -618,9 +633,10 @@ describe('Request', () => {
 		expect(xhr.open).toHaveBeenCalledTimes(1);
 		expect(xhr.open).toHaveBeenCalledWith('GET', 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar', true);
 
-		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(2);
+		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(3);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Depth', '0');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/xml; charset=utf-8');
+		expect(xhr.setRequestHeader).toHaveBeenCalledWith('X-NC-CalDAV-Webcal-Caching', 'On');
 
 		expect(xhr.send).toHaveBeenCalledTimes(1);
 		expect(xhr.send).toHaveBeenCalledWith();
@@ -652,9 +668,10 @@ describe('Request', () => {
 		expect(xhr.open).toHaveBeenCalledTimes(1);
 		expect(xhr.open).toHaveBeenCalledWith('GET', 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar', true);
 
-		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(2);
+		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(3);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Depth', '0');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/xml; charset=utf-8');
+		expect(xhr.setRequestHeader).toHaveBeenCalledWith('X-NC-CalDAV-Webcal-Caching', 'On');
 
 		expect(xhr.send).toHaveBeenCalledTimes(1);
 		expect(xhr.send).toHaveBeenCalledWith();
@@ -686,9 +703,10 @@ describe('Request', () => {
 		expect(xhr.open).toHaveBeenCalledTimes(1);
 		expect(xhr.open).toHaveBeenCalledWith('GET', 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar', true);
 
-		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(2);
+		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(3);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Depth', '0');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/xml; charset=utf-8');
+		expect(xhr.setRequestHeader).toHaveBeenCalledWith('X-NC-CalDAV-Webcal-Caching', 'On');
 
 		expect(xhr.send).toHaveBeenCalledTimes(1);
 		expect(xhr.send).toHaveBeenCalledWith();
@@ -720,9 +738,10 @@ describe('Request', () => {
 		expect(xhr.open).toHaveBeenCalledTimes(1);
 		expect(xhr.open).toHaveBeenCalledWith('GET', 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar', true);
 
-		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(2);
+		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(3);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Depth', '0');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/xml; charset=utf-8');
+		expect(xhr.setRequestHeader).toHaveBeenCalledWith('X-NC-CalDAV-Webcal-Caching', 'On');
 
 		expect(xhr.send).toHaveBeenCalledTimes(1);
 		expect(xhr.send).toHaveBeenCalledWith();
@@ -757,9 +776,10 @@ describe('Request', () => {
 		expect(xhr.open).toHaveBeenCalledTimes(1);
 		expect(xhr.open).toHaveBeenCalledWith('PROPFIND', 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar', true);
 
-		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(2);
+		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(3);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Depth', 0);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/xml; charset=utf-8');
+		expect(xhr.setRequestHeader).toHaveBeenCalledWith('X-NC-CalDAV-Webcal-Caching', 'On');
 
 		expect(xhr.send).toHaveBeenCalledTimes(1);
 		expect(xhr.send).toHaveBeenCalledWith('<x0:propfind xmlns:x0="DAV:"><x0:prop/></x0:propfind>');
@@ -893,9 +913,10 @@ describe('Request', () => {
 		expect(xhr.open).toHaveBeenCalledTimes(1);
 		expect(xhr.open).toHaveBeenCalledWith('GET', 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar', true);
 
-		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(2);
+		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(3);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Depth', 1);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/xml; charset=utf-8');
+		expect(xhr.setRequestHeader).toHaveBeenCalledWith('X-NC-CalDAV-Webcal-Caching', 'On');
 
 		expect(xhr.send).toHaveBeenCalledTimes(1);
 		expect(xhr.send).toHaveBeenCalledWith();
@@ -1217,9 +1238,10 @@ describe('Request', () => {
 		expect(xhr.open).toHaveBeenCalledTimes(1);
 		expect(xhr.open).toHaveBeenCalledWith('GET', 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar', true);
 
-		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(2);
+		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(3);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Depth', '0');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/xml; charset=utf-8');
+		expect(xhr.setRequestHeader).toHaveBeenCalledWith('X-NC-CalDAV-Webcal-Caching', 'On');
 
 		expect(beforeRequestHandler).toHaveBeenCalledTimes(1);
 		expect(beforeRequestHandler).toHaveBeenCalledWith(xhr);
@@ -1259,9 +1281,10 @@ describe('Request', () => {
 		expect(xhr.open).toHaveBeenCalledTimes(1);
 		expect(xhr.open).toHaveBeenCalledWith('GET', 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar', true);
 
-		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(2);
+		expect(xhr.setRequestHeader).toHaveBeenCalledTimes(3);
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Depth', '0');
 		expect(xhr.setRequestHeader).toHaveBeenCalledWith('Content-Type', 'application/xml; charset=utf-8');
+		expect(xhr.setRequestHeader).toHaveBeenCalledWith('X-NC-CalDAV-Webcal-Caching', 'On');
 
 		expect(afterRequestHandler).toHaveBeenCalledTimes(0);
 		expect(xhr.send).toHaveBeenCalledTimes(1);
