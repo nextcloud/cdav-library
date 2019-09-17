@@ -495,7 +495,7 @@ export default class Parser {
 	 * @returns {String}
 	 */
 	static scheduleCalendarTransp(document, node, resolver) {
-		const children = document.evaluate('//cl:opaque | //cl:transparent', node, resolver, XPathResult.ANY_TYPE, null);
+		const children = document.evaluate('cl:opaque | cl:transparent', node, resolver, XPathResult.ANY_TYPE, null);
 		const childNode = children.iterateNext();
 		if (childNode) {
 			return document.evaluate('local-name(.)', childNode, resolver, XPathResult.ANY_TYPE, null).stringValue;
@@ -533,7 +533,7 @@ export default class Parser {
 	 */
 	static allowedSharingModes(document, node, resolver) {
 		const result = [];
-		const children = document.evaluate('//cs:can-be-shared | //cs:can-be-published', node, resolver, XPathResult.ANY_TYPE, null);
+		const children = document.evaluate('cs:can-be-shared | cs:can-be-published', node, resolver, XPathResult.ANY_TYPE, null);
 		let childNode;
 
 		while ((childNode = children.iterateNext()) !== null) {
