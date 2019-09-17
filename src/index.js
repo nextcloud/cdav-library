@@ -89,6 +89,15 @@ export default class DavClient {
 		this.calendarHomes = [];
 
 		/**
+		 * The calendar-home that houses all public calendars
+		 * findAll will obviously not work ;)
+		 * use find(token) to get a public calendar
+		 *
+		 * @type {CalendarHome|null}
+		 */
+		this.publicCalendarHome = null;
+
+		/**
 		 * Array of address book homes
 		 * will be filled after connect() was called
 		 *
@@ -150,6 +159,7 @@ export default class DavClient {
 		this._extractAddressBookHomes(response.body);
 		this._extractCalendarHomes(response.body);
 		this._extractPrincipalCollectionSets(response.body);
+		this._createPublicCalendarHome();
 
 		this._isConnected = true;
 
@@ -404,6 +414,17 @@ export default class DavClient {
 	_extractAdvertisedDavFeatures(xhr) {
 		const dav = xhr.getResponseHeader('DAV');
 		this.advertisedFeatures.push(...dav.split(',').map((s) => s.trim()));
+	}
+
+	/**
+	 * Creates a public calendar home
+	 *
+	 * @returns void
+	 * @private
+	 */
+	_createPublicCalendarHome() {
+		const url = this._request.pathname(this.rootUrl) + 'public-calendars/';
+		this.publicCalendarHome = new CalendarHome(this, this._request, url, {});
 	}
 
 }
