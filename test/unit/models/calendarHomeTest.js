@@ -316,6 +316,62 @@ describe('Calendar home model', () => {
 		});
 	});
 
+	it('should create a calendar collection with additional parameters and timezone', () => {
+		const parent = null;
+		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname', 'mkCol']);
+		const url = '/nextcloud/remote.php/dav/calendars/admin/';
+
+		request.propFind.and.returnValues(Promise.resolve({
+				status: 207,
+				body: getDefaultPropFind(),
+				xhr: null
+			}), Promise.resolve({
+				status: 207,
+				body: {
+					"{DAV:}resourcetype" : [
+						"{DAV:}collection",
+						"{urn:ietf:params:xml:ns:caldav}calendar"
+					],
+					"{DAV:}displayname" : "personal 123 456",
+					"{DAV:}owner" : "/nextcloud/remote.php/dav/principals/users/admin/",
+					"{DAV:}sync-token" : "http://sabre.io/ns/sync/19",
+					"{urn:ietf:params:xml:ns:caldav}calendar": "FOO",
+				},
+				xhr: null
+			})
+		);
+
+		request.mkCol.and.callFake(() => {
+			return Promise.resolve({
+				status: 201,
+				body: null,
+				xhr: null
+			})
+		});
+
+		request.pathname.and.callFake((p) => p);
+
+		const calendarHome = new CalendarHome(parent, request, url, {});
+		return calendarHome.findAllScheduleOutboxes().then(() => {
+			return calendarHome.createCalendarCollection('inbox', '#FFFFFF', ['VEVENT', 'VJOURNAL'], 99, 'ABC').then((res) => {
+				expect(res).toEqual(jasmine.any(Calendar));
+				expect(res.url).toEqual('/nextcloud/remote.php/dav/calendars/admin/inbox-1/');
+
+				expect(request.propFind).toHaveBeenCalledTimes(2);
+				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/', jasmine.any(Array), 1);
+				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/inbox-1/', jasmine.any(Array), 0);
+
+				expect(request.mkCol).toHaveBeenCalledTimes(1);
+				expect(request.mkCol).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/inbox-1', {},
+					'<x0:mkcol xmlns:x0="DAV:"><x0:set><x0:prop><x0:resourcetype><x0:collection/><x1:calendar xmlns:x1="urn:ietf:params:xml:ns:caldav"/></x0:resourcetype><x0:displayname>inbox</x0:displayname><x2:calendar-color xmlns:x2="http://apple.com/ns/ical/">#FFFFFF</x2:calendar-color><x3:calendar-enabled xmlns:x3="http://owncloud.org/ns">1</x3:calendar-enabled><x1:calendar-timezone xmlns:x1="urn:ietf:params:xml:ns:caldav">ABC</x1:calendar-timezone><x1:supported-calendar-component-set xmlns:x1="urn:ietf:params:xml:ns:caldav"><x1:comp name="VEVENT"/><x1:comp name="VJOURNAL"/></x1:supported-calendar-component-set><x2:calendar-order xmlns:x2="http://apple.com/ns/ical/">99</x2:calendar-order></x0:prop></x0:set></x0:mkcol>');
+			}).catch(() => {
+				fail('CalendarHome createCalendarCollection was not supposed to fail');
+			});
+		}).catch(() => {
+			fail('CalendarHome createCalendarCollection was not supposed to fail');
+		});
+	});
+
 	it('should create a subscribed collection', () => {
 		const parent = null;
 		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname', 'mkCol']);
