@@ -106,9 +106,10 @@ export class CalendarHome extends DavCollection {
      * @param {String} color
 	 * @param {String[]} supportedComponentSet
 	 * @param {Number} order
+	 * @param {String=} timezone
      * @returns {Promise<Calendar>}
      */
-	async createCalendarCollection(displayname, color, supportedComponentSet = null, order = null) {
+	async createCalendarCollection(displayname, color, supportedComponentSet = null, order = null, timezone = null) {
 		debug('creating a calendar collection');
 
 		const props = [{
@@ -128,6 +129,13 @@ export class CalendarHome extends DavCollection {
 			name: [NS.OWNCLOUD, 'calendar-enabled'],
 			value: '1'
 		}];
+
+		if (timezone) {
+			props.push({
+				name: [NS.IETF_CALDAV, 'calendar-timezone'],
+				value: timezone
+			});
+		}
 
 		if (supportedComponentSet) {
 			props.push({
