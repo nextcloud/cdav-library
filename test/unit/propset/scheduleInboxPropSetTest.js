@@ -21,31 +21,24 @@
  *
  */
 
-import { Calendar } from './calendar.js';
-import * as NS from '../utility/namespaceUtility.js';
-import scheduleInboxPropSet from '../propset/scheduleInboxPropSet.js';
+import scheduleInboxPropSet from "../../../src/propset/scheduleInboxPropSet.js";
 
-export default class ScheduleInbox extends Calendar {
+describe('Schedule Inbox collection prop-set', () => {
+	it('should ignore unknown properties', () => {
+		expect(scheduleInboxPropSet({
+			'{Foo:}bar': 123
+		})).toEqual([]);
+	});
 
-	/**
-	 * @inheritDoc
-	 */
-	constructor(...args) {
-		super(...args);
-
-		super._registerPropSetFactory(scheduleInboxPropSet);
-
-		// https://tools.ietf.org/html/rfc7953#section-7.2.4
-		super._exposeProperty('availability', NS.IETF_CALDAV, 'calendar-availability', true);
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	static getPropFindList() {
-		return super.getPropFindList().concat([
-			[NS.IETF_CALDAV, 'calendar-availability']
+	it('should serialize {DAV:}displayname correctly', () => {
+		expect(scheduleInboxPropSet({
+			'{Foo:}bar': 123,
+			'{urn:ietf:params:xml:ns:caldav}calendar-availability': 'NEW:VAVAILABILITY'
+		})).toEqual([
+			{
+				name: ['urn:ietf:params:xml:ns:caldav', 'calendar-availability'],
+				value: 'NEW:VAVAILABILITY'
+			}
 		]);
-	}
-
-}
+	});
+});

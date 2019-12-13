@@ -4,7 +4,7 @@
  * This library is part of the Nextcloud project
  *
  * @author Georg Ehrke
- * @copyright 2018 Georg Ehrke <oc.list@georgehrke.com>
+ * @copyright 2019 Georg Ehrke <oc.list@georgehrke.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU AFFERO GENERAL PUBLIC LICENSE
@@ -21,31 +21,28 @@
  *
  */
 
-import { Calendar } from './calendar.js';
 import * as NS from '../utility/namespaceUtility.js';
-import scheduleInboxPropSet from '../propset/scheduleInboxPropSet.js';
 
-export default class ScheduleInbox extends Calendar {
+/**
+ * This function is capable of creating the propset xml structure for:
+ * - {urn:ietf:params:xml:ns:caldav}calendar-availability
+ *
+ * @param {Object} props
+ * @return {Object}
+ */
+export default function calendarPropSet(props) {
+	const xmlified = [];
 
-	/**
-	 * @inheritDoc
-	 */
-	constructor(...args) {
-		super(...args);
+	Object.entries(props).forEach(([key, value]) => {
+		switch (key) {
+		case '{urn:ietf:params:xml:ns:caldav}calendar-availability':
+			xmlified.push({
+				name: [NS.IETF_CALDAV, 'calendar-availability'],
+				value: value.toString()
+			});
+			break;
+		}
+	});
 
-		super._registerPropSetFactory(scheduleInboxPropSet);
-
-		// https://tools.ietf.org/html/rfc7953#section-7.2.4
-		super._exposeProperty('availability', NS.IETF_CALDAV, 'calendar-availability', true);
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	static getPropFindList() {
-		return super.getPropFindList().concat([
-			[NS.IETF_CALDAV, 'calendar-availability']
-		]);
-	}
-
+	return xmlified;
 }

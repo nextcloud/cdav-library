@@ -69,7 +69,7 @@ export class CalendarHome extends DavCollection {
 	 * @returns {Promise<Calendar[]>}
 	 */
 	async findAllCalendars() {
-		return super.findAllByFilter((elm) => elm instanceof Calendar);
+		return super.findAllByFilter((elm) => elm instanceof Calendar && !(elm instanceof ScheduleInbox));
 	}
 
 	/**
