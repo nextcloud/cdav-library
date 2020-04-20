@@ -129,6 +129,96 @@ describe('Dav object model', () => {
 		});
 	});
 
+	it('should fetch complete data if forcing', () => {
+		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
+			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
+		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const url = '/foo/bar/file';
+		const props = {
+			'{DAV:}getetag': '"etag foo bar tralala"',
+			'{DAV:}getcontenttype': 'text/blub',
+			'{DAV:}resourcetype': [],
+			'{FOO:}bar': 'data1'
+		};
+
+		const davObject = new DavObject(parent, request, url, props, true);
+		expect(davObject.isPartial()).toEqual(true);
+		expect(davObject.isDirty()).toEqual(false);
+		expect(davObject._props['{FOO:}bar']).toEqual('data1');
+
+		request.propFind.and.callFake(() => {
+			return Promise.resolve({
+				body: {
+					'{DAV:}getetag': '"new etag foo bar tralala"',
+					'{DAV:}getcontenttype': 'text/bla',
+					'{DAV:}resourcetype': [],
+					'{FOO:}bar': 'data2'
+				},
+				status: 200,
+				xhr: null
+			})
+		});
+
+		return davObject.fetchCompleteData(true).then(() => {
+			expect(davObject.isPartial()).toEqual(false);
+			expect(davObject.isDirty()).toEqual(false);
+			expect(davObject.etag).toEqual('"new etag foo bar tralala"');
+			expect(davObject.contenttype).toEqual('text/bla');
+			expect(davObject._props['{FOO:}bar']).toEqual('data2');
+
+			expect(request.propFind).toHaveBeenCalledTimes(1);
+			expect(request.propFind).toHaveBeenCalledWith('/foo/bar/file',
+				[['DAV:', 'getcontenttype'], ['DAV:', 'getetag'], ['DAV:', 'resourcetype']], 0);
+		}).catch((e) => {
+			fail('fetchCompleteData was not supposed to throw error');
+		});
+	});
+
+	it('should fetch complete data if forcing, even if data is not partial', () => {
+		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
+			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
+		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const url = '/foo/bar/file';
+		const props = {
+			'{DAV:}getetag': '"etag foo bar tralala"',
+			'{DAV:}getcontenttype': 'text/blub',
+			'{DAV:}resourcetype': [],
+			'{FOO:}bar': 'data1'
+		};
+
+		const davObject = new DavObject(parent, request, url, props, false);
+		expect(davObject.isPartial()).toEqual(false);
+		expect(davObject.isDirty()).toEqual(false);
+		expect(davObject._props['{FOO:}bar']).toEqual('data1');
+
+		request.propFind.and.callFake(() => {
+			return Promise.resolve({
+				body: {
+					'{DAV:}getetag': '"new etag foo bar tralala"',
+					'{DAV:}getcontenttype': 'text/bla',
+					'{DAV:}resourcetype': [],
+					'{FOO:}bar': 'data2'
+				},
+				status: 200,
+				xhr: null
+			})
+		});
+
+		return davObject.fetchCompleteData(true).then(() => {
+			expect(davObject.isPartial()).toEqual(false);
+			expect(davObject.isDirty()).toEqual(false);
+			expect(davObject.etag).toEqual('"new etag foo bar tralala"');
+			expect(davObject.contenttype).toEqual('text/bla');
+			expect(davObject._props['{FOO:}bar']).toEqual('data2');
+
+			expect(request.propFind).toHaveBeenCalledTimes(1);
+			expect(request.propFind).toHaveBeenCalledWith('/foo/bar/file',
+				[['DAV:', 'getcontenttype'], ['DAV:', 'getetag'], ['DAV:', 'resourcetype']], 0);
+		}).catch((e) => {
+			fail('fetchCompleteData was not supposed to throw error');
+		});
+	});
+
 	it('should fetch complete data and pass thru rejected Promises', () => {
 		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
 			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);

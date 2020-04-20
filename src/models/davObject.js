@@ -66,10 +66,11 @@ export class DavObject extends DAVEventListener {
 	/**
 	 * gets unfiltered data for this object
 	 *
+	 * @param {boolean} forceReFetch Always refetch data, even if not partial
 	 * @returns {Promise<void>}
 	 */
-	async fetchCompleteData() {
-		if (!this.isPartial()) {
+	async fetchCompleteData(forceReFetch = false) {
+		if (!forceReFetch && !this.isPartial()) {
 			return;
 		}
 
