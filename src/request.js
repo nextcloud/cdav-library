@@ -525,7 +525,6 @@ function getDefaultHeaders() {
 
 	return {
 		Depth: '0',
-		'Content-Type': 'application/xml; charset=utf-8',
-		'X-NC-CalDAV-Webcal-Caching': 'On'
+		'Content-Type': 'application/xml; charset=utf-8'
 	};
 }
