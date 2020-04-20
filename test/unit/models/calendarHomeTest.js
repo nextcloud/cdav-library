@@ -99,13 +99,11 @@ describe('Calendar home model', () => {
 
 		const calendarHome = new CalendarHome(parent, request, url, {});
 		return calendarHome.findAllCalendars().then(res => {
-			expect(res.length).toEqual(3);
+			expect(res.length).toEqual(2);
 			expect(res[0]).toEqual(jasmine.any(Calendar));
 			expect(res[0].url).toEqual('/nextcloud/remote.php/dav/calendars/admin/personal/');
 			expect(res[1]).toEqual(jasmine.any(Calendar));
 			expect(res[1].url).toEqual('/nextcloud/remote.php/dav/calendars/admin/contact_birthdays/');
-			expect(res[2]).toEqual(jasmine.any(Subscription));
-			expect(res[2].url).toEqual('/nextcloud/remote.php/dav/calendars/admin/subscribed-calendar/');
 
 			expect(request.propFind).toHaveBeenCalledTimes(1);
 			expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/',
