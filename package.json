@@ -60,7 +60,7 @@
 		"karma-mocha-reporter": "^2.2.5",
 		"webpack": "^4.44.1",
 		"webpack-cli": "^3.3.12",
-		"webpack-merge": "^5.1.1"
+		"webpack-merge": "^5.1.2"
 	},
 	"dependencies": {
 		"core-js": "^3.6.5",
