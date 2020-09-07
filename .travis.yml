@@ -1,9 +1,0 @@
-language: node_js
-node_js:
-- node
-addons:
-  firefox: latest-esr
-script:
-- npm run lint
-- npm run build
-- npm run test
