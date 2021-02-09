@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "webpack --config webpack.dev.js",
 		"watch": "webpack --progress --watch --config webpack.dev.js",
-		"build": "webpack --progress --hide-modules --config webpack.prod.js",
+		"build": "webpack --progress --config webpack.prod.js",
 		"test": "./node_modules/.bin/karma start karma.conf.js",
 		"build-doc": "./node_modules/.bin/esdoc",
 		"lint": "eslint --ext .js src",
@@ -59,7 +59,7 @@
 		"karma-jasmine": "^4.0.1",
 		"karma-mocha-reporter": "^2.2.5",
 		"webpack": "^4.44.2",
-		"webpack-cli": "^3.3.12",
+		"webpack-cli": "^4.5.0",
 		"webpack-merge": "^5.7.3"
 	},
 	"dependencies": {
