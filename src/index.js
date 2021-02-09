@@ -200,6 +200,19 @@ export default class DavClient {
 	}
 
 	/**
+	 * performs a principal property search based on a principal's displayname OR email address
+	 *
+	 * @param {String} value
+	 * @returns {Promise<Principal[]>}
+	 */
+	async principalPropertySearchByDisplaynameOrEmail(value) {
+		return this.principalPropertySearch([
+			{ name: [NS.DAV, 'displayname'] },
+			{ name: [NS.SABREDAV, 'email-address'] }
+		], value, 'anyof');
+	}
+
+	/**
 	 * Performs a principal property based on the address of a room
 	 *
 	 * @param {String} address Address of the building the room is in
@@ -274,11 +287,19 @@ export default class DavClient {
 	 *
 	 * @param {Array} props
 	 * @param {String} match
+	 * @param {String} test 'anyof', 'allof' or none
 	 * @returns {Promise<Principal[]>}
 	 */
-	async principalPropertySearch(props, match) {
+	async principalPropertySearch(props, match, test) {
 		const [skeleton, propSearch] = XMLUtility.getRootSkeleton(
-			[NS.DAV, 'principal-property-search'], [NS.DAV, 'property-search']);
+			[NS.DAV, 'principal-property-search'],
+			[NS.DAV, 'property-search']
+		);
+		if (test) {
+			skeleton.attributes = [
+				['test', test]
+			];
+		}
 
 		propSearch.push({
 			name: [NS.DAV, 'prop'],
