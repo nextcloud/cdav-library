@@ -29,6 +29,7 @@ import * as NS from '../utility/namespaceUtility.js';
 import * as XMLUtility from '../utility/xmlUtility.js';
 
 import { debugFactory } from '../debug.js';
+import { CalendarTrashBin } from './calendarTrashBin.js';
 const debug = debugFactory('CalendarHome');
 
 /**
@@ -51,16 +52,34 @@ export class CalendarHome extends DavCollection {
 		super._registerCollectionFactory('{' + NS.CALENDARSERVER + '}subscribed', Subscription);
 		super._registerCollectionFactory('{' + NS.IETF_CALDAV + '}schedule-inbox', ScheduleInbox);
 		super._registerCollectionFactory('{' + NS.IETF_CALDAV + '}schedule-outbox', ScheduleOutbox);
+		super._registerCollectionFactory('{' + NS.NEXTCLOUD + '}trash-bin', CalendarTrashBin);
 	}
 
 	/**
-	 * finds all CalDAV-specific collections in this calendar home
+	 * Finds all CalDAV-specific collections in this calendar home
 	 *
-	 * @returns {Promise<Calendar[]|Subscription[]|ScheduleInbox[]|ScheduleOutbox[]>}
+	 * @returns {Promise<Calendar[]|Subscription[]|ScheduleInbox[]|ScheduleOutbox[]|CalendarTrashBin[]>}
 	 */
 	async findAllCalDAVCollections() {
-		return super.findAllByFilter((elm) => elm instanceof Calendar || elm instanceof Subscription
-			|| elm instanceof ScheduleInbox || elm instanceof ScheduleOutbox);
+		return super.findAllByFilter((elm) => elm instanceof Calendar || elm instanceof CalendarTrashBin
+			|| elm instanceof Subscription || elm instanceof ScheduleInbox || elm instanceof ScheduleOutbox);
+	}
+
+	/**
+	 * Finds all CalDAV-specific collections in this calendar home, grouped by type
+	 *
+	 * @returns {Promise<Calendar[]|Subscription[]|ScheduleInbox[]|ScheduleOutbox[]|CalendarTrashBin[]>}
+	 */
+	async findAllCalDAVCollectionsGrouped() {
+		const collections = await super.findAll();
+
+		return {
+			calendars: collections.filter(c => c instanceof Calendar && !(c instanceof ScheduleInbox) && !(c instanceof Subscription)),
+			trashBins: collections.filter(c => c instanceof CalendarTrashBin),
+			subscriptions: collections.filter(c => c instanceof Subscription),
+			scheduleInboxes: collections.filter(c => c instanceof ScheduleInbox),
+			scheduleOutboxes: collections.filter(c => c instanceof ScheduleOutbox)
+		};
 	}
 
 	/**

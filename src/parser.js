@@ -194,6 +194,7 @@ export default class Parser {
 		this.registerParser('{http://owncloud.org/ns}read-only', Parser.bool);
 		this.registerParser('{http://nextcloud.com/ns}owner-displayname', Parser.text);
 		this.registerParser('{http://nextcloud.com/ns}deleted-at', Parser.decInt);
+		this.registerParser('{http://nextcloud.com/ns}calendar-uri', Parser.text);
 		this.registerParser('{http://nextcloud.com/ns}has-photo', Parser.bool);
 
 		// Sabre/Dav specific
