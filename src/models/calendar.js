@@ -291,7 +291,8 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 			[NS.IETF_CALDAV, 'schedule-calendar-transp'],
 			[NS.IETF_CALDAV, 'schedule-default-calendar-URL'],
 			[NS.OWNCLOUD, 'calendar-enabled'],
-			[NS.NEXTCLOUD, 'owner-displayname']
+			[NS.NEXTCLOUD, 'owner-displayname'],
+			[NS.NEXTCLOUD, 'deleted-at']
 		]);
 	}
 
