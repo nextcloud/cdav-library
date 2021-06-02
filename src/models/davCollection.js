@@ -205,10 +205,11 @@ export class DavCollection extends DAVEventListener {
 	/**
 	 * deletes the DavCollection on the server
 	 *
+	 * @param {Object} headers - additional HTTP headers to send
 	 * @returns {Promise<void>}
 	 */
-	async delete() {
-		await this._request.delete(this._url);
+	async delete(headers = {}) {
+		await this._request.delete(this._url, headers);
 	}
 
 	/**
