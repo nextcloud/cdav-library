@@ -654,7 +654,7 @@ describe('Dav collection model', () => {
 		const collection = new DavCollection(parent, request, url, props);
 		return collection.delete().then(() => {
 			expect(request.delete).toHaveBeenCalledTimes(1);
-			expect(request.delete).toHaveBeenCalledWith('/foo/bar/folder/');
+			expect(request.delete).toHaveBeenCalledWith('/foo/bar/folder/',  {});
 		}).catch(() => {
 			fail('DavCollection::delete was not supposed to fail');
 		});
