@@ -35,6 +35,8 @@ export class CalendarTrashBin extends DavCollection {
 		super(...args);
 
 		super._registerObjectFactory('text/calendar', VObject);
+
+		super._exposeProperty('retentionDuration', NS.NEXTCLOUD, 'trash-bin-retention-duration');
 	}
 
 	async findDeletedObjects() {
