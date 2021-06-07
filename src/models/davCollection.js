@@ -347,7 +347,7 @@ export class DavCollection extends DAVEventListener {
 			const url = this._request.pathname(path);
 
 			// empty resourcetype property => this is no collection
-			if (props['{DAV:}resourcetype'].length === 0) {
+			if ((!props['{DAV:}resourcetype']) || (props['{DAV:}resourcetype'].length === 0)) {
 				debug(`${path} was identified as a file`);
 
 				const contentType = props['{DAV:}getcontenttype'].split(';')[0];
