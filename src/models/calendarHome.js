@@ -30,6 +30,7 @@ import * as XMLUtility from '../utility/xmlUtility.js';
 
 import { debugFactory } from '../debug.js';
 import { CalendarTrashBin } from './calendarTrashBin.js';
+import { DeletedCalendar } from './deletedCalendar';
 const debug = debugFactory('CalendarHome');
 
 /**
@@ -49,6 +50,7 @@ export class CalendarHome extends DavCollection {
 		super(...args);
 
 		super._registerCollectionFactory('{' + NS.IETF_CALDAV + '}calendar', Calendar);
+		super._registerCollectionFactory('{' + NS.NEXTCLOUD + '}deleted-calendar', DeletedCalendar);
 		super._registerCollectionFactory('{' + NS.CALENDARSERVER + '}subscribed', Subscription);
 		super._registerCollectionFactory('{' + NS.IETF_CALDAV + '}schedule-inbox', ScheduleInbox);
 		super._registerCollectionFactory('{' + NS.IETF_CALDAV + '}schedule-outbox', ScheduleOutbox);
@@ -58,23 +60,32 @@ export class CalendarHome extends DavCollection {
 	/**
 	 * Finds all CalDAV-specific collections in this calendar home
 	 *
-	 * @returns {Promise<Calendar[]|Subscription[]|ScheduleInbox[]|ScheduleOutbox[]|CalendarTrashBin[]>}
+	 * @returns {Promise<(Calendar|Subscription|ScheduleInbox|ScheduleOutbox|CalendarTrashBin|DeletedCalendar)[]>}
 	 */
 	async findAllCalDAVCollections() {
 		return super.findAllByFilter((elm) => elm instanceof Calendar || elm instanceof CalendarTrashBin
-			|| elm instanceof Subscription || elm instanceof ScheduleInbox || elm instanceof ScheduleOutbox);
+			|| elm instanceof Subscription || elm instanceof ScheduleInbox || elm instanceof ScheduleOutbox
+			|| elm instanceof DeletedCalendar);
 	}
 
 	/**
 	 * Finds all CalDAV-specific collections in this calendar home, grouped by type
 	 *
-	 * @returns {Promise<Calendar[]|Subscription[]|ScheduleInbox[]|ScheduleOutbox[]|CalendarTrashBin[]>}
+	 * @returns {Promise<{
+			calendars: Calendar[],
+			deletedCalendars: DeletedCalendar[],
+			trashBins: CalendarTrashBin[],
+			subscriptions: Subscription[],
+			scheduleInboxes: ScheduleInbox[],
+			scheduleOutboxes: ScheduleOutbox[],
+		}>}
 	 */
 	async findAllCalDAVCollectionsGrouped() {
 		const collections = await super.findAll();
 
 		return {
-			calendars: collections.filter(c => c instanceof Calendar && !(c instanceof ScheduleInbox) && !(c instanceof Subscription)),
+			calendars: collections.filter(c => c instanceof Calendar && !(c instanceof ScheduleInbox) && !(c instanceof Subscription) && !(c instanceof DeletedCalendar)),
+			deletedCalendars: collections.filter(c => c instanceof DeletedCalendar),
 			trashBins: collections.filter(c => c instanceof CalendarTrashBin),
 			subscriptions: collections.filter(c => c instanceof Subscription),
 			scheduleInboxes: collections.filter(c => c instanceof ScheduleInbox),
@@ -88,7 +99,16 @@ export class CalendarHome extends DavCollection {
 	 * @returns {Promise<Calendar[]>}
 	 */
 	async findAllCalendars() {
-		return super.findAllByFilter((elm) => elm instanceof Calendar && !(elm instanceof ScheduleInbox) && !(elm instanceof Subscription));
+		return super.findAllByFilter((elm) => elm instanceof Calendar && !(elm instanceof ScheduleInbox) && !(elm instanceof Subscription) && !(elm instanceof DeletedCalendar));
+	}
+
+	/**
+	 * Finds all deleted calendars in this calendar home
+	 *
+	 * @returns {Promise<DeletedCalendar[]>}
+	 */
+	async findAllDeletedCalendars() {
+		return super.findAllByFilter((elm) => elm instanceof DeletedCalendar);
 	}
 
 	/**
