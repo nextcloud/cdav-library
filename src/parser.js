@@ -193,7 +193,7 @@ export default class Parser {
 		this.registerParser('{http://owncloud.org/ns}enabled', Parser.bool);
 		this.registerParser('{http://owncloud.org/ns}read-only', Parser.bool);
 		this.registerParser('{http://nextcloud.com/ns}owner-displayname', Parser.text);
-		this.registerParser('{http://nextcloud.com/ns}deleted-at', Parser.decInt);
+		this.registerParser('{http://nextcloud.com/ns}deleted-at', Parser.iso8601DateTime);
 		this.registerParser('{http://nextcloud.com/ns}calendar-uri', Parser.text);
 		this.registerParser('{http://nextcloud.com/ns}has-photo', Parser.bool);
 		this.registerParser('{http://nextcloud.com/ns}trash-bin-retention-duration', Parser.decInt);
@@ -250,6 +250,20 @@ export default class Parser {
 		const text = Parser.text(document, node, resolver);
 
 		// TODO this might not work in every browser
+		return new Date(text);
+	}
+
+	/**
+	 * returns Date from an ISO8601 string
+	 *
+	 * @param {Document} document
+	 * @param {Node} node
+	 * @param {XPathNSResolver} resolver
+	 * @returns {Date}
+	 */
+	static iso8601DateTime(document, node, resolver) {
+		const text = Parser.text(document, node, resolver);
+
 		return new Date(text);
 	}
 
