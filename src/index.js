@@ -282,6 +282,91 @@ export default class DavClient {
 	}
 
 	/**
+	 * Performs a principal property search based on display name, capacity and features
+	 *
+	 * @param {Object} query The destructuring query object
+	 * @param {String=} query.displayName The display name to search for
+	 * @param {Number=} query.capacity The minimum required seating capacity
+	 * @param {String[]=} query.features The required features
+	 * @return {Promise<Principal[]>}
+	 */
+	async principalPropertySearchByDisplaynameAndCapacityAndFeatures(query) {
+		const [skeleton] = XMLUtility.getRootSkeleton([NS.DAV, 'principal-property-search']);
+
+		// Every prop has to match
+		skeleton.attributes = [
+			['test', 'allof']
+		];
+
+		const { displayName, capacity, features } = query;
+		if (displayName) {
+			skeleton.children.push({
+				name: [NS.DAV, 'property-search'],
+				children: [{
+					name: [NS.DAV, 'prop'],
+					children: [
+						{ name: [NS.DAV, 'displayname'] },
+						{ name: [NS.SABREDAV, 'email-address'] }
+					]
+				}, {
+					name: [NS.DAV, 'match'],
+					value: displayName
+				}]
+			});
+		}
+		if (capacity) {
+			skeleton.children.push({
+				name: [NS.DAV, 'property-search'],
+				children: [{
+					name: [NS.DAV, 'prop'],
+					children: [{
+						name: [NS.NEXTCLOUD, 'room-seating-capacity']
+					}]
+				}, {
+					name: [NS.DAV, 'match'],
+					value: capacity
+				}]
+			});
+		}
+		if (features && features.length > 0) {
+			skeleton.children.push({
+				name: [NS.DAV, 'property-search'],
+				children: [{
+					name: [NS.DAV, 'prop'],
+					children: [{
+						name: [NS.NEXTCLOUD, 'room-features']
+					}]
+				}, {
+					name: [NS.DAV, 'match'],
+					value: features.join(',')
+				}]
+			});
+		}
+
+		// Do not perform search if no parameter is given
+		if (skeleton.children.length === 0) {
+			return [];
+		}
+
+		skeleton.children.push({
+			name: [NS.DAV, 'prop'],
+			children: Principal.getPropFindList().map((propFindListItem) => ({ name: propFindListItem }))
+		});
+
+		// We are searching all principal collections, not just one
+		skeleton.children.push({ name: [NS.DAV, 'apply-to-principal-collection-set'] });
+
+		const xml = XMLUtility.serialize(skeleton);
+		const response = await this._request.report(this.rootUrl, { Depth: 0 }, xml);
+		return Object
+			.entries(response.body)
+			.map(([path, props]) => {
+				const url = this._request.pathname(path);
+				return new Principal(null, this._request, url, props);
+			});
+	}
+
+	/**
 	 * performs a principal property search
 	 * @see https://tools.ietf.org/html/rfc3744#section-9.4
 	 *
