@@ -58,7 +58,7 @@
 		"karma-firefox-launcher": "^2.1.1",
 		"karma-jasmine": "^4.0.1",
 		"karma-mocha-reporter": "^2.2.5",
-		"webpack": "^5.46.0",
+		"webpack": "^5.47.1",
 		"webpack-cli": "^4.7.2",
 		"webpack-merge": "^5.8.0"
 	},
