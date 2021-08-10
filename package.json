@@ -7,7 +7,8 @@
 		"dev": "webpack --config webpack.dev.js",
 		"watch": "webpack --progress --watch --config webpack.dev.js",
 		"build": "webpack --progress --config webpack.prod.js",
-		"test": "./node_modules/.bin/karma start karma.conf.js",
+		"test": "karma start karma.conf.js",
+		"test:watch": "karma start --auto-watch=true --single-run=false karma.conf.js",
 		"build-doc": "./node_modules/.bin/esdoc",
 		"lint": "eslint --ext .js src",
 		"lint:fix": "eslint --ext .js src --fix"
@@ -53,11 +54,12 @@
 		"eslint-plugin-standard": "^5.0.0",
 		"istanbul": "^0.4.5",
 		"jasmine": "^3.8.0",
-		"karma": "^5.2.3",
+		"karma": "^6.3.4",
 		"karma-coverage": "^2.0.3",
 		"karma-firefox-launcher": "^2.1.1",
 		"karma-jasmine": "^4.0.1",
 		"karma-mocha-reporter": "^2.2.5",
+		"karma-webpack": "^5.0.0",
 		"webpack": "^5.49.0",
 		"webpack-cli": "^4.7.2",
 		"webpack-merge": "^5.8.0"
