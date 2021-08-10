@@ -2,15 +2,20 @@ module.exports = function(config) {
 	config.set({
 		basePath: './',
 		browsers: ['FirefoxHeadless'],
-		// browsers: ['Firefox'],
-		frameworks: ['jasmine'],
+		frameworks: ['jasmine', 'webpack'],
 		files: [
-			{pattern: 'src/**/*.js', type: 'module'},
-			{pattern: 'test/unit/**/*.js', type: 'module'},
+			// set watched=false as we use webpacks watcher
+			{ pattern: 'src/**/*.js', type: 'module', watched: false },
+			{ pattern: 'test/unit/**/*.js', type: 'module', watched: false }
 		],
-		preprocessors: { 'js/**/*.js': ['coverage'] },
+		preprocessors: {
+			'js/**/*.js': ['coverage'],
+			'src/**/*.js': ['webpack'],
+			'test/**/*.js': ['webpack']
+		},
+		webpack: {},
 		reporters: ['mocha', 'coverage'],
-		port: 9876,  // karma web server port
+		port: 9876, // karma web server port
 		colors: true,
 		logLevel: config.LOG_INFO,
 		autoWatch: false,
@@ -24,7 +29,8 @@ module.exports = function(config) {
 			'karma-jasmine',
 			'karma-coverage',
 			'karma-firefox-launcher',
-			'karma-mocha-reporter'
+			'karma-mocha-reporter',
+			'karma-webpack'
 		]
 	});
 };
