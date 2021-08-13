@@ -86,7 +86,7 @@ export class DavObject extends DAVEventListener {
 	 * @param {Boolean} overwrite
 	 * @returns {Promise<DavObject>} Promise that resolves to the copied DavObject
 	 */
-	async copy(collection, overwrite = false) {
+	async copy(collection, overwrite = false, headers = {}) {
 		debug(`copying ${this.url} from ${this._parent.url} to ${collection.url}`);
 
 		if (this._parent === collection) {
@@ -102,7 +102,7 @@ export class DavObject extends DAVEventListener {
 		const uri = this.url.split('/').splice(-1, 1)[0];
 		const destination = collection.url + uri;
 
-		await this._request.copy(this.url, destination, 0, overwrite);
+		await this._request.copy(this.url, destination, 0, overwrite, headers);
 		return collection.find(uri);
 	}
 
@@ -112,7 +112,7 @@ export class DavObject extends DAVEventListener {
 	 * @param {Boolean} overwrite
 	 * @returns {Promise<void>}
 	 */
-	async move(collection, overwrite = false) {
+	async move(collection, overwrite = false, headers = {}) {
 		debug(`moving ${this.url} from ${this._parent.url} to ${collection.url}`);
 
 		if (this._parent === collection) {
@@ -128,7 +128,7 @@ export class DavObject extends DAVEventListener {
 		const uri = this.url.split('/').splice(-1, 1)[0];
 		const destination = collection.url + uri;
 
-		await this._request.move(this.url, destination, overwrite);
+		await this._request.move(this.url, destination, overwrite, headers);
 		this._parent = collection;
 		this._url = destination;
 	}
@@ -170,8 +170,8 @@ export class DavObject extends DAVEventListener {
 	 *
 	 * @returns {Promise<void>}
 	 */
-	async delete() {
-		return this._request.delete(this.url);
+	async delete(headers = {}) {
+		return this._request.delete(this.url, headers);
 	}
 
 	/**

@@ -543,7 +543,7 @@ describe('Dav object model', () => {
 
 		return davObject.delete().then(() => {
 			expect(request.delete).toHaveBeenCalledTimes(1);
-			expect(request.delete).toHaveBeenCalledWith('/foo/bar/file');
+			expect(request.delete).toHaveBeenCalledWith('/foo/bar/file', {});
 		}).catch((e) => {
 			fail('delete was not supposed to throw error');
 		});
@@ -625,7 +625,7 @@ describe('Dav object model', () => {
 			expect(davCollection2.isWriteable).toHaveBeenCalledTimes(1);
 
 			expect(request.copy).toHaveBeenCalledTimes(1);
-			expect(request.copy).toHaveBeenCalledWith('/foo/bar/file-tri-tra-tralala', '/foo/bla/file-tri-tra-tralala', 0, true);
+			expect(request.copy).toHaveBeenCalledWith('/foo/bar/file-tri-tra-tralala', '/foo/bla/file-tri-tra-tralala', 0, true, {});
 
 			expect(davCollection2.find).toHaveBeenCalledTimes(1);
 			expect(davCollection2.find).toHaveBeenCalledWith('file-tri-tra-tralala');
@@ -739,7 +739,7 @@ describe('Dav object model', () => {
 			expect(davCollection2.isWriteable).toHaveBeenCalledTimes(1);
 
 			expect(request.move).toHaveBeenCalledTimes(1);
-			expect(request.move).toHaveBeenCalledWith('/foo/bar/file-tri-tra-tralala', '/foo/bla/file-tri-tra-tralala', true);
+			expect(request.move).toHaveBeenCalledWith('/foo/bar/file-tri-tra-tralala', '/foo/bla/file-tri-tra-tralala', true, {});
 
 			expect(davCollection2.find).toHaveBeenCalledTimes(0);
 			expect(davObject._parent).toEqual(davCollection2);
