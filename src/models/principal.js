@@ -45,6 +45,7 @@ export class Principal extends DavObject {
 		super._exposeProperty('calendarUserAddressSet', NS.IETF_CALDAV, 'calendar-user-address-set');
 		super._exposeProperty('principalUrl', NS.DAV, 'principal-URL');
 		super._exposeProperty('email', NS.SABREDAV, 'email-address');
+		super._exposeProperty('language', NS.NEXTCLOUD, 'language');
 
 		super._exposeProperty('calendarHomes', NS.IETF_CALDAV, 'calendar-home-set');
 		super._exposeProperty('scheduleInbox', NS.IETF_CALDAV, 'schedule-inbox-URL');
@@ -113,7 +114,8 @@ export class Principal extends DavObject {
 			[NS.IETF_CALDAV, 'calendar-user-address-set'],
 			[NS.DAV, 'principal-URL'],
 			[NS.DAV, 'alternate-URI-set'],
-			[NS.SABREDAV, 'email-address']
+			[NS.SABREDAV, 'email-address'],
+			[NS.NEXTCLOUD, 'language']
 		];
 
 		if (options.enableCalDAV) {

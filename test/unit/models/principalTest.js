@@ -21,9 +21,9 @@
  *
  */
 
-import {DavObject} from "../../../src/models/davObject.js";
-import {Principal} from "../../../src/models/principal.js";
-import * as NS from "../../../src/utility/namespaceUtility.js";
+import { DavObject } from '../../../src/models/davObject.js';
+import { Principal } from '../../../src/models/principal.js';
+import * as NS from '../../../src/utility/namespaceUtility.js';
 
 describe('Principal model', () => {
 	it('should inherit from DavObject', () => {
@@ -40,7 +40,7 @@ describe('Principal model', () => {
 			'{urn:ietf:params:xml:ns:caldav}calendar-home-set': ['/nextcloud/remote.php/dav/calendars/admin/'],
 			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL': '/nextcloud/remote.php/dav/calendars/admin/inbox/',
 			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL': '/nextcloud/remote.php/dav/calendars/admin/outbox/',
-			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/'],
+			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/']
 		};
 
 		const principal = new Principal(parent, request, url, props);
@@ -61,7 +61,7 @@ describe('Principal model', () => {
 			'{urn:ietf:params:xml:ns:caldav}calendar-home-set': ['/nextcloud/remote.php/dav/calendars/admin/'],
 			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL': '/nextcloud/remote.php/dav/calendars/admin/inbox/',
 			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL': '/nextcloud/remote.php/dav/calendars/admin/outbox/',
-			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/'],
+			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/']
 		};
 
 		const principal = new Principal(parent, request, url, props);
@@ -82,7 +82,7 @@ describe('Principal model', () => {
 			'{urn:ietf:params:xml:ns:caldav}calendar-home-set': ['/nextcloud/remote.php/dav/calendars/admin/'],
 			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL': '/nextcloud/remote.php/dav/calendars/admin/inbox/',
 			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL': '/nextcloud/remote.php/dav/calendars/admin/outbox/',
-			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/'],
+			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/']
 		};
 
 		const principal = new Principal(parent, request, url, props);
@@ -103,7 +103,7 @@ describe('Principal model', () => {
 			'{urn:ietf:params:xml:ns:caldav}calendar-home-set': ['/nextcloud/remote.php/dav/calendars/admin/'],
 			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL': '/nextcloud/remote.php/dav/calendars/admin/inbox/',
 			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL': '/nextcloud/remote.php/dav/calendars/admin/outbox/',
-			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/'],
+			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/']
 		};
 
 		const principal = new Principal(parent, request, url, props);
@@ -124,7 +124,7 @@ describe('Principal model', () => {
 			'{urn:ietf:params:xml:ns:caldav}calendar-home-set': ['/nextcloud/remote.php/dav/calendars/admin/'],
 			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL': '/nextcloud/remote.php/dav/calendars/admin/inbox/',
 			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL': '/nextcloud/remote.php/dav/calendars/admin/outbox/',
-			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/'],
+			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/']
 		};
 
 		const principal = new Principal(parent, request, url, props);
@@ -145,7 +145,7 @@ describe('Principal model', () => {
 			'{urn:ietf:params:xml:ns:caldav}calendar-home-set': ['/nextcloud/remote.php/dav/calendars/admin/'],
 			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL': '/nextcloud/remote.php/dav/calendars/admin/inbox/',
 			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL': '/nextcloud/remote.php/dav/calendars/admin/outbox/',
-			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/'],
+			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/']
 		};
 
 		const principal = new Principal(parent, request, url, props);
@@ -166,7 +166,7 @@ describe('Principal model', () => {
 			'{urn:ietf:params:xml:ns:caldav}calendar-home-set': ['/nextcloud/remote.php/dav/calendars/admin/'],
 			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL': '/nextcloud/remote.php/dav/calendars/admin/inbox/',
 			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL': '/nextcloud/remote.php/dav/calendars/admin/outbox/',
-			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/'],
+			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/']
 		};
 
 		const principal = new Principal(parent, request, url, props);
@@ -187,7 +187,7 @@ describe('Principal model', () => {
 			'{urn:ietf:params:xml:ns:caldav}calendar-home-set': ['/nextcloud/remote.php/dav/calendars/admin/'],
 			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL': '/nextcloud/remote.php/dav/calendars/admin/inbox/',
 			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL': '/nextcloud/remote.php/dav/calendars/admin/outbox/',
-			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/'],
+			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/']
 		};
 
 		const principal = new Principal(parent, request, url, props);
@@ -208,7 +208,7 @@ describe('Principal model', () => {
 			'{urn:ietf:params:xml:ns:caldav}calendar-home-set': ['/nextcloud/remote.php/dav/calendars/admin/'],
 			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL': '/nextcloud/remote.php/dav/calendars/admin/inbox/',
 			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL': '/nextcloud/remote.php/dav/calendars/admin/outbox/',
-			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/'],
+			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/']
 		};
 
 		const principal = new Principal(parent, request, url, props);
@@ -229,7 +229,7 @@ describe('Principal model', () => {
 			'{urn:ietf:params:xml:ns:caldav}calendar-home-set': ['/nextcloud/remote.php/dav/calendars/admin/'],
 			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL': '/nextcloud/remote.php/dav/calendars/admin/inbox/',
 			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL': '/nextcloud/remote.php/dav/calendars/admin/outbox/',
-			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/'],
+			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/']
 		};
 
 		const principal = new Principal(parent, request, url, props);
@@ -250,7 +250,7 @@ describe('Principal model', () => {
 			'{urn:ietf:params:xml:ns:caldav}calendar-home-set': ['/nextcloud/remote.php/dav/calendars/admin/'],
 			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL': '/nextcloud/remote.php/dav/calendars/admin/inbox/',
 			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL': '/nextcloud/remote.php/dav/calendars/admin/outbox/',
-			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/'],
+			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/']
 		};
 
 		request.pathname.and.callFake((p) => {
@@ -355,47 +355,50 @@ describe('Principal model', () => {
 			['urn:ietf:params:xml:ns:caldav', 'calendar-user-address-set'],
 			['DAV:', 'principal-URL'],
 			['DAV:', 'alternate-URI-set'],
-			['http://sabredav.org/ns', 'email-address']
+			['http://sabredav.org/ns', 'email-address'],
+			['http://nextcloud.com/ns', 'language'],
 		]);
 	});
 
 	it('should provide a static method getPropFindList + CalDAV', () => {
-		expect(Principal.getPropFindList({enableCalDAV: true})).toEqual([
+		expect(Principal.getPropFindList({ enableCalDAV: true })).toEqual([
 			['DAV:', 'displayname'],
 			['urn:ietf:params:xml:ns:caldav', 'calendar-user-type'],
 			['urn:ietf:params:xml:ns:caldav', 'calendar-user-address-set'],
 			['DAV:', 'principal-URL'],
 			['DAV:', 'alternate-URI-set'],
 			['http://sabredav.org/ns', 'email-address'],
+			['http://nextcloud.com/ns', 'language'],
 			['urn:ietf:params:xml:ns:caldav', 'calendar-home-set'],
 			['urn:ietf:params:xml:ns:caldav', 'schedule-inbox-URL'],
 			['urn:ietf:params:xml:ns:caldav', 'schedule-outbox-URL'],
-			[ 'http://nextcloud.com/ns', 'resource-type'],
-			[ 'http://nextcloud.com/ns', 'resource-vehicle-type'],
-			[ 'http://nextcloud.com/ns', 'resource-vehicle-make'],
-			[ 'http://nextcloud.com/ns', 'resource-vehicle-model'],
-			[ 'http://nextcloud.com/ns', 'resource-vehicle-is-electric'],
-			[ 'http://nextcloud.com/ns', 'resource-vehicle-range'],
-			[ 'http://nextcloud.com/ns', 'resource-vehicle-seating-capacity'],
-			[ 'http://nextcloud.com/ns', 'resource-contact-person'],
-			[ 'http://nextcloud.com/ns', 'resource-contact-person-vcard'],
-			[ 'http://nextcloud.com/ns', 'room-type'],
-			[ 'http://nextcloud.com/ns', 'room-seating-capacity'],
-			[ 'http://nextcloud.com/ns', 'room-building-address'],
-			[ 'http://nextcloud.com/ns', 'room-building-story'],
-			[ 'http://nextcloud.com/ns', 'room-building-room-number'],
-			[ 'http://nextcloud.com/ns', 'room-features']
+			['http://nextcloud.com/ns', 'resource-type'],
+			['http://nextcloud.com/ns', 'resource-vehicle-type'],
+			['http://nextcloud.com/ns', 'resource-vehicle-make'],
+			['http://nextcloud.com/ns', 'resource-vehicle-model'],
+			['http://nextcloud.com/ns', 'resource-vehicle-is-electric'],
+			['http://nextcloud.com/ns', 'resource-vehicle-range'],
+			['http://nextcloud.com/ns', 'resource-vehicle-seating-capacity'],
+			['http://nextcloud.com/ns', 'resource-contact-person'],
+			['http://nextcloud.com/ns', 'resource-contact-person-vcard'],
+			['http://nextcloud.com/ns', 'room-type'],
+			['http://nextcloud.com/ns', 'room-seating-capacity'],
+			['http://nextcloud.com/ns', 'room-building-address'],
+			['http://nextcloud.com/ns', 'room-building-story'],
+			['http://nextcloud.com/ns', 'room-building-room-number'],
+			['http://nextcloud.com/ns', 'room-features']
 		]);
 	});
 
 	it('should provide a static method getPropFindList + CardDAV', () => {
-		expect(Principal.getPropFindList({enableCardDAV: true})).toEqual([
+		expect(Principal.getPropFindList({ enableCardDAV: true })).toEqual([
 			['DAV:', 'displayname'],
 			['urn:ietf:params:xml:ns:caldav', 'calendar-user-type'],
 			['urn:ietf:params:xml:ns:caldav', 'calendar-user-address-set'],
 			['DAV:', 'principal-URL'],
 			['DAV:', 'alternate-URI-set'],
 			['http://sabredav.org/ns', 'email-address'],
+			['http://nextcloud.com/ns', 'language'],
 			['urn:ietf:params:xml:ns:carddav', 'addressbook-home-set']
 
 		]);
