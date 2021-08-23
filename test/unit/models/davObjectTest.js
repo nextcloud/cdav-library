@@ -286,7 +286,7 @@ describe('Dav object model', () => {
 
 		return davObject.update().then(() => {
 			expect(request.put).toHaveBeenCalledTimes(1);
-			expect(request.put).toHaveBeenCalledWith('/foo/bar/file', {'If-Match': '"etag foo bar tralala"'}, 'FooBar');
+			expect(request.put).toHaveBeenCalledWith('/foo/bar/file', {'If-Match': '"etag foo bar tralala"', 'Content-Type': 'text/blub; charset=utf-8'}, 'FooBar');
 
 			expect(xhr.getResponseHeader).toHaveBeenCalledTimes(1);
 			expect(xhr.getResponseHeader).toHaveBeenCalledWith('etag');
@@ -398,7 +398,7 @@ describe('Dav object model', () => {
 
 		return davObject.update().then(() => {
 			expect(request.put).toHaveBeenCalledTimes(1);
-			expect(request.put).toHaveBeenCalledWith('/foo/bar/file', {}, 'FooBar');
+			expect(request.put).toHaveBeenCalledWith('/foo/bar/file', { 'Content-Type': 'text/blub; charset=utf-8' }, 'FooBar');
 
 			expect(xhr.getResponseHeader).toHaveBeenCalledTimes(1);
 			expect(xhr.getResponseHeader).toHaveBeenCalledWith('etag');

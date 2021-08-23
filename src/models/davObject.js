@@ -146,6 +146,11 @@ export class DavObject extends DAVEventListener {
 		}
 
 		const headers = {};
+
+		// updating an object should use it's content-type
+		if (this.contenttype) {
+			headers['Content-Type'] = `${this.contenttype}; charset=utf-8`;
+		}
 		if (this.etag) {
 			headers['If-Match'] = this.etag;
 		}
