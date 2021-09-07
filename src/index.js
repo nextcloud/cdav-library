@@ -350,7 +350,9 @@ export default class DavClient {
 
 		skeleton.children.push({
 			name: [NS.DAV, 'prop'],
-			children: Principal.getPropFindList().map((propFindListItem) => ({ name: propFindListItem }))
+			children: Principal
+				.getPropFindList({ enableCalDAV: true })
+				.map((propFindListItem) => ({ name: propFindListItem }))
 		});
 
 		// We are searching all principal collections, not just one
