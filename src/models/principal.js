@@ -4,6 +4,7 @@
  * This library is part of the Nextcloud project
  *
  * @author Georg Ehrke
+ * @author Richard Steinmetz <richard@steinmetz.cloud>
  * @copyright 2019 Georg Ehrke <oc.list@georgehrke.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -53,6 +54,14 @@ export class Principal extends DavObject {
 
 		super._exposeProperty('addressBookHomes', NS.IETF_CARDDAV, 'addressbook-home-set');
 
+		// Room and resource booking related
+		super._exposeProperty('roomType', NS.NEXTCLOUD, 'room-type');
+		super._exposeProperty('roomSeatingCapacity', NS.NEXTCLOUD, 'room-seating-capacity');
+		super._exposeProperty('roomBuildingAddress', NS.NEXTCLOUD, 'room-building-address');
+		super._exposeProperty('roomBuildingStory', NS.NEXTCLOUD, 'room-building-story');
+		super._exposeProperty('roomBuildingRoomNumber', NS.NEXTCLOUD, 'room-building-room-number');
+		super._exposeProperty('roomFeatures', NS.NEXTCLOUD, 'room-features');
+
 		Object.defineProperties(this, {
 			principalScheme: {
 				get: () => {
@@ -99,6 +108,18 @@ export class Principal extends DavObject {
 					}
 
 					return this.url.split('/').splice(-2, 2)[this.url.endsWith('/') ? 0 : 1];
+				}
+			},
+			roomAddress: {
+				get: () => {
+					const data = [
+						this.roomBuildingRoomNumber,
+						this.roomBuildingStory,
+						this.roomBuildingAddress
+					];
+					return data
+						.filter(value => !!value)
+						.join(', ');
 				}
 			}
 		});

@@ -4,6 +4,7 @@
  * This library is part of the Nextcloud project
  *
  * @author Georg Ehrke
+ * @author Richard Steinmetz <richard@steinmetz.cloud>
  * @copyright 2018 Georg Ehrke <oc.list@georgehrke.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -198,6 +199,12 @@ export default class Parser {
 		this.registerParser('{http://nextcloud.com/ns}has-photo', Parser.bool);
 		this.registerParser('{http://nextcloud.com/ns}trash-bin-retention-duration', Parser.decInt);
 		this.registerParser('{http://nextcloud.com/ns}language', Parser.text);
+		this.registerParser('{http://nextcloud.com/ns}room-type', Parser.text);
+		this.registerParser('{http://nextcloud.com/ns}room-seating-capacity', Parser.decInt);
+		this.registerParser('{http://nextcloud.com/ns}room-building-address', Parser.text);
+		this.registerParser('{http://nextcloud.com/ns}room-building-story', Parser.text);
+		this.registerParser('{http://nextcloud.com/ns}room-building-room-number', Parser.text);
+		this.registerParser('{http://nextcloud.com/ns}room-features', Parser.text);
 
 		// Sabre/Dav specific
 		this.registerParser('{http://sabredav.org/ns}email-address', Parser.text);
