@@ -282,15 +282,16 @@ export default class DavClient {
 	}
 
 	/**
-	 * Performs a principal property search based on display name, capacity and features
+	 * Performs a principal property search based on multiple advanced filters
 	 *
 	 * @param {Object} query The destructuring query object
-	 * @param {String=} query.displayName The display name to search for
+	 * @param {String=} query.displayName The display name to filter by
 	 * @param {Number=} query.capacity The minimum required seating capacity
-	 * @param {String[]=} query.features The required features
+	 * @param {String[]=} query.features The features to filter by
+	 * @param {String=} query.roomType The room type to filter by
 	 * @return {Promise<Principal[]>}
 	 */
-	async principalPropertySearchByDisplaynameAndCapacityAndFeatures(query) {
+	async advancedPrincipalPropertySearch(query) {
 		const [skeleton] = XMLUtility.getRootSkeleton([NS.DAV, 'principal-property-search']);
 
 		// Every prop has to match
@@ -298,7 +299,7 @@ export default class DavClient {
 			['test', 'allof']
 		];
 
-		const { displayName, capacity, features } = query;
+		const { displayName, capacity, features, roomType } = query;
 		if (displayName) {
 			skeleton.children.push({
 				name: [NS.DAV, 'property-search'],
@@ -339,6 +340,20 @@ export default class DavClient {
 				}, {
 					name: [NS.DAV, 'match'],
 					value: features.join(',')
+				}]
+			});
+		}
+		if (roomType) {
+			skeleton.children.push({
+				name: [NS.DAV, 'property-search'],
+				children: [{
+					name: [NS.DAV, 'prop'],
+					children: [{
+						name: [NS.NEXTCLOUD, 'room-type']
+					}]
+				}, {
+					name: [NS.DAV, 'match'],
+					value: roomType
 				}]
 			});
 		}
