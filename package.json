@@ -65,7 +65,7 @@
 		"webpack-merge": "^5.8.0"
 	},
 	"dependencies": {
-		"core-js": "^3.17.3",
+		"core-js": "^3.18.0",
 		"regenerator-runtime": "^0.13.9"
 	}
 }
