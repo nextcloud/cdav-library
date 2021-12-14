@@ -1,8 +1,13 @@
 {
-	"name": "cdav-library",
-	"version": "0.0.1",
+	"name": "@nextcloud/cdav-library",
+	"version": "1.0.0",
 	"description": "CalDAV and CardDAV client library for Nextcloud",
 	"main": "dist/dist.js",
+	"files": [
+		"README.md",
+		"LICENSE",
+		"dist"
+	],
 	"scripts": {
 		"dev": "webpack --config webpack.dev.js",
 		"watch": "webpack --progress --watch --config webpack.dev.js",

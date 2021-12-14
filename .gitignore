@@ -96,4 +96,5 @@ RCS/*
 /.project
 
 coverage/
+dist/
 
