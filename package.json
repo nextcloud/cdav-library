@@ -31,7 +31,6 @@
 	],
 	"author": "Georg Ehrke",
 	"license": "AGPL-3.0",
-	"private": true,
 	"bugs": {
 		"url": "https://github.com/nextcloud/cdav-library/issues"
 	},
