@@ -308,8 +308,7 @@ export default class DavClient {
 				children: [{
 					name: [NS.DAV, 'prop'],
 					children: [
-						{ name: [NS.DAV, 'displayname'] },
-						{ name: [NS.SABREDAV, 'email-address'] }
+						{ name: [NS.DAV, 'displayname'] }
 					]
 				}, {
 					name: [NS.DAV, 'match'],
