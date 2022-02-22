@@ -57,7 +57,7 @@
 		"eslint-plugin-promise": "^6.0.0",
 		"eslint-plugin-standard": "^5.0.0",
 		"istanbul": "^0.4.5",
-		"jasmine": "^3.10.0",
+		"jasmine": "^4.0.2",
 		"karma": "^6.3.9",
 		"karma-coverage": "^2.1.0",
 		"karma-firefox-launcher": "^2.1.2",
