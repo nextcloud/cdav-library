@@ -66,9 +66,9 @@ export class Principal extends DavObject {
 			principalScheme: {
 				get: () => {
 					const baseUrl = this._request.pathname(this._request.baseUrl);
-					let principalURI = this.url.substr(baseUrl.length);
-					if (principalURI.substr(-1) === '/') {
-						principalURI = principalURI.substr(0, principalURI.length - 1);
+					let principalURI = this.url.slice(baseUrl.length);
+					if (principalURI.slice(-1) === '/') {
+						principalURI = principalURI.slice(0, -1);
 					}
 
 					return 'principal:' + principalURI;

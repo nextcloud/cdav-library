@@ -286,13 +286,13 @@ export default class Parser {
 	static iCalendarTimestamp(document, node, resolver) {
 		const text = Parser.text(document, node, resolver);
 
-		const year = parseInt(text.substr(0, 4), 10);
-		const month = parseInt(text.substr(4, 2), 10) - 1;
-		const date = parseInt(text.substr(6, 2), 10);
+		const year = parseInt(text.slice(0, 4), 10);
+		const month = parseInt(text.slice(4, 6), 10) - 1;
+		const date = parseInt(text.slice(6, 8), 10);
 
-		const hour = parseInt(text.substr(9, 2), 10);
-		const minute = parseInt(text.substr(11, 2), 10);
-		const second = parseInt(text.substr(13, 2), 10);
+		const hour = parseInt(text.slice(9, 11), 10);
+		const minute = parseInt(text.slice(11, 13), 10);
+		const second = parseInt(text.slice(13, 15), 10);
 
 		const dateObj = new Date();
 		dateObj.setUTCFullYear(year, month, date);
@@ -542,7 +542,7 @@ export default class Parser {
 		// but some browsers can't parse that *cough cough* Safari 9 *cough cough*
 		// Safari 10 seems to support this though
 		if (text.length === 9) {
-			return text.substr(0, 7);
+			return text.slice(0, 7);
 		}
 
 		return text;

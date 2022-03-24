@@ -85,8 +85,8 @@ export function uri(start, isAvailable) {
 	// === false because !undefined = true, possible infinite loop
 	do {
 		const positionLastDash = uri.lastIndexOf('-');
-		const firstPart = uri.substr(0, positionLastDash);
-		let lastPart = uri.substr(positionLastDash + 1);
+		const firstPart = uri.slice(0, positionLastDash);
+		let lastPart = uri.slice(positionLastDash + 1);
 
 		if (lastPart.match(/^\d+$/)) {
 			lastPart = parseInt(lastPart);

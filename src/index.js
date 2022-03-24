@@ -52,7 +52,7 @@ export default class DavClient {
 		 */
 		this.rootUrl = null;
 
-		if (options.rootUrl.substr(-1) !== '/') {
+		if (options.rootUrl.slice(-1) !== '/') {
 			options.rootUrl += '/';
 		}
 
