@@ -410,12 +410,12 @@ export default class Request {
 	 */
 	filename(url) {
 		let pathname = this.pathname(url);
-		if (pathname.substr(-1) === '/') {
-			pathname = pathname.substr(0, pathname.length - 1);
+		if (pathname.slice(-1) === '/') {
+			pathname = pathname.slice(0, -1);
 		}
 
 		const slashPos = pathname.lastIndexOf('/');
-		return pathname.substr(slashPos);
+		return pathname.slice(slashPos);
 	}
 
 	/**

@@ -42,7 +42,7 @@ export class DavCollection extends DAVEventListener {
 		super();
 
 		// This is a collection, so always make sure to end with a /
-		if (url.substr(-1) !== '/') {
+		if (url.slice(-1) !== '/') {
 			url += '/';
 		}
 
