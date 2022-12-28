@@ -4,10 +4,13 @@ updates:
   directory: "/"
   schedule:
     interval: weekly
-    day: saturday
+    day: wednesday
     time: "03:00"
     timezone: Europe/Paris
   open-pull-requests-limit: 10
   labels:
   - 3. to review
   - dependencies
+  commit-message:
+    prefix: "chore"
+    include: "scope"
