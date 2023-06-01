@@ -60,6 +60,7 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 		super._exposeProperty('description', NS.IETF_CARDDAV, 'addressbook-description', true);
 		super._exposeProperty('enabled', NS.OWNCLOUD, 'enabled', true);
 		super._exposeProperty('readOnly', NS.OWNCLOUD, 'read-only');
+		super._exposeProperty('privilegeSet', NS.DAV, 'current-user-privilege-set');
 	}
 
 	/**
