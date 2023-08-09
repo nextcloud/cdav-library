@@ -68,6 +68,6 @@
   },
   "dependencies": {
     "core-js": "^3.19.3",
-    "regenerator-runtime": "^0.13.9"
+    "regenerator-runtime": "^0.14.0"
   }
 }
