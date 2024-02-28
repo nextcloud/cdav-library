@@ -4,6 +4,7 @@
  * This library is part of the Nextcloud project
  *
  * @author Georg Ehrke
+ * @author Richard Steinmetz <richard@steinmetz.cloud>
  * @copyright 2018 Georg Ehrke <oc.list@georgehrke.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -23,9 +24,13 @@
 
 import { DavObject } from '../../../src/models/davObject.js';
 import { Principal } from '../../../src/models/principal.js';
-import * as NS from '../../../src/utility/namespaceUtility.js';
+import * as XMLUtility from '../../../src/utility/xmlUtility.js';
 
 describe('Principal model', () => {
+	beforeEach(() => {
+		XMLUtility.resetPrefixMap();
+	});
+
 	it('should inherit from DavObject', () => {
 		const parent = null;
 		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
@@ -348,6 +353,28 @@ describe('Principal model', () => {
 		expect(principal.roomId).toEqual(null);
 	});
 
+	it('should expose scheduleDefaultCalendarUrl as property', () => {
+		const parent = null;
+		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav';
+		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
+		const props = {
+			'{DAV:}displayname': 'Umberto',
+			'{urn:ietf:params:xml:ns:caldav}calendar-user-type': 'INDIVIDUAL',
+			'{urn:ietf:params:xml:ns:caldav}calendar-user-address-set': [],
+			'{DAV:}principal-URL': '/nextcloud/remote.php/dav/principals/users/user2/',
+			'{http://sabredav.org/ns}email-address': 'foo-bar@example.com',
+			'{urn:ietf:params:xml:ns:caldav}calendar-home-set': ['/nextcloud/remote.php/dav/calendars/admin/'],
+			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL': '/nextcloud/remote.php/dav/calendars/admin/inbox/',
+			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL': '/nextcloud/remote.php/dav/calendars/admin/outbox/',
+			'{urn:ietf:params:xml:ns:caldav}schedule-default-calendar-URL': '/nextcloud/remote.php/dav/calendars/admin/personal/',
+			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/']
+		};
+
+		const principal = new Principal(parent, request, url, props);
+		expect(principal.scheduleDefaultCalendarUrl).toEqual('/nextcloud/remote.php/dav/calendars/admin/personal/');
+	});
+
 	it('should provide a static method getPropFindList', () => {
 		expect(Principal.getPropFindList()).toEqual([
 			['DAV:', 'displayname'],
@@ -372,6 +399,7 @@ describe('Principal model', () => {
 			['urn:ietf:params:xml:ns:caldav', 'calendar-home-set'],
 			['urn:ietf:params:xml:ns:caldav', 'schedule-inbox-URL'],
 			['urn:ietf:params:xml:ns:caldav', 'schedule-outbox-URL'],
+			['urn:ietf:params:xml:ns:caldav', 'schedule-default-calendar-URL'],
 			['http://nextcloud.com/ns', 'resource-type'],
 			['http://nextcloud.com/ns', 'resource-vehicle-type'],
 			['http://nextcloud.com/ns', 'resource-vehicle-make'],
@@ -402,5 +430,84 @@ describe('Principal model', () => {
 			['urn:ietf:params:xml:ns:carddav', 'addressbook-home-set']
 
 		]);
+	});
+
+	it('should update the principal', () => {
+		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find', 'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
+		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'propPatch']);
+		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
+		const props = {
+			'{DAV:}displayname': 'Umberto',
+			'{urn:ietf:params:xml:ns:caldav}calendar-user-type': 'INDIVIDUAL',
+			'{urn:ietf:params:xml:ns:caldav}calendar-user-address-set': [],
+			'{DAV:}principal-URL': '/nextcloud/remote.php/dav/principals/users/user2/',
+			'{http://sabredav.org/ns}email-address': 'foo-bar@example.com',
+			'{urn:ietf:params:xml:ns:caldav}calendar-home-set': ['/nextcloud/remote.php/dav/calendars/admin/'],
+			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL': '/nextcloud/remote.php/dav/calendars/admin/inbox/',
+			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL': '/nextcloud/remote.php/dav/calendars/admin/outbox/',
+			'{urn:ietf:params:xml:ns:caldav}schedule-default-calendar-URL': '/nextcloud/remote.php/dav/calendars/admin/personal/',
+			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/'],
+		};
+
+		const principal = new Principal(parent, request, url, props);
+
+		request.propPatch.and.callFake(() => {
+			return Promise.resolve({
+				status: 207,
+				body: {
+					'{urn:ietf:params:xml:ns:caldav}schedule-default-calendar-URL': '',
+				},
+				xhr: null
+			});
+		});
+
+		principal.scheduleDefaultCalendarUrl = '/nextcloud/remote.php/dav/calendars/admin/calendar2/';
+
+		return principal.update().then(() => {
+			expect(principal.scheduleDefaultCalendarUrl).toEqual('/nextcloud/remote.php/dav/calendars/admin/calendar2/');
+
+			expect(request.propPatch).toHaveBeenCalledTimes(1);
+			expect(request.propPatch).toHaveBeenCalledWith('/nextcloud/remote.php/dav/foo/bar/baz/', {}, '<x0:propertyupdate xmlns:x0="DAV:"><x0:set><x0:prop><x1:schedule-default-calendar-URL xmlns:x1="urn:ietf:params:xml:ns:caldav"><x0:href>/nextcloud/remote.php/dav/calendars/admin/calendar2/</x0:href></x1:schedule-default-calendar-URL></x0:prop></x0:set></x0:propertyupdate>');
+		}).catch(() => {
+			fail('Principal update was not supposed to fail');
+		});
+	});
+
+	it('should update the principal only if properties changed', () => {
+		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find', 'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
+		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'propPatch']);
+		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
+		const props = {
+			'{DAV:}displayname': 'Umberto',
+			'{urn:ietf:params:xml:ns:caldav}calendar-user-type': 'INDIVIDUAL',
+			'{urn:ietf:params:xml:ns:caldav}calendar-user-address-set': [],
+			'{DAV:}principal-URL': '/nextcloud/remote.php/dav/principals/users/user2/',
+			'{http://sabredav.org/ns}email-address': 'foo-bar@example.com',
+			'{urn:ietf:params:xml:ns:caldav}calendar-home-set': ['/nextcloud/remote.php/dav/calendars/admin/'],
+			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL': '/nextcloud/remote.php/dav/calendars/admin/inbox/',
+			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL': '/nextcloud/remote.php/dav/calendars/admin/outbox/',
+			'{urn:ietf:params:xml:ns:caldav}schedule-default-calendar-URL': '/nextcloud/remote.php/dav/calendars/admin/personal/',
+			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/'],
+		};
+
+		const principal = new Principal(parent, request, url, props);
+
+		request.propPatch.and.callFake(() => {
+			return Promise.resolve({
+				status: 207,
+				body: {
+					'{urn:ietf:params:xml:ns:caldav}schedule-default-calendar-URL': '',
+				},
+				xhr: null
+			});
+		});
+
+		return principal.update().then(() => {
+			expect(principal.scheduleDefaultCalendarUrl).toEqual('/nextcloud/remote.php/dav/calendars/admin/personal/');
+
+			expect(request.propPatch).toHaveBeenCalledTimes(0);
+		}).catch(() => {
+			fail('Principal update was not supposed to fail');
+		});
 	});
 });
