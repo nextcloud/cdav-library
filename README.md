@@ -1,25 +1,23 @@
 # cdav-library
-[![Build Status](https://travis-ci.com/nextcloud/cdav-library.svg?branch=master)](https://travis-ci.com/nextcloud/cdav-library)
+
+[![NPM Version](https://img.shields.io/npm/v/%40nextcloud%2Fcdav-library)](https://www.npmjs.com/package/@nextcloud/cdav-library)
 
 :date: 📇 CalDAV and CardDAV client library for JavaScript
 
 ## Build the library
 
 ``` bash
-# set up and build for production
-make
-
 # install dependencies
-make dev-setup
+make install
 
 # build for dev and watch changes
-make watch-js
+npm run watch
 
 # build for dev
-make build-js
+npm run dev
 
 # build for production with minification
-make build-js-production
+npm run build
 
 ```
 ## Running tests
