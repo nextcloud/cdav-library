@@ -8,7 +8,7 @@
 
 ``` bash
 # install dependencies
-make install
+npm install
 
 # build for dev and watch changes
 npm run watch
