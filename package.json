@@ -1,6 +1,6 @@
 {
   "name": "@nextcloud/cdav-library",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "CalDAV and CardDAV client library for Nextcloud",
   "main": "dist/dist.js",
   "files": [
