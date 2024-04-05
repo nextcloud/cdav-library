@@ -66,6 +66,7 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 		super._exposeProperty('order', NS.APPLE, 'calendar-order', true);
 		super._exposeProperty('timezone', NS.IETF_CALDAV, 'calendar-timezone', true);
 		super._exposeProperty('components', NS.IETF_CALDAV, 'supported-calendar-component-set');
+		super._exposeProperty('pattern', NS.NEXTCLOUD, 'calendar-pattern', true);
 	}
 
 	/**
@@ -293,7 +294,8 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 			[NS.OWNCLOUD, 'calendar-enabled'],
 			[NS.NEXTCLOUD, 'owner-displayname'],
 			[NS.NEXTCLOUD, 'trash-bin-retention-duration'],
-			[NS.NEXTCLOUD, 'deleted-at']
+			[NS.NEXTCLOUD, 'deleted-at'],
+			[NS.NEXTCLOUD, 'calendar-pattern']
 		]);
 	}
 
