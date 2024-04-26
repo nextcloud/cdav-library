@@ -4,6 +4,7 @@
  * This library is part of the Nextcloud project
  *
  * @author Georg Ehrke
+ * @author Richard Steinmetz <richard@steinmetz.cloud>
  * @copyright 2019 Georg Ehrke <oc.list@georgehrke.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -445,8 +446,38 @@ export default class DavClient {
 		return this._request.propFind(principalUrl, Principal.getPropFindList()).then(({ body }) => {
 			return new Principal(null, this._request, principalUrl, body)
 		}).catch((err) => {
+			// TODO: improve error handling
 			console.debug(err)
 		})
+	}
+
+	/**
+	 * finds all principals in a collection at a given principalCollectionUrl
+	 *
+	 * @param {string} principalCollectionUrl
+	 * @param {import('./models/principal.js').PrincipalPropfindOptions} options Passed to Principal.getPropFindList()
+	 * @return {Promise<Principal[]>}
+	 */
+	async findPrincipalsInCollection(principalCollectionUrl, options = {}) {
+		try {
+			const { body } = await this._request.propFind(
+				principalCollectionUrl,
+				Principal.getPropFindList(options),
+				1,
+			)
+			const principals = Object.entries(body)
+				.filter(([principalUrl]) => !principalCollectionUrl.endsWith(principalUrl))
+				.map(([principalUrl, principal]) => new Principal(
+					null,
+					this._request,
+					principalUrl,
+					principal,
+				))
+			return principals
+		} catch (err) {
+			// TODO: improve error handling
+			console.debug(err)
+		}
 	}
 
 	/**

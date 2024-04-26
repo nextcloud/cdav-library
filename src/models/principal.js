@@ -29,6 +29,13 @@ import * as XMLUtility from '../utility/xmlUtility.js'
 import prinicipalPropSet from '../propset/principalPropSet.js'
 
 /**
+ * @typedef  {object}   PrincipalPropfindOptions
+ * @property {boolean=} PrincipalPropfindOptions.enableCalDAV
+ * @property {boolean=} PrincipalPropfindOptions.enableCalDAVResourceBooking
+ * @property {boolean=} PrincipalPropfindOptions.enableCardDAV
+ */
+
+/**
  * @class
  */
 export class Principal extends DavObject {
@@ -178,6 +185,8 @@ export class Principal extends DavObject {
 
 	/**
 	 * @inheritDoc
+	 *
+	 * @param {PrincipalPropfindOptions} options
 	 */
 	static getPropFindList(options = {}) {
 		const list = [
@@ -196,6 +205,10 @@ export class Principal extends DavObject {
 				[NS.IETF_CALDAV, 'schedule-inbox-URL'],
 				[NS.IETF_CALDAV, 'schedule-outbox-URL'],
 				[NS.IETF_CALDAV, 'schedule-default-calendar-URL'],
+			)
+		}
+		if (options.enableCalDAVResourceBooking || options.enableCalDAV) {
+			list.push(
 				// Room and Resource booking related
 				[NS.NEXTCLOUD, 'resource-type'],
 				[NS.NEXTCLOUD, 'resource-vehicle-type'],
