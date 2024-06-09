@@ -2,18 +2,25 @@
   "name": "@nextcloud/cdav-library",
   "version": "1.3.0",
   "description": "CalDAV and CardDAV client library for Nextcloud",
-  "main": "dist/dist.js",
+  "type": "module",
+  "main": "dist/dist.cjs",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
   "files": [
     "README.md",
     "LICENSE",
     "dist"
   ],
   "scripts": {
-    "dev": "webpack --config webpack.dev.js",
-    "watch": "webpack --progress --watch --config webpack.dev.js",
-    "build": "webpack --progress --config webpack.prod.js",
-    "test": "karma start karma.conf.js",
-    "test:watch": "karma start --auto-watch=true --single-run=false karma.conf.js",
+    "build": "vite build --mode=production",
+    "dev": "vite build --mode=development",
+    "watch": "vite build --mode=development --watch",
+    "test": "karma start karma.conf.cjs",
+    "test:watch": "karma start --auto-watch=true --single-run=false karma.conf.cjs",
     "lint": "eslint --ext .js src",
     "lint:fix": "eslint --ext .js src --fix"
   },
@@ -46,6 +53,7 @@
     "@nextcloud/babel-config": "^1.2.0",
     "@nextcloud/browserslist-config": "^3.0.0",
     "@nextcloud/eslint-config": "^8.4.1",
+    "@nextcloud/vite-config": "^2.0.1",
     "babel-loader": "^9.1.0",
     "istanbul": "^0.4.5",
     "jasmine": "^5.0.0",
@@ -55,6 +63,7 @@
     "karma-jasmine": "^5.0.1",
     "karma-mocha-reporter": "^2.2.5",
     "karma-webpack": "^5.0.0",
+    "vite": "^5.2.13",
     "webpack": "^5.65.0",
     "webpack-cli": "^5.0.0",
     "webpack-merge": "^5.8.0"
