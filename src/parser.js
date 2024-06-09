@@ -195,6 +195,7 @@ export default class Parser {
 		this.registerParser('{http://owncloud.org/ns}read-only', Parser.bool);
 		this.registerParser('{http://nextcloud.com/ns}owner-displayname', Parser.text);
 		this.registerParser('{http://nextcloud.com/ns}deleted-at', Parser.iso8601DateTime);
+		this.registerParser('{http://nextcloud.com/ns}calendar-pattern', Parser.text);
 		this.registerParser('{http://nextcloud.com/ns}calendar-uri', Parser.text);
 		this.registerParser('{http://nextcloud.com/ns}has-photo', Parser.bool);
 		this.registerParser('{http://nextcloud.com/ns}trash-bin-retention-duration', Parser.decInt);
@@ -544,6 +545,27 @@ export default class Parser {
 		if (text.length === 9) {
 			return text.slice(0, 7);
 		}
+
+		return text;
+	}
+
+	/**
+	 * Parses a {http://apple.com/ns/ical/}calendar-color Node
+	 * strips the alpha value of RGB values
+	 *
+	 * @param {Document} document
+	 * @param {Node} node
+	 * @param {XPathNSResolver} resolver
+	 * @returns {String}
+	 */
+	static pattern(document, node, resolver) {
+		const text = Parser.text(document, node, resolver);
+		// some stupid clients store an alpha value in the rgb hash (like #rrggbbaa) *cough cough* Apple Calendar *cough cough*
+		// but some browsers can't parse that *cough cough* Safari 9 *cough cough*
+		// Safari 10 seems to support this though
+		// if (text.length === 9) {
+		// 	return text.slice(0, 7);
+		// }
 
 		return text;
 	}

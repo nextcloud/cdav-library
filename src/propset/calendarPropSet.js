@@ -55,6 +55,13 @@ export default function calendarPropSet(props) {
 			});
 			break;
 
+		case '{http://nextcloud.com/ns}calendar-pattern':
+			xmlified.push({
+				name: [NS.NEXTCLOUD, 'calendar-pattern'],
+				value: value
+			});
+			break;
+
 		case '{http://calendarserver.org/ns/}source':
 			xmlified.push({
 				name: [NS.CALENDARSERVER, 'source'],
