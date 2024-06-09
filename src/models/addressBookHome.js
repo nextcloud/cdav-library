@@ -20,12 +20,12 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-import { DavCollection } from './davCollection.js';
-import * as NS from '../utility/namespaceUtility.js';
-import { AddressBook } from './addressBook.js';
+import { DavCollection } from './davCollection.js'
+import * as NS from '../utility/namespaceUtility.js'
+import { AddressBook } from './addressBook.js'
 
-import { debugFactory } from '../debug.js';
-const debug = debugFactory('AddressBookHome');
+import { debugFactory } from '../debug.js'
+const debug = debugFactory('AddressBookHome')
 
 /**
  * This class represents an address book home as specified in
@@ -41,43 +41,43 @@ export class AddressBookHome extends DavCollection {
 	 * @inheritDoc
 	 */
 	constructor(...args) {
-		super(...args);
+		super(...args)
 
-		super._registerCollectionFactory('{' + NS.IETF_CARDDAV + '}addressbook', AddressBook);
+		super._registerCollectionFactory('{' + NS.IETF_CARDDAV + '}addressbook', AddressBook)
 	}
 
 	/**
 	 * finds all address books in this address book home
 	 *
-	 * @returns {Promise<AddressBook[]>}
+	 * @return {Promise<AddressBook[]>}
 	 */
 	async findAllAddressBooks() {
-		return super.findAllByFilter((elm) => elm instanceof AddressBook);
+		return super.findAllByFilter((elm) => elm instanceof AddressBook)
 	}
 
 	/**
-     * creates a new address book collection
+	 * creates a new address book collection
 	 *
-     * @param {String} displayname
-     * @returns {Promise<AddressBook>}
-     */
+	 * @param {string} displayname
+	 * @return {Promise<AddressBook>}
+	 */
 	async createAddressBookCollection(displayname) {
-		debug('creating an addressbook collection');
+		debug('creating an addressbook collection')
 
 		const props = [{
 			name: [NS.DAV, 'resourcetype'],
 			children: [{
-				name: [NS.DAV, 'collection']
+				name: [NS.DAV, 'collection'],
 			}, {
-				name: [NS.IETF_CARDDAV, 'addressbook']
-			}]
+				name: [NS.IETF_CARDDAV, 'addressbook'],
+			}],
 		}, {
 			name: [NS.DAV, 'displayname'],
-			value: displayname
-		}];
+			value: displayname,
+		}]
 
-		const name = super._getAvailableNameFromToken(displayname);
-		return super.createCollection(name, props);
+		const name = super._getAvailableNameFromToken(displayname)
+		return super.createCollection(name, props)
 	}
 
 }

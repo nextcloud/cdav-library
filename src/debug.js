@@ -23,16 +23,16 @@
 
 /**
  * creates a debug function bound to a context
- * @param {String} context
- * @returns {Function}
+ * @param {string} context
+ * @return {Function}
  */
 export function debugFactory(context) {
 	return (...args) => {
 		if (debugFactory.enabled) {
 			// eslint-disable-next-line no-console
-			console.debug(context, ...args);
+			console.debug(context, ...args)
 		}
-	};
+	}
 }
 
-debugFactory.enabled = false;
+debugFactory.enabled = false

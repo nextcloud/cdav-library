@@ -21,6 +21,6 @@
  *
  */
 
-import NetworkRequestHttpError from './networkRequestHttpError.js';
+import NetworkRequestHttpError from './networkRequestHttpError.js'
 
 export default class NetworkRequestServerError extends NetworkRequestHttpError {}

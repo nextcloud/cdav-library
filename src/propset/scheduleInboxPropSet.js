@@ -21,28 +21,28 @@
  *
  */
 
-import * as NS from '../utility/namespaceUtility.js';
+import * as NS from '../utility/namespaceUtility.js'
 
 /**
  * This function is capable of creating the propset xml structure for:
  * - {urn:ietf:params:xml:ns:caldav}calendar-availability
  *
- * @param {Object} props
- * @return {Object}
+ * @param {object} props
+ * @return {object}
  */
 export default function calendarPropSet(props) {
-	const xmlified = [];
+	const xmlified = []
 
 	Object.entries(props).forEach(([key, value]) => {
 		switch (key) {
 		case '{urn:ietf:params:xml:ns:caldav}calendar-availability':
 			xmlified.push({
 				name: [NS.IETF_CALDAV, 'calendar-availability'],
-				value: value.toString()
-			});
-			break;
+				value: value.toString(),
+			})
+			break
 		}
-	});
+	})
 
-	return xmlified;
+	return xmlified
 }

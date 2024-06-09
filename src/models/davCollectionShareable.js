@@ -20,11 +20,11 @@
  * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
-import * as NS from '../utility/namespaceUtility.js';
-import * as XMLUtility from '../utility/xmlUtility.js';
+import * as NS from '../utility/namespaceUtility.js'
+import * as XMLUtility from '../utility/xmlUtility.js'
 
-import { debugFactory } from '../debug.js';
-const debug = debugFactory('DavCollectionShareable');
+import { debugFactory } from '../debug.js'
+const debug = debugFactory('DavCollectionShareable')
 
 export function davCollectionShareable(Base) {
 	return class extends Base {
@@ -33,112 +33,112 @@ export function davCollectionShareable(Base) {
 		 * @inheritDoc
 		 */
 		constructor(...args) {
-			super(...args);
+			super(...args)
 
-			super._exposeProperty('shares', NS.OWNCLOUD, 'invite');
-			super._exposeProperty('allowedSharingModes', NS.CALENDARSERVER, 'allowed-sharing-modes');
+			super._exposeProperty('shares', NS.OWNCLOUD, 'invite')
+			super._exposeProperty('allowedSharingModes', NS.CALENDARSERVER, 'allowed-sharing-modes')
 		}
 
 		/**
 		 * shares a DavCollection
 		 *
-		 * @param {String} principalScheme
+		 * @param {string} principalScheme
 		 * @param {boolean} writeable
 		 * @param {string} summary
-		 * @returns {Promise<void>}
+		 * @return {Promise<void>}
 		 */
 		async share(principalScheme, writeable = false, summary = '') {
-			debug(`Sharing ${this.url} with ${principalScheme}`);
+			debug(`Sharing ${this.url} with ${principalScheme}`)
 			const [skeleton, setProp] = XMLUtility.getRootSkeleton(
-				[NS.OWNCLOUD, 'share'], [NS.OWNCLOUD, 'set']);
+				[NS.OWNCLOUD, 'share'], [NS.OWNCLOUD, 'set'])
 
 			setProp.push({
 				name: [NS.DAV, 'href'],
-				value: principalScheme
-			});
+				value: principalScheme,
+			})
 
 			if (writeable) {
 				setProp.push({
-					name: [NS.OWNCLOUD, 'read-write']
-				});
+					name: [NS.OWNCLOUD, 'read-write'],
+				})
 			}
 			if (summary !== '') {
 				setProp.push({
 					name: [NS.OWNCLOUD, 'summary'],
-					value: summary
-				});
+					value: summary,
+				})
 			}
 
-			const xml = XMLUtility.serialize(skeleton);
+			const xml = XMLUtility.serialize(skeleton)
 			return this._request.post(this._url, { 'Content-Type': 'application/xml; charset=utf-8' }, xml).then(() => {
-				const index = this.shares.findIndex((e) => e.href === principalScheme);
+				const index = this.shares.findIndex((e) => e.href === principalScheme)
 
 				if (index === -1) {
 					this.shares.push({
 						href: principalScheme,
 						access: [writeable ? '{http://owncloud.org/ns}read-write' : '{http://owncloud.org/ns}read'],
 						'common-name': null,
-						'invite-accepted': true
-					});
+						'invite-accepted': true,
+					})
 				} else {
 					this.shares[index].access
-						= [writeable ? '{http://owncloud.org/ns}read-write' : '{http://owncloud.org/ns}read'];
+						= [writeable ? '{http://owncloud.org/ns}read-write' : '{http://owncloud.org/ns}read']
 				}
-			});
+			})
 		}
 
 		/**
 		 * unshares a DAVCollection
 		 *
 		 * @param {string} principalScheme
-		 * @returns {Promise<void>}
+		 * @return {Promise<void>}
 		 */
 		async unshare(principalScheme) {
-			debug(`Unsharing ${this.url} with ${principalScheme}`);
+			debug(`Unsharing ${this.url} with ${principalScheme}`)
 
 			const [skeleton, oSetChildren] = XMLUtility.getRootSkeleton(
-				[NS.OWNCLOUD, 'share'], [NS.OWNCLOUD, 'remove']);
+				[NS.OWNCLOUD, 'share'], [NS.OWNCLOUD, 'remove'])
 
 			oSetChildren.push({
 				name: [NS.DAV, 'href'],
-				value: principalScheme
-			});
+				value: principalScheme,
+			})
 
-			const xml = XMLUtility.serialize(skeleton);
+			const xml = XMLUtility.serialize(skeleton)
 			return this._request.post(this._url, { 'Content-Type': 'application/xml; charset=utf-8' }, xml).then(() => {
-				const index = this.shares.findIndex((e) => e.href === principalScheme);
+				const index = this.shares.findIndex((e) => e.href === principalScheme)
 				if (index === -1) {
-					return;
+					return
 				}
 
-				this.shares.splice(index, 1);
-			});
+				this.shares.splice(index, 1)
+			})
 		}
 
 		/**
 		 * checks whether a collection is shareable
 		 *
-		 * @returns {Boolean}
+		 * @return {boolean}
 		 */
 		isShareable() {
 			if (!Array.isArray(this.allowedSharingModes)) {
-				return false;
+				return false
 			}
 
-			return this.allowedSharingModes.includes(`{${NS.CALENDARSERVER}}can-be-shared`);
+			return this.allowedSharingModes.includes(`{${NS.CALENDARSERVER}}can-be-shared`)
 		}
 
 		/**
 		 * checks whether a collection is publishable
 		 *
-		 * @returns {Boolean}
+		 * @return {boolean}
 		 */
 		isPublishable() {
 			if (!Array.isArray(this.allowedSharingModes)) {
-				return false;
+				return false
 			}
 
-			return this.allowedSharingModes.includes(`{${NS.CALENDARSERVER}}can-be-published`);
+			return this.allowedSharingModes.includes(`{${NS.CALENDARSERVER}}can-be-published`)
 		}
 
 		/**
@@ -147,9 +147,9 @@ export function davCollectionShareable(Base) {
 		static getPropFindList() {
 			return super.getPropFindList().concat([
 				[NS.OWNCLOUD, 'invite'],
-				[NS.CALENDARSERVER, 'allowed-sharing-modes']
-			]);
+				[NS.CALENDARSERVER, 'allowed-sharing-modes'],
+			])
 		}
 
-	};
+	}
 }

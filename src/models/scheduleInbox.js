@@ -21,9 +21,9 @@
  *
  */
 
-import { Calendar } from './calendar.js';
-import * as NS from '../utility/namespaceUtility.js';
-import scheduleInboxPropSet from '../propset/scheduleInboxPropSet.js';
+import { Calendar } from './calendar.js'
+import * as NS from '../utility/namespaceUtility.js'
+import scheduleInboxPropSet from '../propset/scheduleInboxPropSet.js'
 
 export default class ScheduleInbox extends Calendar {
 
@@ -31,12 +31,12 @@ export default class ScheduleInbox extends Calendar {
 	 * @inheritDoc
 	 */
 	constructor(...args) {
-		super(...args);
+		super(...args)
 
-		super._registerPropSetFactory(scheduleInboxPropSet);
+		super._registerPropSetFactory(scheduleInboxPropSet)
 
 		// https://tools.ietf.org/html/rfc7953#section-7.2.4
-		super._exposeProperty('availability', NS.IETF_CALDAV, 'calendar-availability', true);
+		super._exposeProperty('availability', NS.IETF_CALDAV, 'calendar-availability', true)
 	}
 
 	/**
@@ -44,8 +44,8 @@ export default class ScheduleInbox extends Calendar {
 	 */
 	static getPropFindList() {
 		return super.getPropFindList().concat([
-			[NS.IETF_CALDAV, 'calendar-availability']
-		]);
+			[NS.IETF_CALDAV, 'calendar-availability'],
+		])
 	}
 
 }

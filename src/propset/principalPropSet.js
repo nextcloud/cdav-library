@@ -24,17 +24,17 @@
  *
  */
 
-import * as NS from '../utility/namespaceUtility.js';
+import * as NS from '../utility/namespaceUtility.js'
 
 /**
  * This function is capable of creating the propset xml structure for:
  * - '{urn:ietf:params:xml:ns:caldav}schedule-default-calendar-URL':
  *
- * @param {Object} props
- * @return {Object}
+ * @param {object} props
+ * @return {object}
  */
 export default function prinicipalPropSet(props) {
-	const xmlified = [];
+	const xmlified = []
 
 	Object.entries(props).forEach(([key, value]) => {
 		switch (key) {
@@ -44,13 +44,13 @@ export default function prinicipalPropSet(props) {
 				children: [
 					{
 						name: ['DAV:', 'href'],
-						value
-					}
-				]
-			});
-			break;
+						value,
+					},
+				],
+			})
+			break
 		}
-	});
+	})
 
-	return xmlified;
+	return xmlified
 }
