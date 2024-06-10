@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.4.0 - 2024-06-10
+### Added
+- Find principal collections
+- Ship an additional ESM bundle
+### Changed
+- Bundle with vite instead of webpack
+- Dependency updates
+
 ## v1.3.0 - 2024-02-29
 ### Added
 - Implement updating a principal's schedule-default-calendar-URL
