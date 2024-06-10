@@ -33,23 +33,23 @@ export default class Parser {
 	constructor() {
 		/**
 		 * Key Value Map of propertyName => parser
-		 * @type {Object}
+		 * @type {object}
 		 * @private
 		 */
-		this._parser = {};
+		this._parser = {}
 
 		// initialize default parsers shipped with this lib
-		this._registerDefaultParsers();
+		this._registerDefaultParsers()
 	}
 
 	/**
 	 * checks if a parser exists for a given property name
 	 *
-	 * @param {String} propertyName
-	 * @returns {boolean}
+	 * @param {string} propertyName
+	 * @return {boolean}
 	 */
 	canParse(propertyName) {
-		return Object.prototype.hasOwnProperty.call(this._parser, propertyName);
+		return Object.prototype.hasOwnProperty.call(this._parser, propertyName)
 	}
 
 	/**
@@ -61,31 +61,31 @@ export default class Parser {
 	 * @return {*}
 	 */
 	parse(document, node, resolver) {
-		const propertyName = `{${node.namespaceURI}}${node.localName}`;
+		const propertyName = `{${node.namespaceURI}}${node.localName}`
 		if (!this.canParse(propertyName)) {
-			throw new Error(`Unable to parse unknown property "${propertyName}"`);
+			throw new Error(`Unable to parse unknown property "${propertyName}"`)
 		}
 
-		return this._parser[propertyName](document, node, resolver);
+		return this._parser[propertyName](document, node, resolver)
 	}
 
 	/**
 	 * registers a parser for propertyName
 	 *
-	 * @param {String} propertyName
+	 * @param {string} propertyName
 	 * @param {Function} parser
 	 */
 	registerParser(propertyName, parser) {
-		this._parser[propertyName] = parser;
+		this._parser[propertyName] = parser
 	}
 
 	/**
 	 * unregisters a parser for propertyName
 	 *
-	 * @param {String} propertyName
+	 * @param {string} propertyName
 	 */
 	unregisterParser(propertyName) {
-		delete this._parser[propertyName];
+		delete this._parser[propertyName]
 	}
 
 	/**
@@ -95,119 +95,119 @@ export default class Parser {
 	 */
 	_registerDefaultParsers() {
 		// RFC 4918 - HTTP Extensions for Web Distributed Authoring and Versioning (WebDAV)
-		this.registerParser('{DAV:}displayname', Parser.text);
-		this.registerParser('{DAV:}creationdate', Parser.text);
-		this.registerParser('{DAV:}getcontentlength', Parser.decInt);
-		this.registerParser('{DAV:}getcontenttype', Parser.text);
-		this.registerParser('{DAV:}getcontentlanguage', Parser.text);
-		this.registerParser('{DAV:}getlastmodified', Parser.rfc1123Date);
-		this.registerParser('{DAV:}getetag', Parser.text);
-		this.registerParser('{DAV:}resourcetype', Parser.resourceType);
+		this.registerParser('{DAV:}displayname', Parser.text)
+		this.registerParser('{DAV:}creationdate', Parser.text)
+		this.registerParser('{DAV:}getcontentlength', Parser.decInt)
+		this.registerParser('{DAV:}getcontenttype', Parser.text)
+		this.registerParser('{DAV:}getcontentlanguage', Parser.text)
+		this.registerParser('{DAV:}getlastmodified', Parser.rfc1123Date)
+		this.registerParser('{DAV:}getetag', Parser.text)
+		this.registerParser('{DAV:}resourcetype', Parser.resourceType)
 
 		// RFC 3744 - Web Distributed Authoring and Versioning (WebDAV) Access Control Protocol
-		this.registerParser('{DAV:}inherited-acl-set', Parser.hrefs);
-		this.registerParser('{DAV:}group', Parser.href);
-		this.registerParser('{DAV:}owner', Parser.href);
-		this.registerParser('{DAV:}current-user-privilege-set', Parser.privileges);
-		this.registerParser('{DAV:}principal-collection-set', Parser.hrefs);
-		this.registerParser('{DAV:}principal-URL', Parser.href);
-		this.registerParser('{DAV:}alternate-URI-set', Parser.hrefs);
-		this.registerParser('{DAV:}group-member-set', Parser.hrefs);
-		this.registerParser('{DAV:}group-membership', Parser.hrefs);
+		this.registerParser('{DAV:}inherited-acl-set', Parser.hrefs)
+		this.registerParser('{DAV:}group', Parser.href)
+		this.registerParser('{DAV:}owner', Parser.href)
+		this.registerParser('{DAV:}current-user-privilege-set', Parser.privileges)
+		this.registerParser('{DAV:}principal-collection-set', Parser.hrefs)
+		this.registerParser('{DAV:}principal-URL', Parser.href)
+		this.registerParser('{DAV:}alternate-URI-set', Parser.hrefs)
+		this.registerParser('{DAV:}group-member-set', Parser.hrefs)
+		this.registerParser('{DAV:}group-membership', Parser.hrefs)
 
 		// RFC 5397 - WebDAV Current Principal Extension
-		this.registerParser('{DAV:}current-user-principal', Parser.currentUserPrincipal);
+		this.registerParser('{DAV:}current-user-principal', Parser.currentUserPrincipal)
 
 		// RFC 6578 - Collection Synchronization for Web Distributed Authoring and Versioning (WebDAV)
-		this.registerParser('{DAV:}sync-token', Parser.text);
+		this.registerParser('{DAV:}sync-token', Parser.text)
 
 		// RFC 6352 - CardDAV: vCard Extensions to Web Distributed Authoring and Versioning (WebDAV)
-		this.registerParser('{urn:ietf:params:xml:ns:carddav}address-data', Parser.text);
-		this.registerParser('{urn:ietf:params:xml:ns:carddav}addressbook-description', Parser.text);
-		this.registerParser('{urn:ietf:params:xml:ns:carddav}supported-address-data', Parser.addressDataTypes);
-		this.registerParser('{urn:ietf:params:xml:ns:carddav}max-resource-size', Parser.decInt);
-		this.registerParser('{urn:ietf:params:xml:ns:carddav}addressbook-home-set', Parser.hrefs);
-		this.registerParser('{urn:ietf:params:xml:ns:carddav}principal-address', Parser.href);
-		this.registerParser('{urn:ietf:params:xml:ns:carddav}supported-collation-set', Parser.supportedCardDAVCollations);
+		this.registerParser('{urn:ietf:params:xml:ns:carddav}address-data', Parser.text)
+		this.registerParser('{urn:ietf:params:xml:ns:carddav}addressbook-description', Parser.text)
+		this.registerParser('{urn:ietf:params:xml:ns:carddav}supported-address-data', Parser.addressDataTypes)
+		this.registerParser('{urn:ietf:params:xml:ns:carddav}max-resource-size', Parser.decInt)
+		this.registerParser('{urn:ietf:params:xml:ns:carddav}addressbook-home-set', Parser.hrefs)
+		this.registerParser('{urn:ietf:params:xml:ns:carddav}principal-address', Parser.href)
+		this.registerParser('{urn:ietf:params:xml:ns:carddav}supported-collation-set', Parser.supportedCardDAVCollations)
 
 		// RFC 4791 - Calendaring Extensions to WebDAV (CalDAV)
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}calendar-data', Parser.text);
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}calendar-home-set', Parser.hrefs);
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}calendar-description', Parser.text);
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}calendar-timezone', Parser.text);
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set', Parser.calendarComps);
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}supported-calendar-data', Parser.calendarDatas);
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}max-resource-size', Parser.decInt);
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}min-date-time', Parser.iCalendarTimestamp);
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}max-date-time', Parser.iCalendarTimestamp);
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}max-instances', Parser.decInt);
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}max-attendees-per-instance', Parser.decInt);
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}supported-collation-set', Parser.supportedCalDAVCollations);
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}calendar-data', Parser.text)
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}calendar-home-set', Parser.hrefs)
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}calendar-description', Parser.text)
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}calendar-timezone', Parser.text)
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}supported-calendar-component-set', Parser.calendarComps)
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}supported-calendar-data', Parser.calendarDatas)
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}max-resource-size', Parser.decInt)
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}min-date-time', Parser.iCalendarTimestamp)
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}max-date-time', Parser.iCalendarTimestamp)
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}max-instances', Parser.decInt)
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}max-attendees-per-instance', Parser.decInt)
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}supported-collation-set', Parser.supportedCalDAVCollations)
 
 		// RFC 6638 - Scheduling Extensions to CalDAV
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL', Parser.href);
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL', Parser.href);
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}calendar-user-address-set', Parser.hrefs);
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}calendar-user-type', Parser.text);
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}schedule-calendar-transp', Parser.scheduleCalendarTransp);
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}schedule-default-calendar-URL', Parser.href);
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}schedule-tag', Parser.text);
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL', Parser.href)
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL', Parser.href)
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}calendar-user-address-set', Parser.hrefs)
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}calendar-user-type', Parser.text)
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}schedule-calendar-transp', Parser.scheduleCalendarTransp)
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}schedule-default-calendar-URL', Parser.href)
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}schedule-tag', Parser.text)
 
 		// RFC 7809 - Calendaring Extensions to WebDAV (CalDAV): Time Zones by Reference
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}timezone-service-set', Parser.hrefs);
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}calendar-timezone-id', Parser.text);
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}timezone-service-set', Parser.hrefs)
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}calendar-timezone-id', Parser.text)
 
 		// RFC 7953 - Calendar Availability
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}calendar-availability', Parser.text);
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}calendar-availability', Parser.text)
 
 		// Apple
-		this.registerParser('{http://apple.com/ns/ical/}calendar-order', Parser.decInt);
-		this.registerParser('{http://apple.com/ns/ical/}calendar-color', Parser.color);
-		this.registerParser('{http://calendarserver.org/ns/}source', Parser.href);
+		this.registerParser('{http://apple.com/ns/ical/}calendar-order', Parser.decInt)
+		this.registerParser('{http://apple.com/ns/ical/}calendar-color', Parser.color)
+		this.registerParser('{http://calendarserver.org/ns/}source', Parser.href)
 
 		// https://tools.ietf.org/html/draft-daboo-valarm-extensions-04#section-11.1
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}default-alarm-vevent-datetime', Parser.text);
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}default-alarm-vevent-date', Parser.text);
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}default-alarm-vtodo-datetime', Parser.text);
-		this.registerParser('{urn:ietf:params:xml:ns:caldav}default-alarm-vtodo-date', Parser.text);
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}default-alarm-vevent-datetime', Parser.text)
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}default-alarm-vevent-date', Parser.text)
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}default-alarm-vtodo-datetime', Parser.text)
+		this.registerParser('{urn:ietf:params:xml:ns:caldav}default-alarm-vtodo-date', Parser.text)
 
 		// https://github.com/apple/ccs-calendarserver/blob/master/doc/Extensions/caldav-ctag.txt
-		this.registerParser('{http://calendarserver.org/ns/}getctag', Parser.text);
+		this.registerParser('{http://calendarserver.org/ns/}getctag', Parser.text)
 
 		// https://github.com/apple/ccs-calendarserver/blob/master/doc/Extensions/caldav-proxy.txt
-		this.registerParser('{http://calendarserver.org/ns/}calendar-proxy-read-for', Parser.hrefs);
-		this.registerParser('{http://calendarserver.org/ns/}calendar-proxy-write-for', Parser.hrefs);
+		this.registerParser('{http://calendarserver.org/ns/}calendar-proxy-read-for', Parser.hrefs)
+		this.registerParser('{http://calendarserver.org/ns/}calendar-proxy-write-for', Parser.hrefs)
 
 		// https://github.com/apple/ccs-calendarserver/blob/master/doc/Extensions/caldav-sharing.txt
-		this.registerParser('{http://calendarserver.org/ns/}allowed-sharing-modes', Parser.allowedSharingModes);
-		this.registerParser('{http://calendarserver.org/ns/}shared-url', Parser.href);
-		this.registerParser('{http://sabredav.org/ns}owner-principal', Parser.href);
-		this.registerParser('{http://sabredav.org/ns}read-only', Parser.bool);
-		this.registerParser('{http://calendarserver.org/ns/}pre-publish-url', Parser.href);
-		this.registerParser('{http://calendarserver.org/ns/}publish-url', Parser.href);
+		this.registerParser('{http://calendarserver.org/ns/}allowed-sharing-modes', Parser.allowedSharingModes)
+		this.registerParser('{http://calendarserver.org/ns/}shared-url', Parser.href)
+		this.registerParser('{http://sabredav.org/ns}owner-principal', Parser.href)
+		this.registerParser('{http://sabredav.org/ns}read-only', Parser.bool)
+		this.registerParser('{http://calendarserver.org/ns/}pre-publish-url', Parser.href)
+		this.registerParser('{http://calendarserver.org/ns/}publish-url', Parser.href)
 
 		// Nextcloud custom sharing
-		this.registerParser('{http://owncloud.org/ns}invite', Parser.ocInvite);
+		this.registerParser('{http://owncloud.org/ns}invite', Parser.ocInvite)
 
 		// Nextcloud specific
-		this.registerParser('{http://owncloud.org/ns}calendar-enabled', Parser.bool);
-		this.registerParser('{http://owncloud.org/ns}enabled', Parser.bool);
-		this.registerParser('{http://owncloud.org/ns}read-only', Parser.bool);
-		this.registerParser('{http://nextcloud.com/ns}owner-displayname', Parser.text);
-		this.registerParser('{http://nextcloud.com/ns}deleted-at', Parser.iso8601DateTime);
-		this.registerParser('{http://nextcloud.com/ns}calendar-uri', Parser.text);
-		this.registerParser('{http://nextcloud.com/ns}has-photo', Parser.bool);
-		this.registerParser('{http://nextcloud.com/ns}trash-bin-retention-duration', Parser.decInt);
-		this.registerParser('{http://nextcloud.com/ns}language', Parser.text);
-		this.registerParser('{http://nextcloud.com/ns}room-type', Parser.text);
-		this.registerParser('{http://nextcloud.com/ns}room-seating-capacity', Parser.decInt);
-		this.registerParser('{http://nextcloud.com/ns}room-building-address', Parser.text);
-		this.registerParser('{http://nextcloud.com/ns}room-building-story', Parser.text);
-		this.registerParser('{http://nextcloud.com/ns}room-building-room-number', Parser.text);
-		this.registerParser('{http://nextcloud.com/ns}room-features', Parser.text);
+		this.registerParser('{http://owncloud.org/ns}calendar-enabled', Parser.bool)
+		this.registerParser('{http://owncloud.org/ns}enabled', Parser.bool)
+		this.registerParser('{http://owncloud.org/ns}read-only', Parser.bool)
+		this.registerParser('{http://nextcloud.com/ns}owner-displayname', Parser.text)
+		this.registerParser('{http://nextcloud.com/ns}deleted-at', Parser.iso8601DateTime)
+		this.registerParser('{http://nextcloud.com/ns}calendar-uri', Parser.text)
+		this.registerParser('{http://nextcloud.com/ns}has-photo', Parser.bool)
+		this.registerParser('{http://nextcloud.com/ns}trash-bin-retention-duration', Parser.decInt)
+		this.registerParser('{http://nextcloud.com/ns}language', Parser.text)
+		this.registerParser('{http://nextcloud.com/ns}room-type', Parser.text)
+		this.registerParser('{http://nextcloud.com/ns}room-seating-capacity', Parser.decInt)
+		this.registerParser('{http://nextcloud.com/ns}room-building-address', Parser.text)
+		this.registerParser('{http://nextcloud.com/ns}room-building-story', Parser.text)
+		this.registerParser('{http://nextcloud.com/ns}room-building-room-number', Parser.text)
+		this.registerParser('{http://nextcloud.com/ns}room-features', Parser.text)
 
 		// Sabre/Dav specific
-		this.registerParser('{http://sabredav.org/ns}email-address', Parser.text);
+		this.registerParser('{http://sabredav.org/ns}email-address', Parser.text)
 	}
 
 	/**
@@ -216,10 +216,10 @@ export default class Parser {
 	 * @param {Document} document
 	 * @param {Node} node
 	 * @param {XPathNSResolver} resolver
-	 * @returns {String}
+	 * @return {string}
 	 */
 	static text(document, node, resolver) {
-		return document.evaluate('string(.)', node, resolver, XPathResult.ANY_TYPE, null).stringValue;
+		return document.evaluate('string(.)', node, resolver, XPathResult.ANY_TYPE, null).stringValue
 	}
 
 	/**
@@ -228,10 +228,10 @@ export default class Parser {
 	 * @param {Document} document
 	 * @param {Node} node
 	 * @param {XPathNSResolver} resolver
-	 * @returns {Boolean}
+	 * @return {boolean}
 	 */
 	static bool(document, node, resolver) {
-		return Parser.text(document, node, resolver) === '1';
+		return Parser.text(document, node, resolver) === '1'
 	}
 
 	/**
@@ -240,10 +240,10 @@ export default class Parser {
 	 * @param {Document} document
 	 * @param {Node} node
 	 * @param {XPathNSResolver} resolver
-	 * @returns {Number}
+	 * @return {number}
 	 */
 	static decInt(document, node, resolver) {
-		return parseInt(Parser.text(document, node, resolver), 10);
+		return parseInt(Parser.text(document, node, resolver), 10)
 	}
 
 	/**
@@ -252,13 +252,13 @@ export default class Parser {
 	 * @param {Document} document
 	 * @param {Node} node
 	 * @param {XPathNSResolver} resolver
-	 * @returns {Date}
+	 * @return {Date}
 	 */
 	static rfc1123Date(document, node, resolver) {
-		const text = Parser.text(document, node, resolver);
+		const text = Parser.text(document, node, resolver)
 
 		// TODO this might not work in every browser
-		return new Date(text);
+		return new Date(text)
 	}
 
 	/**
@@ -267,12 +267,12 @@ export default class Parser {
 	 * @param {Document} document
 	 * @param {Node} node
 	 * @param {XPathNSResolver} resolver
-	 * @returns {Date}
+	 * @return {Date}
 	 */
 	static iso8601DateTime(document, node, resolver) {
-		const text = Parser.text(document, node, resolver);
+		const text = Parser.text(document, node, resolver)
 
-		return new Date(text);
+		return new Date(text)
 	}
 
 	/**
@@ -281,23 +281,23 @@ export default class Parser {
 	 * @param {Document} document
 	 * @param {Node} node
 	 * @param {XPathNSResolver} resolver
-	 * @returns {Date}
+	 * @return {Date}
 	 */
 	static iCalendarTimestamp(document, node, resolver) {
-		const text = Parser.text(document, node, resolver);
+		const text = Parser.text(document, node, resolver)
 
-		const year = parseInt(text.slice(0, 4), 10);
-		const month = parseInt(text.slice(4, 6), 10) - 1;
-		const date = parseInt(text.slice(6, 8), 10);
+		const year = parseInt(text.slice(0, 4), 10)
+		const month = parseInt(text.slice(4, 6), 10) - 1
+		const date = parseInt(text.slice(6, 8), 10)
 
-		const hour = parseInt(text.slice(9, 11), 10);
-		const minute = parseInt(text.slice(11, 13), 10);
-		const second = parseInt(text.slice(13, 15), 10);
+		const hour = parseInt(text.slice(9, 11), 10)
+		const minute = parseInt(text.slice(11, 13), 10)
+		const second = parseInt(text.slice(13, 15), 10)
 
-		const dateObj = new Date();
-		dateObj.setUTCFullYear(year, month, date);
-		dateObj.setUTCHours(hour, minute, second, 0);
-		return dateObj;
+		const dateObj = new Date()
+		dateObj.setUTCFullYear(year, month, date)
+		dateObj.setUTCHours(hour, minute, second, 0)
+		return dateObj
 	}
 
 	/**
@@ -306,21 +306,21 @@ export default class Parser {
 	 * @param {Document} document
 	 * @param {Node} node
 	 * @param {XPathNSResolver} resolver
-	 * @returns {String[]}
+	 * @return {string[]}
 	 */
 	static resourceType(document, node, resolver) {
-		const result = [];
-		const children = document.evaluate('*', node, resolver, XPathResult.ANY_TYPE, null);
-		let childNode;
+		const result = []
+		const children = document.evaluate('*', node, resolver, XPathResult.ANY_TYPE, null)
+		let childNode
 
 		while ((childNode = children.iterateNext()) !== null) {
-			const ns = document.evaluate('namespace-uri(.)', childNode, resolver, XPathResult.ANY_TYPE, null).stringValue;
-			const local = document.evaluate('local-name(.)', childNode, resolver, XPathResult.ANY_TYPE, null).stringValue;
+			const ns = document.evaluate('namespace-uri(.)', childNode, resolver, XPathResult.ANY_TYPE, null).stringValue
+			const local = document.evaluate('local-name(.)', childNode, resolver, XPathResult.ANY_TYPE, null).stringValue
 
-			result.push(`{${ns}}${local}`);
+			result.push(`{${ns}}${local}`)
 		}
 
-		return result;
+		return result
 	}
 
 	/**
@@ -329,10 +329,10 @@ export default class Parser {
 	 * @param {Document} document
 	 * @param {Node} node
 	 * @param {XPathNSResolver} resolver
-	 * @returns {String}
+	 * @return {string}
 	 */
 	static href(document, node, resolver) {
-		return document.evaluate('string(d:href)', node, resolver, XPathResult.ANY_TYPE, null).stringValue;
+		return document.evaluate('string(d:href)', node, resolver, XPathResult.ANY_TYPE, null).stringValue
 	}
 
 	/**
@@ -341,18 +341,18 @@ export default class Parser {
 	 * @param {Document} document
 	 * @param {Node} node
 	 * @param {XPathNSResolver} resolver
-	 * @returns {String[]}
+	 * @return {string[]}
 	 */
 	static hrefs(document, node, resolver) {
-		const result = [];
-		const hrefs = document.evaluate('d:href', node, resolver, XPathResult.ANY_TYPE, null);
-		let hrefNode;
+		const result = []
+		const hrefs = document.evaluate('d:href', node, resolver, XPathResult.ANY_TYPE, null)
+		let hrefNode
 
 		while ((hrefNode = hrefs.iterateNext()) !== null) {
-			result.push(document.evaluate('string(.)', hrefNode, resolver, XPathResult.ANY_TYPE, null).stringValue);
+			result.push(document.evaluate('string(.)', hrefNode, resolver, XPathResult.ANY_TYPE, null).stringValue)
 		}
 
-		return result;
+		return result
 	}
 
 	/**
@@ -361,21 +361,21 @@ export default class Parser {
 	 * @param {Document} document
 	 * @param {Node} node
 	 * @param {XPathNSResolver} resolver
-	 * @returns {String[]}
+	 * @return {string[]}
 	 */
 	static privileges(document, node, resolver) {
-		const result = [];
-		const privileges = document.evaluate('d:privilege/*', node, resolver, XPathResult.ANY_TYPE, null);
-		let privilegeNode;
+		const result = []
+		const privileges = document.evaluate('d:privilege/*', node, resolver, XPathResult.ANY_TYPE, null)
+		let privilegeNode
 
 		while ((privilegeNode = privileges.iterateNext()) !== null) {
-			const ns = document.evaluate('namespace-uri(.)', privilegeNode, resolver, XPathResult.ANY_TYPE, null).stringValue;
-			const local = document.evaluate('local-name(.)', privilegeNode, resolver, XPathResult.ANY_TYPE, null).stringValue;
+			const ns = document.evaluate('namespace-uri(.)', privilegeNode, resolver, XPathResult.ANY_TYPE, null).stringValue
+			const local = document.evaluate('local-name(.)', privilegeNode, resolver, XPathResult.ANY_TYPE, null).stringValue
 
-			result.push(`{${ns}}${local}`);
+			result.push(`{${ns}}${local}`)
 		}
 
-		return result;
+		return result
 	}
 
 	/**
@@ -384,24 +384,24 @@ export default class Parser {
 	 * @param {Document} document
 	 * @param {Node} node
 	 * @param {XPathNSResolver} resolver
-	 * @returns {Object}
-	 * @property {String} type
-	 * @property {String} href
+	 * @return {object}
+	 * @property {string} type
+	 * @property {string} href
 	 */
 	static currentUserPrincipal(document, node, resolver) {
 		const unauthenticatedCount
-			= document.evaluate('count(d:unauthenticated)', node, resolver, XPathResult.ANY_TYPE, null).numberValue;
+			= document.evaluate('count(d:unauthenticated)', node, resolver, XPathResult.ANY_TYPE, null).numberValue
 
 		if (unauthenticatedCount !== 0) {
 			return {
 				type: 'unauthenticated',
-				href: null
-			};
+				href: null,
+			}
 		} else {
 			return {
 				type: 'href',
-				href: Parser.href(...arguments)
-			};
+				href: Parser.href(...arguments),
+			}
 		}
 	}
 
@@ -411,21 +411,21 @@ export default class Parser {
 	 * @param {Document} document
 	 * @param {Node} node
 	 * @param {XPathNSResolver} resolver
-	 * @returns {*}
+	 * @return {*}
 	 */
 	static addressDataTypes(document, node, resolver) {
-		const result = [];
-		const addressDatas = document.evaluate('cr:address-data-type', node, resolver, XPathResult.ANY_TYPE, null);
-		let addressDataNode;
+		const result = []
+		const addressDatas = document.evaluate('cr:address-data-type', node, resolver, XPathResult.ANY_TYPE, null)
+		let addressDataNode
 
 		while ((addressDataNode = addressDatas.iterateNext()) !== null) {
 			result.push({
 				'content-type': document.evaluate('string(@content-type)', addressDataNode, resolver, XPathResult.ANY_TYPE, null).stringValue,
-				version: document.evaluate('string(@version)', addressDataNode, resolver, XPathResult.ANY_TYPE, null).stringValue
-			});
+				version: document.evaluate('string(@version)', addressDataNode, resolver, XPathResult.ANY_TYPE, null).stringValue,
+			})
 		}
 
-		return result;
+		return result
 	}
 
 	/**
@@ -434,18 +434,18 @@ export default class Parser {
 	 * @param {Document} document
 	 * @param {Node} node
 	 * @param {XPathNSResolver} resolver
-	 * @returns {*}
+	 * @return {*}
 	 */
 	static supportedCardDAVCollations(document, node, resolver) {
-		const result = [];
-		const collations = document.evaluate('cr:supported-collation', node, resolver, XPathResult.ANY_TYPE, null);
-		let collationNode;
+		const result = []
+		const collations = document.evaluate('cr:supported-collation', node, resolver, XPathResult.ANY_TYPE, null)
+		let collationNode
 
 		while ((collationNode = collations.iterateNext()) !== null) {
-			result.push(document.evaluate('string(.)', collationNode, resolver, XPathResult.ANY_TYPE, null).stringValue);
+			result.push(document.evaluate('string(.)', collationNode, resolver, XPathResult.ANY_TYPE, null).stringValue)
 		}
 
-		return result;
+		return result
 	}
 
 	/**
@@ -454,18 +454,18 @@ export default class Parser {
 	 * @param {Document} document
 	 * @param {Node} node
 	 * @param {XPathNSResolver} resolver
-	 * @returns {*}
+	 * @return {*}
 	 */
 	static supportedCalDAVCollations(document, node, resolver) {
-		const result = [];
-		const collations = document.evaluate('cl:supported-collation', node, resolver, XPathResult.ANY_TYPE, null);
-		let collationNode;
+		const result = []
+		const collations = document.evaluate('cl:supported-collation', node, resolver, XPathResult.ANY_TYPE, null)
+		let collationNode
 
 		while ((collationNode = collations.iterateNext()) !== null) {
-			result.push(document.evaluate('string(.)', collationNode, resolver, XPathResult.ANY_TYPE, null).stringValue);
+			result.push(document.evaluate('string(.)', collationNode, resolver, XPathResult.ANY_TYPE, null).stringValue)
 		}
 
-		return result;
+		return result
 	}
 
 	/**
@@ -474,18 +474,18 @@ export default class Parser {
 	 * @param {Document} document
 	 * @param {Node} node
 	 * @param {XPathNSResolver} resolver
-	 * @returns {String[]}
+	 * @return {string[]}
 	 */
 	static calendarComps(document, node, resolver) {
-		const result = [];
-		const comps = document.evaluate('cl:comp', node, resolver, XPathResult.ANY_TYPE, null);
-		let compNode;
+		const result = []
+		const comps = document.evaluate('cl:comp', node, resolver, XPathResult.ANY_TYPE, null)
+		let compNode
 
 		while ((compNode = comps.iterateNext()) !== null) {
-			result.push(document.evaluate('string(@name)', compNode, resolver, XPathResult.ANY_TYPE, null).stringValue);
+			result.push(document.evaluate('string(@name)', compNode, resolver, XPathResult.ANY_TYPE, null).stringValue)
 		}
 
-		return result;
+		return result
 	}
 
 	/**
@@ -494,21 +494,21 @@ export default class Parser {
 	 * @param {Document} document
 	 * @param {Node} node
 	 * @param {XPathNSResolver} resolver
-	 * @returns {*}
+	 * @return {*}
 	 */
 	static calendarDatas(document, node, resolver) {
-		const result = [];
-		const calendarDatas = document.evaluate('cl:calendar-data', node, resolver, XPathResult.ANY_TYPE, null);
-		let calendarDataNode;
+		const result = []
+		const calendarDatas = document.evaluate('cl:calendar-data', node, resolver, XPathResult.ANY_TYPE, null)
+		let calendarDataNode
 
 		while ((calendarDataNode = calendarDatas.iterateNext()) !== null) {
 			result.push({
 				'content-type': document.evaluate('string(@content-type)', calendarDataNode, resolver, XPathResult.ANY_TYPE, null).stringValue,
-				version: document.evaluate('string(@version)', calendarDataNode, resolver, XPathResult.ANY_TYPE, null).stringValue
-			});
+				version: document.evaluate('string(@version)', calendarDataNode, resolver, XPathResult.ANY_TYPE, null).stringValue,
+			})
 		}
 
-		return result;
+		return result
 	}
 
 	/**
@@ -517,13 +517,13 @@ export default class Parser {
 	 * @param {Document} document
 	 * @param {Node} node
 	 * @param {XPathNSResolver} resolver
-	 * @returns {String}
+	 * @return {string}
 	 */
 	static scheduleCalendarTransp(document, node, resolver) {
-		const children = document.evaluate('cl:opaque | cl:transparent', node, resolver, XPathResult.ANY_TYPE, null);
-		const childNode = children.iterateNext();
+		const children = document.evaluate('cl:opaque | cl:transparent', node, resolver, XPathResult.ANY_TYPE, null)
+		const childNode = children.iterateNext()
 		if (childNode) {
-			return document.evaluate('local-name(.)', childNode, resolver, XPathResult.ANY_TYPE, null).stringValue;
+			return document.evaluate('local-name(.)', childNode, resolver, XPathResult.ANY_TYPE, null).stringValue
 		}
 	}
 
@@ -534,18 +534,18 @@ export default class Parser {
 	 * @param {Document} document
 	 * @param {Node} node
 	 * @param {XPathNSResolver} resolver
-	 * @returns {String}
+	 * @return {string}
 	 */
 	static color(document, node, resolver) {
-		const text = Parser.text(document, node, resolver);
+		const text = Parser.text(document, node, resolver)
 		// some stupid clients store an alpha value in the rgb hash (like #rrggbbaa) *cough cough* Apple Calendar *cough cough*
 		// but some browsers can't parse that *cough cough* Safari 9 *cough cough*
 		// Safari 10 seems to support this though
 		if (text.length === 9) {
-			return text.slice(0, 7);
+			return text.slice(0, 7)
 		}
 
-		return text;
+		return text
 	}
 
 	/**
@@ -554,21 +554,21 @@ export default class Parser {
 	 * @param {Document} document
 	 * @param {Node} node
 	 * @param {XPathNSResolver} resolver
-	 * @returns {String[]}
+	 * @return {string[]}
 	 */
 	static allowedSharingModes(document, node, resolver) {
-		const result = [];
-		const children = document.evaluate('cs:can-be-shared | cs:can-be-published', node, resolver, XPathResult.ANY_TYPE, null);
-		let childNode;
+		const result = []
+		const children = document.evaluate('cs:can-be-shared | cs:can-be-published', node, resolver, XPathResult.ANY_TYPE, null)
+		let childNode
 
 		while ((childNode = children.iterateNext()) !== null) {
-			const ns = document.evaluate('namespace-uri(.)', childNode, resolver, XPathResult.ANY_TYPE, null).stringValue;
-			const local = document.evaluate('local-name(.)', childNode, resolver, XPathResult.ANY_TYPE, null).stringValue;
+			const ns = document.evaluate('namespace-uri(.)', childNode, resolver, XPathResult.ANY_TYPE, null).stringValue
+			const local = document.evaluate('local-name(.)', childNode, resolver, XPathResult.ANY_TYPE, null).stringValue
 
-			result.push(`{${ns}}${local}`);
+			result.push(`{${ns}}${local}`)
 		}
 
-		return result;
+		return result
 	}
 
 	/**
@@ -577,23 +577,23 @@ export default class Parser {
 	 * @param {Document} document
 	 * @param {Node} node
 	 * @param {XPathNSResolver} resolver
-	 * @returns {*}
+	 * @return {*}
 	 */
 	static ocInvite(document, node, resolver) {
-		const result = [];
-		const users = document.evaluate('oc:user', node, resolver, XPathResult.ANY_TYPE, null);
-		let userNode;
+		const result = []
+		const users = document.evaluate('oc:user', node, resolver, XPathResult.ANY_TYPE, null)
+		let userNode
 
 		while ((userNode = users.iterateNext()) !== null) {
 			result.push({
 				href: Parser.href(document, userNode, resolver),
 				'common-name': document.evaluate('string(oc:common-name)', userNode, resolver, XPathResult.ANY_TYPE, null).stringValue,
 				'invite-accepted': document.evaluate('count(oc:invite-accepted)', userNode, resolver, XPathResult.ANY_TYPE, null).numberValue === 1,
-				access: Parser.ocAccess(document, userNode, resolver)
-			});
+				access: Parser.ocAccess(document, userNode, resolver),
+			})
 		}
 
-		return result;
+		return result
 	}
 
 	/**
@@ -602,21 +602,21 @@ export default class Parser {
 	 * @param {Document} document
 	 * @param {Node} node
 	 * @param {XPathNSResolver} resolver
-	 * @returns {String[]}
+	 * @return {string[]}
 	 */
 	static ocAccess(document, node, resolver) {
-		const result = [];
-		const privileges = document.evaluate('oc:access/*', node, resolver, XPathResult.ANY_TYPE, null);
-		let privilegeNode;
+		const result = []
+		const privileges = document.evaluate('oc:access/*', node, resolver, XPathResult.ANY_TYPE, null)
+		let privilegeNode
 
 		while ((privilegeNode = privileges.iterateNext()) !== null) {
-			const ns = document.evaluate('namespace-uri(.)', privilegeNode, resolver, XPathResult.ANY_TYPE, null).stringValue;
-			const local = document.evaluate('local-name(.)', privilegeNode, resolver, XPathResult.ANY_TYPE, null).stringValue;
+			const ns = document.evaluate('namespace-uri(.)', privilegeNode, resolver, XPathResult.ANY_TYPE, null).stringValue
+			const local = document.evaluate('local-name(.)', privilegeNode, resolver, XPathResult.ANY_TYPE, null).stringValue
 
-			result.push(`{${ns}}${local}`);
+			result.push(`{${ns}}${local}`)
 		}
 
-		return result;
+		return result
 	}
 
 }

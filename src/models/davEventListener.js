@@ -24,38 +24,38 @@
 export default class DAVEventListener {
 
 	constructor() {
-		this._eventListeners = {};
+		this._eventListeners = {}
 	}
 
 	/**
 	 * adds an event listener
 	 *
 	 * @param {string} type
-	 * @param {function} listener
+	 * @param {Function} listener
 	 * @param {object} options
 	 */
 	addEventListener(type, listener, options = null) {
-		this._eventListeners[type] = this._eventListeners[type] || [];
-		this._eventListeners[type].push({ listener, options });
+		this._eventListeners[type] = this._eventListeners[type] || []
+		this._eventListeners[type].push({ listener, options })
 	}
 
 	/**
 	 * removes an event listener
 	 *
 	 * @param {string} type
-	 * @param {function} dListener
+	 * @param {Function} dListener
 	 */
 	removeEventListener(type, dListener) {
 		if (!this._eventListeners[type]) {
-			return;
+			return
 		}
 
 		const index = this._eventListeners[type]
-			.findIndex(({ listener }) => listener === dListener);
+			.findIndex(({ listener }) => listener === dListener)
 		if (index === -1) {
-			return;
+			return
 		}
-		this._eventListeners[type].splice(index, 1);
+		this._eventListeners[type].splice(index, 1)
 	}
 
 	/**
@@ -66,26 +66,26 @@ export default class DAVEventListener {
 	 */
 	dispatchEvent(type, event) {
 		if (!this._eventListeners[type]) {
-			return;
+			return
 		}
 
-		const listenersToCall = [];
-		const listenersToCallAndRemove = [];
+		const listenersToCall = []
+		const listenersToCallAndRemove = []
 		this._eventListeners[type].forEach(({ listener, options }) => {
 			if (options && options.once) {
-				listenersToCallAndRemove.push(listener);
+				listenersToCallAndRemove.push(listener)
 			} else {
-				listenersToCall.push(listener);
+				listenersToCall.push(listener)
 			}
-		});
+		})
 
 		listenersToCallAndRemove.forEach(listener => {
-			this.removeEventListener(type, listener);
-			listener(event);
-		});
+			this.removeEventListener(type, listener)
+			listener(event)
+		})
 		listenersToCall.forEach(listener => {
-			listener(event);
-		});
+			listener(event)
+		})
 	}
 
 }

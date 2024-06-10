@@ -21,7 +21,7 @@
  *
  */
 
-import { Calendar } from './calendar';
+import { Calendar } from './calendar.js'
 
 /**
  * This class represents a deleted calendar collection.

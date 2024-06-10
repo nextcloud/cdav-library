@@ -21,6 +21,6 @@
  *
  */
 
-import AttachError from './attachError.js';
+import AttachError from './attachError.js'
 
 export default class NetworkRequestAbortedError extends AttachError {}

@@ -21,8 +21,8 @@
  *
  */
 
-import { DavObject } from './davObject.js';
-import * as NS from '../utility/namespaceUtility.js';
+import { DavObject } from './davObject.js'
+import * as NS from '../utility/namespaceUtility.js'
 
 /**
  * @class
@@ -38,10 +38,10 @@ export class VCard extends DavObject {
 	 * @inheritDoc
 	 */
 	constructor(...args) {
-		super(...args);
+		super(...args)
 
-		super._exposeProperty('data', NS.IETF_CARDDAV, 'address-data', true);
-		super._exposeProperty('hasphoto', NS.NEXTCLOUD, 'has-photo', false);
+		super._exposeProperty('data', NS.IETF_CARDDAV, 'address-data', true)
+		super._exposeProperty('hasphoto', NS.NEXTCLOUD, 'has-photo', false)
 	}
 
 	/**
@@ -49,8 +49,8 @@ export class VCard extends DavObject {
 	 */
 	static getPropFindList() {
 		return super.getPropFindList().concat([
-			[NS.IETF_CARDDAV, 'address-data']
-		]);
+			[NS.IETF_CARDDAV, 'address-data'],
+		])
 	}
 
 }
