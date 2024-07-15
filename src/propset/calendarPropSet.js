@@ -85,7 +85,12 @@ export default function calendarPropSet(props) {
 				value: value ? '1' : '0',
 			})
 			break
-
+		case '{urn:ietf:params:xml:ns:caldav}schedule-calendar-transp':
+			xmlified.push({
+				name: [NS.IETF_CALDAV, 'schedule-calendar-transp'],
+				value,
+			})
+			break
 		default:
 			break
 		}
