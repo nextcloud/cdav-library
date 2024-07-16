@@ -66,6 +66,7 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 		super._exposeProperty('order', NS.APPLE, 'calendar-order', true)
 		super._exposeProperty('timezone', NS.IETF_CALDAV, 'calendar-timezone', true)
 		super._exposeProperty('components', NS.IETF_CALDAV, 'supported-calendar-component-set')
+		super._exposeProperty('transparency', NS.IETF_CALDAV, 'schedule-calendar-transp', true)
 	}
 
 	/**
