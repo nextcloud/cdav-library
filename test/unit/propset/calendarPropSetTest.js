@@ -118,4 +118,36 @@ describe('Calendar prop-set', () => {
 			}
 		]);
 	});
+
+	it('should serialize {urn:ietf:params:xml:ns:caldav}schedule-calendar-transp correctly - transparent', () => {
+		expect(calendarPropSet({
+			'{Foo:}bar': 123,
+			'{urn:ietf:params:xml:ns:caldav}schedule-calendar-transp': 'transparent'
+		})).toEqual([
+			{
+				name: ['urn:ietf:params:xml:ns:caldav', 'schedule-calendar-transp'],
+				children: [
+					{
+						name: ['urn:ietf:params:xml:ns:caldav', 'transparent'],
+					},
+				],
+			}
+		]);
+	});
+
+	it('should serialize {urn:ietf:params:xml:ns:caldav}schedule-calendar-transp correctly - opaque', () => {
+		expect(calendarPropSet({
+			'{Foo:}bar': 123,
+			'{urn:ietf:params:xml:ns:caldav}schedule-calendar-transp': 'opaque'
+		})).toEqual([
+			{
+				name: ['urn:ietf:params:xml:ns:caldav', 'schedule-calendar-transp'],
+				children: [
+					{
+						name: ['urn:ietf:params:xml:ns:caldav', 'opaque'],
+					},
+				],
+			}
+		]);
+	});
 });
