@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.5.1 - 2024-07-17
+### Fixed
+- Fix serialization of schedule-calendar-transp property
+
 ## v1.5.0 - 2024-07-16
 ### Added
 - Expose scheduling transparency property
