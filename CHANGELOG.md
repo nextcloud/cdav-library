@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.5.2 - 2024-10-14
+### Fixed
+- Update vulnerable dependencies
+
 ## v1.5.1 - 2024-07-17
 ### Fixed
 - Fix serialization of schedule-calendar-transp property
