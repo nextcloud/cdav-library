@@ -1,3 +1,7 @@
+<!--
+  - SPDX-FileCopyrightText: 2018 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 # cdav-library
 
 [![NPM Version](https://img.shields.io/npm/v/%40nextcloud%2Fcdav-library)](https://www.npmjs.com/package/@nextcloud/cdav-library)
