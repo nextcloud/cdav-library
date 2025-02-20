@@ -7,6 +7,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { describe, expect, it, vi } from "vitest";
+
 import DAVEventListener from "../../../src/models/davEventListener.js";
 
 describe('Dav event listener base model', () => {
@@ -14,8 +16,8 @@ describe('Dav event listener base model', () => {
 	it('should allow to register event listeners', () => {
 		const davEventListener = new DAVEventListener();
 
-		const handler1 = jasmine.createSpy('handler1');
-		const handler2 = jasmine.createSpy('handler2');
+		const handler1 = vi.fn();
+		const handler2 = vi.fn();
 
 		davEventListener.addEventListener('foo', handler1);
 		davEventListener.addEventListener('bar', handler1);
@@ -32,8 +34,8 @@ describe('Dav event listener base model', () => {
 	it('should allow to remove event listeners', () => {
 		const davEventListener = new DAVEventListener();
 
-		const handler1 = jasmine.createSpy('handler1');
-		const handler2 = jasmine.createSpy('handler2');
+		const handler1 = vi.fn();
+		const handler2 = vi.fn();
 
 		davEventListener.addEventListener('foo', handler1);
 		davEventListener.addEventListener('bar', handler1);
@@ -51,8 +53,8 @@ describe('Dav event listener base model', () => {
 	it('should allow to register event listeners for just one call', () => {
 		const davEventListener = new DAVEventListener();
 
-		const handler1 = jasmine.createSpy('handler1');
-		const handler2 = jasmine.createSpy('handler2');
+		const handler1 = vi.fn();
+		const handler2 = vi.fn();
 
 		davEventListener.addEventListener('foo', handler1);
 		davEventListener.addEventListener('bar', handler1, {once: true});

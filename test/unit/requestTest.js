@@ -7,6 +7,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { assert, beforeEach, describe, expect, it, vi } from "vitest";
+
 import Request from "../../src/request.js";
 import * as XMLUtility from '../../src/utility/xmlUtility.js';
 import NetworkRequestAbortedError from "../../src/errors/networkRequestAbortedError.js";
@@ -22,9 +24,16 @@ describe('Request', () => {
 	});
 
 	it ('should send GET requests', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 		const promise = request.get('fooBar', {
@@ -60,14 +69,21 @@ describe('Request', () => {
 				xhr: xhr
 			});
 		}).catch(() => {
-			fail('Promise was not supposed to fail');
+			assert.fail('Promise was not supposed to assert.fail');
 		});
 	});
 
 	it ('should send PATCH requests', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 		const promise = request.patch('fooBar', {
@@ -100,14 +116,21 @@ describe('Request', () => {
 				xhr: xhr
 			});
 		}).catch(() => {
-			fail('Promise was not supposed to fail');
+			assert.fail('Promise was not supposed to assert.fail');
 		});
 	});
 
 	it ('should send POST requests', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 		const promise = request.post('fooBar', {
@@ -140,14 +163,21 @@ describe('Request', () => {
 				xhr: xhr
 			});
 		}).catch(() => {
-			fail('Promise was not supposed to fail');
+			assert.fail('Promise was not supposed to assert.fail');
 		});
 	});
 
 	it ('should send PUT requests', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 		const promise = request.put('fooBar', {
@@ -180,14 +210,21 @@ describe('Request', () => {
 				xhr: xhr
 			});
 		}).catch(() => {
-			fail('Promise was not supposed to fail');
+			assert.fail('Promise was not supposed to assert.fail');
 		});
 	});
 
 	it ('should send DELETE requests', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 		const promise = request.delete('fooBar');
@@ -215,14 +252,21 @@ describe('Request', () => {
 				xhr: xhr
 			});
 		}).catch(() => {
-			fail('Promise was not supposed to fail');
+			assert.fail('Promise was not supposed to assert.fail');
 		});
 	});
 
 	it ('should send COPY requests', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 		const promise = request.copy('fooBar', 'barFoo', 'Infinity', true);
@@ -252,14 +296,21 @@ describe('Request', () => {
 				xhr: xhr
 			});
 		}).catch(() => {
-			fail('Promise was not supposed to fail');
+			assert.fail('Promise was not supposed to assert.fail');
 		});
 	});
 
 	it ('should send MOVE requests', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 		const promise = request.move('fooBar', 'barFoo');
@@ -289,14 +340,21 @@ describe('Request', () => {
 				xhr: xhr
 			});
 		}).catch(() => {
-			fail('Promise was not supposed to fail');
+			assert.fail('Promise was not supposed to assert.fail');
 		});
 	});
 
 	it ('should send LOCK requests', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 		const promise = request.lock('fooBar');
@@ -324,14 +382,21 @@ describe('Request', () => {
 				xhr: xhr
 			});
 		}).catch(() => {
-			fail('Promise was not supposed to fail');
+			assert.fail('Promise was not supposed to assert.fail');
 		});
 	});
 
 	it ('should send UNLOCK requests', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 		const promise = request.unlock('fooBar');
@@ -359,14 +424,21 @@ describe('Request', () => {
 				xhr: xhr
 			});
 		}).catch(() => {
-			fail('Promise was not supposed to fail');
+			assert.fail('Promise was not supposed to assert.fail');
 		});
 	});
 
 	it ('should send PROPFIND requests', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 		const promise = request.propFind('fooBar', [['NS1', 'local1'], ['NS2', 'local2']], 1);
@@ -394,14 +466,21 @@ describe('Request', () => {
 				xhr: xhr
 			});
 		}).catch(() => {
-			fail('Promise was not supposed to fail');
+			assert.fail('Promise was not supposed to assert.fail');
 		});
 	});
 
 	it ('should send PROPPATCH requests', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 		const promise = request.propPatch('fooBar', {
@@ -434,14 +513,21 @@ describe('Request', () => {
 				xhr: xhr
 			});
 		}).catch(() => {
-			fail('Promise was not supposed to fail');
+			assert.fail('Promise was not supposed to assert.fail');
 		});
 	});
 
 	it ('should send MKCOL requests', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 		const promise = request.mkCol('fooBar', {
@@ -474,14 +560,21 @@ describe('Request', () => {
 				xhr: xhr
 			});
 		}).catch(() => {
-			fail('Promise was not supposed to fail');
+			assert.fail('Promise was not supposed to assert.fail');
 		});
 	});
 
 	it ('should send REPORT requests', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 		const promise = request.report('fooBar', {
@@ -514,14 +607,21 @@ describe('Request', () => {
 				xhr: xhr
 			});
 		}).catch(() => {
-			fail('Promise was not supposed to fail');
+			assert.fail('Promise was not supposed to assert.fail');
 		});
 	});
 
 	it ('should send generic requests', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 		const promise = request.request('METHOD123', 'fooBar', {
@@ -554,14 +654,21 @@ describe('Request', () => {
 				xhr: xhr
 			});
 		}).catch(() => {
-			fail('Promise was not supposed to fail');
+			assert.fail('Promise was not supposed to assert.fail');
 		});
 	});
 
 	it ('should reject the promise on abort', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 		const promise = request.get('fooBar');
@@ -583,9 +690,9 @@ describe('Request', () => {
 		xhr.onabort();
 
 		return promise.then(() => {
-			fail('Promise was not supposed to succeed');
+			assert.fail('Promise was not supposed to succeed');
 		}).catch((res) => {
-			expect(res).toEqual(jasmine.any(NetworkRequestAbortedError));
+			expect(res).toEqual(expect.any(NetworkRequestAbortedError));
 			expect(res.body).toEqual(null);
 			expect(res.status).toEqual(-1);
 			expect(res.xhr).toEqual(xhr);
@@ -593,9 +700,16 @@ describe('Request', () => {
 	});
 
 	it ('should reject the promise on error', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 		const promise = request.get('fooBar');
@@ -617,9 +731,9 @@ describe('Request', () => {
 		xhr.onerror();
 
 		return promise.then(() => {
-			fail('Promise was not supposed to succeed');
+			assert.fail('Promise was not supposed to succeed');
 		}).catch((res) => {
-			expect(res).toEqual(jasmine.any(NetworkRequestError));
+			expect(res).toEqual(expect.any(NetworkRequestError));
 			expect(res.body).toEqual(null);
 			expect(res.status).toEqual(-1);
 			expect(res.xhr).toEqual(xhr);
@@ -627,9 +741,16 @@ describe('Request', () => {
 	});
 
 	it ('should reject the promise on HTTP 5xx', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 		const promise = request.get('fooBar');
@@ -651,9 +772,9 @@ describe('Request', () => {
 		xhr.onreadystatechange();
 
 		return promise.then(() => {
-			fail('Promise was not supposed to succeed');
+			assert.fail('Promise was not supposed to succeed');
 		}).catch((res) => {
-			expect(res).toEqual(jasmine.any(NetworkRequestServerError));
+			expect(res).toEqual(expect.any(NetworkRequestServerError));
 			expect(res.body).toEqual(567);
 			expect(res.status).toEqual(503);
 			expect(res.xhr).toEqual(xhr);
@@ -661,9 +782,16 @@ describe('Request', () => {
 	});
 
 	it ('should reject the promise on HTTP 4xx', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 		const promise = request.get('fooBar');
@@ -685,9 +813,9 @@ describe('Request', () => {
 		xhr.onreadystatechange();
 
 		return promise.then(() => {
-			fail('Promise was not supposed to succeed');
+			assert.fail('Promise was not supposed to succeed');
 		}).catch((res) => {
-			expect(res).toEqual(jasmine.any(NetworkRequestClientError));
+			expect(res).toEqual(expect.any(NetworkRequestClientError));
 			expect(res.body).toEqual(567);
 			expect(res.status).toEqual(403);
 			expect(res.xhr).toEqual(xhr);
@@ -695,9 +823,16 @@ describe('Request', () => {
 	});
 
 	it ('should reject the promise for unsuccessful HTTP requests', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 		const promise = request.get('fooBar');
@@ -719,9 +854,9 @@ describe('Request', () => {
 		xhr.onreadystatechange();
 
 		return promise.then(() => {
-			fail('Promise was not supposed to succeed');
+			assert.fail('Promise was not supposed to succeed');
 		}).catch((res) => {
-			expect(res).toEqual(jasmine.any(NetworkRequestHttpError));
+			expect(res).toEqual(expect.any(NetworkRequestHttpError));
 			expect(res.body).toEqual(567);
 			expect(res.status).toEqual(666);
 			expect(res.xhr).toEqual(xhr);
@@ -729,12 +864,19 @@ describe('Request', () => {
 	});
 
 	it ('should properly handle multistatus responses - Depth 0', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
 
-		parser.canParse.and.returnValues(true, false, true);
-		parser.parse.and.returnValues('value1', 'value2');
+		parser.canParse.mockReturnValueOnce(true).mockReturnValueOnce(false).mockReturnValueOnce(true);
+		parser.parse.mockReturnValueOnce('value1').mockReturnValueOnce('value2');
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 		const promise = request.propFind('fooBar', []);
@@ -841,8 +983,8 @@ describe('Request', () => {
 		expect(parser.canParse).toHaveBeenCalledWith('{DAV:}current-user-privilege-set');
 
 		expect(parser.parse).toHaveBeenCalledTimes(2);
-		expect(parser.parse).toHaveBeenCalledWith(jasmine.any(Document), jasmine.any(Node), jasmine.any(Function));
-		expect(parser.parse).toHaveBeenCalledWith(jasmine.any(Document), jasmine.any(Node), jasmine.any(Function));
+		expect(parser.parse).toHaveBeenCalledWith(expect.any(Document), expect.any(Node), expect.any(Function));
+		expect(parser.parse).toHaveBeenCalledWith(expect.any(Document), expect.any(Node), expect.any(Function));
 
 		return promise.then((res) => {
 			expect(res).toEqual({
@@ -854,23 +996,24 @@ describe('Request', () => {
 				xhr: xhr
 			});
 		}).catch(() => {
-			fail('Promise was not supposed to fail');
+			assert.fail('Promise was not supposed to assert.fail');
 		});
 	});
 
 	it ('should properly handle multistatus responses - Depth 1', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
 
-		parser.canParse.and.returnValues(true, true, false,
-			true, true, true, true, true, true, true, true, true, true,
-			true, true, true, true, true, true, true, true, true, true);
-		parser.parse.and.returnValues('value1', 'value2',
-			'value3', 'value4', 'value5', 'value6', 'value7',
-			'value8', 'value9', 'value10', 'value11', 'value12',
-			'value13', 'value14', 'value15', 'value16', 'value17',
-			'value18', 'value19', 'value20', 'value21', 'value22');
+		parser.canParse.mockReturnValueOnce(true).mockReturnValueOnce(true).mockReturnValueOnce(false).mockReturnValueOnce(true).mockReturnValueOnce(true).mockReturnValueOnce(true).mockReturnValueOnce(true).mockReturnValueOnce(true).mockReturnValueOnce(true).mockReturnValueOnce(true).mockReturnValueOnce(true).mockReturnValueOnce(true).mockReturnValueOnce(true).mockReturnValueOnce(true).mockReturnValueOnce(true).mockReturnValueOnce(true).mockReturnValueOnce(true).mockReturnValueOnce(true).mockReturnValueOnce(true).mockReturnValueOnce(true).mockReturnValueOnce(true).mockReturnValueOnce(true).mockReturnValueOnce(true);
+		parser.parse.mockReturnValueOnce('value1').mockReturnValueOnce('value2').mockReturnValueOnce('value3').mockReturnValueOnce('value4').mockReturnValueOnce('value5').mockReturnValueOnce('value6').mockReturnValueOnce('value7').mockReturnValueOnce('value8').mockReturnValueOnce('value9').mockReturnValueOnce('value10').mockReturnValueOnce('value11').mockReturnValueOnce('value12').mockReturnValueOnce('value13').mockReturnValueOnce('value14').mockReturnValueOnce('value15').mockReturnValueOnce('value16').mockReturnValueOnce('value17').mockReturnValueOnce('value18').mockReturnValueOnce('value19').mockReturnValueOnce('value20').mockReturnValueOnce('value21').mockReturnValueOnce('value22');
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 		const promise = request.get('fooBar', { 'Depth': 1 });
@@ -1131,27 +1274,27 @@ describe('Request', () => {
 		expect(parser.canParse).toHaveBeenCalledWith('{http://nextcloud.com/ns}owner-displayname');
 
 		expect(parser.parse).toHaveBeenCalledTimes(21);
-		expect(parser.parse).toHaveBeenCalledWith(jasmine.any(Document), jasmine.any(Node), jasmine.any(Function));
-		expect(parser.parse).toHaveBeenCalledWith(jasmine.any(Document), jasmine.any(Node), jasmine.any(Function));
-		expect(parser.parse).toHaveBeenCalledWith(jasmine.any(Document), jasmine.any(Node), jasmine.any(Function));
-		expect(parser.parse).toHaveBeenCalledWith(jasmine.any(Document), jasmine.any(Node), jasmine.any(Function));
-		expect(parser.parse).toHaveBeenCalledWith(jasmine.any(Document), jasmine.any(Node), jasmine.any(Function));
-		expect(parser.parse).toHaveBeenCalledWith(jasmine.any(Document), jasmine.any(Node), jasmine.any(Function));
-		expect(parser.parse).toHaveBeenCalledWith(jasmine.any(Document), jasmine.any(Node), jasmine.any(Function));
-		expect(parser.parse).toHaveBeenCalledWith(jasmine.any(Document), jasmine.any(Node), jasmine.any(Function));
-		expect(parser.parse).toHaveBeenCalledWith(jasmine.any(Document), jasmine.any(Node), jasmine.any(Function));
-		expect(parser.parse).toHaveBeenCalledWith(jasmine.any(Document), jasmine.any(Node), jasmine.any(Function));
-		expect(parser.parse).toHaveBeenCalledWith(jasmine.any(Document), jasmine.any(Node), jasmine.any(Function));
-		expect(parser.parse).toHaveBeenCalledWith(jasmine.any(Document), jasmine.any(Node), jasmine.any(Function));
-		expect(parser.parse).toHaveBeenCalledWith(jasmine.any(Document), jasmine.any(Node), jasmine.any(Function));
-		expect(parser.parse).toHaveBeenCalledWith(jasmine.any(Document), jasmine.any(Node), jasmine.any(Function));
-		expect(parser.parse).toHaveBeenCalledWith(jasmine.any(Document), jasmine.any(Node), jasmine.any(Function));
-		expect(parser.parse).toHaveBeenCalledWith(jasmine.any(Document), jasmine.any(Node), jasmine.any(Function));
-		expect(parser.parse).toHaveBeenCalledWith(jasmine.any(Document), jasmine.any(Node), jasmine.any(Function));
-		expect(parser.parse).toHaveBeenCalledWith(jasmine.any(Document), jasmine.any(Node), jasmine.any(Function));
-		expect(parser.parse).toHaveBeenCalledWith(jasmine.any(Document), jasmine.any(Node), jasmine.any(Function));
-		expect(parser.parse).toHaveBeenCalledWith(jasmine.any(Document), jasmine.any(Node), jasmine.any(Function));
-		expect(parser.parse).toHaveBeenCalledWith(jasmine.any(Document), jasmine.any(Node), jasmine.any(Function));
+		expect(parser.parse).toHaveBeenCalledWith(expect.any(Document), expect.any(Node), expect.any(Function));
+		expect(parser.parse).toHaveBeenCalledWith(expect.any(Document), expect.any(Node), expect.any(Function));
+		expect(parser.parse).toHaveBeenCalledWith(expect.any(Document), expect.any(Node), expect.any(Function));
+		expect(parser.parse).toHaveBeenCalledWith(expect.any(Document), expect.any(Node), expect.any(Function));
+		expect(parser.parse).toHaveBeenCalledWith(expect.any(Document), expect.any(Node), expect.any(Function));
+		expect(parser.parse).toHaveBeenCalledWith(expect.any(Document), expect.any(Node), expect.any(Function));
+		expect(parser.parse).toHaveBeenCalledWith(expect.any(Document), expect.any(Node), expect.any(Function));
+		expect(parser.parse).toHaveBeenCalledWith(expect.any(Document), expect.any(Node), expect.any(Function));
+		expect(parser.parse).toHaveBeenCalledWith(expect.any(Document), expect.any(Node), expect.any(Function));
+		expect(parser.parse).toHaveBeenCalledWith(expect.any(Document), expect.any(Node), expect.any(Function));
+		expect(parser.parse).toHaveBeenCalledWith(expect.any(Document), expect.any(Node), expect.any(Function));
+		expect(parser.parse).toHaveBeenCalledWith(expect.any(Document), expect.any(Node), expect.any(Function));
+		expect(parser.parse).toHaveBeenCalledWith(expect.any(Document), expect.any(Node), expect.any(Function));
+		expect(parser.parse).toHaveBeenCalledWith(expect.any(Document), expect.any(Node), expect.any(Function));
+		expect(parser.parse).toHaveBeenCalledWith(expect.any(Document), expect.any(Node), expect.any(Function));
+		expect(parser.parse).toHaveBeenCalledWith(expect.any(Document), expect.any(Node), expect.any(Function));
+		expect(parser.parse).toHaveBeenCalledWith(expect.any(Document), expect.any(Node), expect.any(Function));
+		expect(parser.parse).toHaveBeenCalledWith(expect.any(Document), expect.any(Node), expect.any(Function));
+		expect(parser.parse).toHaveBeenCalledWith(expect.any(Document), expect.any(Node), expect.any(Function));
+		expect(parser.parse).toHaveBeenCalledWith(expect.any(Document), expect.any(Node), expect.any(Function));
+		expect(parser.parse).toHaveBeenCalledWith(expect.any(Document), expect.any(Node), expect.any(Function));
 
 		return promise.then((res) => {
 			expect(res).toEqual({
@@ -1186,15 +1329,22 @@ describe('Request', () => {
 				xhr: xhr
 			});
 		}).catch(() => {
-			fail('Promise was not supposed to fail');
+			assert.fail('Promise was not supposed to assert.fail');
 		});
 	});
 
 	it ('should call the before request handler', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
-		const beforeRequestHandler = jasmine.createSpy('beforeRequestHandler');
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
+		const beforeRequestHandler = vi.fn();
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 		const promise = request.get('fooBar', {}, null, beforeRequestHandler);
@@ -1228,15 +1378,22 @@ describe('Request', () => {
 			expect(beforeRequestHandler).toHaveBeenCalledTimes(1);
 			expect(beforeRequestHandler).toHaveBeenCalledWith(xhr);
 		}).catch(() => {
-			fail('Promise was not supposed to fail');
+			assert.fail('Promise was not supposed to assert.fail');
 		});
 	});
 
 	it ('should call the after request handler', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
-		const afterRequestHandler = jasmine.createSpy('afterRequestHandler');
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
+		const afterRequestHandler = vi.fn();
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 		const promise = request.get('fooBar', {}, null, () => null, afterRequestHandler);
@@ -1268,14 +1425,21 @@ describe('Request', () => {
 			expect(afterRequestHandler).toHaveBeenCalledTimes(1);
 			expect(afterRequestHandler).toHaveBeenCalledWith(xhr);
 		}).catch(() => {
-			fail('Promise was not supposed to fail');
+			assert.fail('Promise was not supposed to assert.fail');
 		});
 	});
 
 	it ('should return the filename of a URL', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 
@@ -1285,9 +1449,16 @@ describe('Request', () => {
 	});
 
 	it ('should return the pathname of a URL', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 
@@ -1297,9 +1468,16 @@ describe('Request', () => {
 	});
 
 	it ('should return the absolute url of a URL', () => {
-		const xhr = jasmine.createSpyObj('xhrObject', ['open', 'setRequestHeader', 'send']);
-		const xhrProvider = jasmine.createSpy('xhrProvider').and.callFake(() => xhr);
-		const parser = jasmine.createSpyObj('parserObject', ['canParse', 'parse']);
+		const xhr = {
+            'open': vi.fn(),
+            'setRequestHeader': vi.fn(),
+            'send': vi.fn()
+        };
+		const xhrProvider = vi.fn(() => xhr);
+		const parser = {
+            'canParse': vi.fn(),
+            'parse': vi.fn()
+        };
 
 		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser, xhrProvider);
 

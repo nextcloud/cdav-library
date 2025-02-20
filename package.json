@@ -19,8 +19,8 @@
     "build": "vite build --mode=production",
     "dev": "vite build --mode=development",
     "watch": "vite build --mode=development --watch",
-    "test": "karma start karma.conf.cjs",
-    "test:watch": "karma start --auto-watch=true --single-run=false karma.conf.cjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "lint": "eslint --ext .js src",
     "lint:fix": "eslint --ext .js src --fix"
   },
@@ -49,23 +49,12 @@
     "npm": "^10.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.0",
-    "@nextcloud/babel-config": "^1.2.0",
     "@nextcloud/browserslist-config": "^3.0.0",
     "@nextcloud/eslint-config": "^8.4.1",
     "@nextcloud/vite-config": "^2.0.1",
-    "babel-loader": "^9.1.0",
-    "istanbul": "^0.4.5",
-    "jasmine": "^5.0.0",
-    "karma": "^6.3.9",
-    "karma-coverage": "^2.1.0",
-    "karma-firefox-launcher": "^2.1.2",
-    "karma-jasmine": "^5.0.1",
-    "karma-mocha-reporter": "^2.2.5",
-    "karma-webpack": "^5.0.0",
+    "@vitest/browser": "^3.0.6",
+    "playwright": "^1.49.1",
     "vite": "^5.2.13",
-    "webpack": "^5.65.0",
-    "webpack-cli": "^5.0.0",
-    "webpack-merge": "^5.8.0"
+    "vitest": "^3.0.6"
   }
 }

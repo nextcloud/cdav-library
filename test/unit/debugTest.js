@@ -7,6 +7,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { afterEach, describe, expect, it, vi } from "vitest";
+
 import { debugFactory } from '../../src/debug.js';
 
 describe('Debug', () => {
@@ -16,12 +18,12 @@ describe('Debug', () => {
 	});
 
 	it ('should provide a factory for a debugger', () => {
-		expect(debugFactory).toEqual(jasmine.any(Function));
-		expect(debugFactory('foo')).toEqual(jasmine.any(Function));
+		expect(debugFactory).toEqual(expect.any(Function));
+		expect(debugFactory('foo')).toEqual(expect.any(Function));
 	});
 
 	it ('should log console messages including their context if debug is enabled', () => {
-		spyOn(window.console, 'debug');
+		vi.spyOn(window.console, 'debug').mockImplementation(() => {});
 
 		debugFactory.enabled = true;
 
@@ -35,7 +37,7 @@ describe('Debug', () => {
 	});
 
 	it ('should not log console messages if debug is disabled', () => {
-		spyOn(window.console, 'debug');
+		vi.spyOn(window.console, 'debug').mockImplementation(() => {});
 
 		debugFactory.enabled = false;
 
