@@ -7,26 +7,55 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { assert, describe, expect, it, vi } from "vitest";
+
 import ScheduleOutbox from "../../../src/models/scheduleOutbox.js";
 import { DavCollection } from "../../../src/models/davCollection.js";
 
 describe('Schedule outbox model', () => {
 
 	it('should inherit from DavCollection', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+            'findAll': vi.fn(),
+            'findAllByFilter': vi.fn(),
+            'find': vi.fn(),
+            'createCollection': vi.fn(),
+            'createObject': vi.fn(),
+            'update': vi.fn(),
+            'delete': vi.fn(),
+            'isReadable': vi.fn(),
+            'isWriteable': vi.fn()
+        };
+		const request = {
+            'propFind': vi.fn(),
+            'put': vi.fn(),
+            'delete': vi.fn()
+        };
 		const url = '/foo/bar/folder';
 		const props = {}
 
 		const scheduleOutbox = new ScheduleOutbox(parent, request, url, props)
-		expect(scheduleOutbox).toEqual(jasmine.any(DavCollection))
+		expect(scheduleOutbox).toEqual(expect.any(DavCollection))
 	});
 
 	it('should provide a method to gather free/busy data', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'post']);
+		const parent = {
+            'findAll': vi.fn(),
+            'findAllByFilter': vi.fn(),
+            'find': vi.fn(),
+            'createCollection': vi.fn(),
+            'createObject': vi.fn(),
+            'update': vi.fn(),
+            'delete': vi.fn(),
+            'isReadable': vi.fn(),
+            'isWriteable': vi.fn()
+        };
+		const request = {
+            'propFind': vi.fn(),
+            'put': vi.fn(),
+            'delete': vi.fn(),
+            'post': vi.fn()
+        };
 		const url = '/foo/bar/folder';
 		const props = {}
 
@@ -92,7 +121,7 @@ END:VCALENDAR
 </C:response>
 </C:schedule-response>`
 
-		request.post.and.callFake(() => {
+		request.post.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: response,
@@ -155,7 +184,7 @@ END:VCALENDAR
 				'Content-Type': 'text/calendar; charset="utf-8"'
 			}, requestData);
 		}).catch(() => {
-			fail('Calendar findAllVObjects was not supposed to fail');
+			assert.fail('Calendar findAllVObjects was not supposed to assert.fail');
 		});
 
 	})

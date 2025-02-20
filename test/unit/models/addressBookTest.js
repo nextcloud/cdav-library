@@ -7,7 +7,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {DavCollection} from "../../../src/models/davCollection.js";
+import { assert, beforeEach, describe, expect, it, vi } from "vitest";
+
+import { DavCollection } from "../../../src/models/davCollection.js";
 import {AddressBook} from "../../../src/models/addressBook.js";
 import * as XMLUtility from "../../../src/utility/xmlUtility.js";
 import {VCard} from "../../../src/models/vcard.js";
@@ -20,22 +22,48 @@ describe('Address book model', () => {
 	});
 
 	it('should inherit from DavCollection / shareable ', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+            'findAll': vi.fn(),
+            'findAllByFilter': vi.fn(),
+            'find': vi.fn(),
+            'createCollection': vi.fn(),
+            'createObject': vi.fn(),
+            'update': vi.fn(),
+            'delete': vi.fn(),
+            'isReadable': vi.fn(),
+            'isWriteable': vi.fn()
+        };
+		const request = {
+            'propFind': vi.fn(),
+            'put': vi.fn(),
+            'delete': vi.fn()
+        };
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
 		const addressbook = new AddressBook(parent, request, url, props);
-		expect(addressbook).toEqual(jasmine.any(DavCollection));
-		expect(addressbook.share).toEqual(jasmine.any(Function));
-		expect(addressbook.unshare).toEqual(jasmine.any(Function));
+		expect(addressbook).toEqual(expect.any(DavCollection));
+		expect(addressbook.share).toEqual(expect.any(Function));
+		expect(addressbook.unshare).toEqual(expect.any(Function));
 	});
 
 	it('should inherit expose the property description', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+            'findAll': vi.fn(),
+            'findAllByFilter': vi.fn(),
+            'find': vi.fn(),
+            'createCollection': vi.fn(),
+            'createObject': vi.fn(),
+            'update': vi.fn(),
+            'delete': vi.fn(),
+            'isReadable': vi.fn(),
+            'isWriteable': vi.fn()
+        };
+		const request = {
+            'propFind': vi.fn(),
+            'put': vi.fn(),
+            'delete': vi.fn()
+        };
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -44,9 +72,22 @@ describe('Address book model', () => {
 	});
 
 	it('should inherit expose the property enabled', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+            'findAll': vi.fn(),
+            'findAllByFilter': vi.fn(),
+            'find': vi.fn(),
+            'createCollection': vi.fn(),
+            'createObject': vi.fn(),
+            'update': vi.fn(),
+            'delete': vi.fn(),
+            'isReadable': vi.fn(),
+            'isWriteable': vi.fn()
+        };
+		const request = {
+            'propFind': vi.fn(),
+            'put': vi.fn(),
+            'delete': vi.fn()
+        };
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -55,9 +96,22 @@ describe('Address book model', () => {
 	});
 
 	it('should inherit expose the property read-only', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+            'findAll': vi.fn(),
+            'findAllByFilter': vi.fn(),
+            'find': vi.fn(),
+            'createCollection': vi.fn(),
+            'createObject': vi.fn(),
+            'update': vi.fn(),
+            'delete': vi.fn(),
+            'isReadable': vi.fn(),
+            'isWriteable': vi.fn()
+        };
+		const request = {
+            'propFind': vi.fn(),
+            'put': vi.fn(),
+            'delete': vi.fn()
+        };
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -66,13 +120,27 @@ describe('Address book model', () => {
 	});
 
 	it('should find all VCards', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const parent = {
+            'findAll': vi.fn(),
+            'findAllByFilter': vi.fn(),
+            'find': vi.fn(),
+            'createCollection': vi.fn(),
+            'createObject': vi.fn(),
+            'update': vi.fn(),
+            'delete': vi.fn(),
+            'isReadable': vi.fn(),
+            'isWriteable': vi.fn()
+        };
+		const request = {
+            'propFind': vi.fn(),
+            'put': vi.fn(),
+            'delete': vi.fn(),
+            'pathname': vi.fn()
+        };
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
-		request.propFind.and.callFake(() => {
+		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: {
@@ -89,14 +157,14 @@ describe('Address book model', () => {
 			});
 		});
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		const addressbook = new AddressBook(parent, request, url, props);
 		return addressbook.findAllVCards().then((res) => {
 			expect(res.length).toEqual(2);
-			expect(res[0]).toEqual(jasmine.any(VCard));
+			expect(res[0]).toEqual(expect.any(VCard));
 			expect(res[0].url).toEqual('/foo/bar/folder/a');
-			expect(res[1]).toEqual(jasmine.any(VCard));
+			expect(res[1]).toEqual(expect.any(VCard));
 			expect(res[1].url).toEqual('/foo/bar/folder/b');
 
 			expect(request.propFind).toHaveBeenCalledTimes(1);
@@ -107,18 +175,33 @@ describe('Address book model', () => {
 				['DAV:', 'getcontenttype'], ['DAV:', 'getetag'], ['DAV:', 'resourcetype'],
 				['urn:ietf:params:xml:ns:carddav', 'address-data']], 1);
 		}).catch(() => {
-			fail('Addressbook findAllVCards was not supposed to fail');
+			assert.fail('Addressbook findAllVCards was not supposed to assert.fail');
 		});
 	});
 
 	it('should find all VCards and request only a set of VCard properties', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'report', 'pathname']);
+		const parent = {
+            'findAll': vi.fn(),
+            'findAllByFilter': vi.fn(),
+            'find': vi.fn(),
+            'createCollection': vi.fn(),
+            'createObject': vi.fn(),
+            'update': vi.fn(),
+            'delete': vi.fn(),
+            'isReadable': vi.fn(),
+            'isWriteable': vi.fn()
+        };
+		const request = {
+            'propFind': vi.fn(),
+            'put': vi.fn(),
+            'delete': vi.fn(),
+            'report': vi.fn(),
+            'pathname': vi.fn()
+        };
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
-		request.report.and.callFake(() => {
+		request.report.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: {
@@ -128,75 +211,104 @@ describe('Address book model', () => {
 			});
 		});
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		const addressbook = new AddressBook(parent, request, url, props);
 		return addressbook.findAllAndFilterBySimpleProperties(['EMAIL', 'UID', 'CATEGORIES']).then((res) => {
 			expect(res.length).toEqual(1);
-			expect(res[0]).toEqual(jasmine.any(VCard));
+			expect(res[0]).toEqual(expect.any(VCard));
 			expect(res[0].url).toEqual('/foo/bar/folder/b');
 
 			expect(request.report).toHaveBeenCalledTimes(1);
 			expect(request.report).toHaveBeenCalledWith('/foo/bar/folder/', { Depth: '1' },
 				'<x0:addressbook-query xmlns:x0="urn:ietf:params:xml:ns:carddav"><x1:prop xmlns:x1="DAV:"><x1:getetag/><x1:getcontenttype/><x1:resourcetype/><x0:address-data><x0:prop name="EMAIL"/><x0:prop name="UID"/><x0:prop name="CATEGORIES"/></x0:address-data><x2:has-photo xmlns:x2="http://nextcloud.com/ns"/></x1:prop></x0:addressbook-query>');
 		}).catch(() => {
-			fail('AddressBook findAllAndFilterBySimpleProperties was not supposed to fail');
+			assert.fail('AddressBook findAllAndFilterBySimpleProperties was not supposed to assert.fail');
 		});
 	});
 
 	it('should create a new VCard', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete' , 'pathname']);
+		const parent = {
+            'findAll': vi.fn(),
+            'findAllByFilter': vi.fn(),
+            'find': vi.fn(),
+            'createCollection': vi.fn(),
+            'createObject': vi.fn(),
+            'update': vi.fn(),
+            'delete': vi.fn(),
+            'isReadable': vi.fn(),
+            'isWriteable': vi.fn()
+        };
+		const request = {
+            'propFind': vi.fn(),
+            'put': vi.fn(),
+            'delete': vi.fn(),
+            'pathname': vi.fn()
+        };
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
-		request.put.and.callFake(() => {
+		request.put.mockImplementation(() => {
 			return Promise.resolve({
 				status: 204,
 				body: null,
 				xhr: null,
 			})
 		});
-		request.propFind.and.callFake(() => {
+		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: getVCardProps(),
 				xhr: null
 			});
 		});
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		const addressbook = new AddressBook(parent, request, url, props);
 		return addressbook.createVCard('DATA123').then((res) => {
-			expect(res).toEqual(jasmine.any(VCard));
-			expect(res.url).toEqual(jasmine.any(String));
+			expect(res).toEqual(expect.any(VCard));
+			expect(res.url).toEqual(expect.any(String));
 			expect(res.url.startsWith('/foo/bar/folder/')).toEqual(true);
 			expect(res.url.endsWith('.vcf')).toEqual(true);
 			expect(res.etag).toEqual('"095329048d1a5a7ce26ec24bb7af0908"');
 
 			expect(request.put).toHaveBeenCalledTimes(1);
-			expect(request.put).toHaveBeenCalledWith(jasmine.any(String), { 'Content-Type': 'text/vcard; charset=utf-8' }, 'DATA123');
+			expect(request.put).toHaveBeenCalledWith(expect.any(String), { 'Content-Type': 'text/vcard; charset=utf-8' }, 'DATA123');
 			expect(request.propFind).toHaveBeenCalledTimes(1);
-			expect(request.propFind).toHaveBeenCalledWith(jasmine.any(String), [
+			expect(request.propFind).toHaveBeenCalledWith(expect.any(String), [
 				['DAV:', 'getcontenttype'], ['DAV:', 'getetag'], ['DAV:', 'resourcetype'],
 				['DAV:', 'displayname'], ['DAV:', 'owner'], ['DAV:', 'resourcetype'],
 				['DAV:', 'sync-token'], ['DAV:', 'current-user-privilege-set'],
 				['DAV:', 'getcontenttype'], ['DAV:', 'getetag'], ['DAV:', 'resourcetype'],
 				['urn:ietf:params:xml:ns:carddav', 'address-data']], 0);
 		}).catch(() => {
-			fail('DavCollection update was not supposed to fail');
+			assert.fail('DavCollection update was not supposed to assert.fail');
 		});
 	});
 
 	it('should send an addressbook-query', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'report', 'pathname']);
+		const parent = {
+            'findAll': vi.fn(),
+            'findAllByFilter': vi.fn(),
+            'find': vi.fn(),
+            'createCollection': vi.fn(),
+            'createObject': vi.fn(),
+            'update': vi.fn(),
+            'delete': vi.fn(),
+            'isReadable': vi.fn(),
+            'isWriteable': vi.fn()
+        };
+		const request = {
+            'propFind': vi.fn(),
+            'put': vi.fn(),
+            'delete': vi.fn(),
+            'report': vi.fn(),
+            'pathname': vi.fn()
+        };
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
-		request.report.and.callFake(() => {
+		request.report.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: {
@@ -206,7 +318,7 @@ describe('Address book model', () => {
 			});
 		});
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		// https://tools.ietf.org/html/rfc6352#section-8.6.4
 		const addressbook = new AddressBook(parent, request, url, props);
@@ -238,25 +350,40 @@ describe('Address book model', () => {
 			}]
 		}]).then((res) => {
 			expect(res.length).toEqual(1);
-			expect(res[0]).toEqual(jasmine.any(VCard));
+			expect(res[0]).toEqual(expect.any(VCard));
 			expect(res[0].url).toEqual('/foo/bar/folder/b');
 
 			expect(request.report).toHaveBeenCalledTimes(1);
 			expect(request.report).toHaveBeenCalledWith('/foo/bar/folder/', { Depth: '1' },
 				'<x0:addressbook-query xmlns:x0="urn:ietf:params:xml:ns:carddav"><x1:prop xmlns:x1="DAV:"><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x1:displayname/><x1:owner/><x1:resourcetype/><x1:sync-token/><x1:current-user-privilege-set/><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x0:address-data/></x1:prop><x0:filter test="anyof"><x0:prop-filter name="FN"><x0:text-match collation="i;unicode-casemap" match-type="contains">daboo</x0:text-match></x0:prop-filter><x0:prop-filter name="EMAIL"><x0:text-match collation="i;unicode-casemap" match-type="contains">daboo</x0:text-match></x0:prop-filter></x0:filter></x0:addressbook-query>');
 		}).catch(() => {
-			fail('AddressBook addressbook-query was not supposed to fail');
+			assert.fail('AddressBook addressbook-query was not supposed to assert.fail');
 		});
 	});
 
 	it('should send an addressbook-multiget', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'report', 'pathname']);
+		const parent = {
+            'findAll': vi.fn(),
+            'findAllByFilter': vi.fn(),
+            'find': vi.fn(),
+            'createCollection': vi.fn(),
+            'createObject': vi.fn(),
+            'update': vi.fn(),
+            'delete': vi.fn(),
+            'isReadable': vi.fn(),
+            'isWriteable': vi.fn()
+        };
+		const request = {
+            'propFind': vi.fn(),
+            'put': vi.fn(),
+            'delete': vi.fn(),
+            'report': vi.fn(),
+            'pathname': vi.fn()
+        };
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
-		request.report.and.callFake(() => {
+		request.report.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: {
@@ -267,32 +394,47 @@ describe('Address book model', () => {
 			});
 		});
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		const addressbook = new AddressBook(parent, request, url, props);
 		return addressbook.addressbookMultiget(['/foo/bar/folder/a', '/foo/bar/folder/b']).then((res) => {
 			expect(res.length).toEqual(2);
-			expect(res[0]).toEqual(jasmine.any(VCard));
+			expect(res[0]).toEqual(expect.any(VCard));
 			expect(res[0].url).toEqual('/foo/bar/folder/a');
-			expect(res[1]).toEqual(jasmine.any(VCard));
+			expect(res[1]).toEqual(expect.any(VCard));
 			expect(res[1].url).toEqual('/foo/bar/folder/b');
 
 			expect(request.report).toHaveBeenCalledTimes(1);
 			expect(request.report).toHaveBeenCalledWith('/foo/bar/folder/', { Depth: '1' },
 				'<x0:addressbook-multiget xmlns:x0="urn:ietf:params:xml:ns:carddav"><x1:prop xmlns:x1="DAV:"><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x1:displayname/><x1:owner/><x1:resourcetype/><x1:sync-token/><x1:current-user-privilege-set/><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x0:address-data/></x1:prop><x1:href xmlns:x1="DAV:">/foo/bar/folder/a</x1:href><x1:href xmlns:x1="DAV:">/foo/bar/folder/b</x1:href></x0:addressbook-multiget>');
 		}).catch(() => {
-			fail('AddressBook addressbook-multiget was not supposed to fail');
+			assert.fail('AddressBook addressbook-multiget was not supposed to assert.fail');
 		});
 	});
 
 	it('should send an addressbook-multiget and request export of data', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'report', 'pathname']);
+		const parent = {
+            'findAll': vi.fn(),
+            'findAllByFilter': vi.fn(),
+            'find': vi.fn(),
+            'createCollection': vi.fn(),
+            'createObject': vi.fn(),
+            'update': vi.fn(),
+            'delete': vi.fn(),
+            'isReadable': vi.fn(),
+            'isWriteable': vi.fn()
+        };
+		const request = {
+            'propFind': vi.fn(),
+            'put': vi.fn(),
+            'delete': vi.fn(),
+            'report': vi.fn(),
+            'pathname': vi.fn()
+        };
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
-		request.report.and.callFake(() => {
+		request.report.mockImplementation(() => {
 			return Promise.resolve({
 				status: 200,
 				body: 'RAW DATA',
@@ -300,7 +442,7 @@ describe('Address book model', () => {
 			});
 		});
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		const addressbook = new AddressBook(parent, request, url, props);
 		return addressbook.addressbookMultigetExport(['/foo/bar/folder/a', '/foo/bar/folder/b']).then((res) => {
@@ -311,7 +453,7 @@ describe('Address book model', () => {
 			expect(request.report).toHaveBeenCalledWith('/foo/bar/folder/?export', { Depth: '1' },
 				'<x0:addressbook-multiget xmlns:x0="urn:ietf:params:xml:ns:carddav"><x1:prop xmlns:x1="DAV:"><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x1:displayname/><x1:owner/><x1:resourcetype/><x1:sync-token/><x1:current-user-privilege-set/><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x0:address-data/></x1:prop><x1:href xmlns:x1="DAV:">/foo/bar/folder/a</x1:href><x1:href xmlns:x1="DAV:">/foo/bar/folder/b</x1:href></x0:addressbook-multiget>');
 		}).catch(() => {
-			fail('AddressBook addressbook-multiget was not supposed to fail');
+			assert.fail('AddressBook addressbook-multiget was not supposed to assert.fail');
 		});
 	});
 });

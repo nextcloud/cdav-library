@@ -9,4 +9,22 @@ export default createLibConfig({
 	index: 'src/index.js',
 }, {
 	libraryFormats: ['es', 'cjs'],
+	config: {
+		test: {
+			passWithNoTests: true,
+			restoreMocks: true,
+			include: [
+				'test/unit/**/*.js',
+			],
+			browser: {
+				enabled: true,
+				screenshotFailures: false,
+				headless: true,
+				provider: 'playwright',
+				instances: [
+					{ browser: 'firefox' },
+				],
+			},
+		},
+	},
 })

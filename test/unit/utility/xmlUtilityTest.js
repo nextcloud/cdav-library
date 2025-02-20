@@ -7,6 +7,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { beforeEach, describe, expect, it } from "vitest";
+
 import * as XMLUtility from '../../../src/utility/xmlUtility.js';
 
 describe('XMLUtility', () => {

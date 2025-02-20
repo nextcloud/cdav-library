@@ -1,3 +1,4 @@
+import { describe } from "vitest";
 /**
  * CDAV Library
  *
@@ -7,8 +8,4 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-describe('Subscription model', () => {
-	it('should ...', () => {
-		pending();
-	});
-});
+describe.todo('Subscription model');

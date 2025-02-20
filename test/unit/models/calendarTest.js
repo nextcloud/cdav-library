@@ -7,7 +7,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {DavCollection} from "../../../src/models/davCollection.js";
+import { assert, beforeEach, describe, expect, it, vi } from "vitest";
+
+import { DavCollection } from "../../../src/models/davCollection.js";
 import {Calendar} from "../../../src/models/calendar.js";
 import {VObject} from "../../../src/models/vobject.js";
 import * as NS from "../../../src/utility/namespaceUtility.js";
@@ -20,24 +22,50 @@ describe('Calendar model', () => {
 	});
 
 	it('should inherit from DavCollection / shareable / publishable', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+            'findAll': vi.fn(),
+            'findAllByFilter': vi.fn(),
+            'find': vi.fn(),
+            'createCollection': vi.fn(),
+            'createObject': vi.fn(),
+            'update': vi.fn(),
+            'delete': vi.fn(),
+            'isReadable': vi.fn(),
+            'isWriteable': vi.fn()
+        };
+		const request = {
+            'propFind': vi.fn(),
+            'put': vi.fn(),
+            'delete': vi.fn()
+        };
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
 		const calendar = new Calendar(parent, request, url, props);
-		expect(calendar).toEqual(jasmine.any(DavCollection));
-		expect(calendar.share).toEqual(jasmine.any(Function));
-		expect(calendar.unshare).toEqual(jasmine.any(Function));
-		expect(calendar.publish).toEqual(jasmine.any(Function));
-		expect(calendar.unpublish).toEqual(jasmine.any(Function));
+		expect(calendar).toEqual(expect.any(DavCollection));
+		expect(calendar.share).toEqual(expect.any(Function));
+		expect(calendar.unshare).toEqual(expect.any(Function));
+		expect(calendar.publish).toEqual(expect.any(Function));
+		expect(calendar.unpublish).toEqual(expect.any(Function));
 	});
 
 	it('should inherit expose the property color', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+            'findAll': vi.fn(),
+            'findAllByFilter': vi.fn(),
+            'find': vi.fn(),
+            'createCollection': vi.fn(),
+            'createObject': vi.fn(),
+            'update': vi.fn(),
+            'delete': vi.fn(),
+            'isReadable': vi.fn(),
+            'isWriteable': vi.fn()
+        };
+		const request = {
+            'propFind': vi.fn(),
+            'put': vi.fn(),
+            'delete': vi.fn()
+        };
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -46,9 +74,22 @@ describe('Calendar model', () => {
 	});
 
 	it('should inherit expose the property enabled', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+            'findAll': vi.fn(),
+            'findAllByFilter': vi.fn(),
+            'find': vi.fn(),
+            'createCollection': vi.fn(),
+            'createObject': vi.fn(),
+            'update': vi.fn(),
+            'delete': vi.fn(),
+            'isReadable': vi.fn(),
+            'isWriteable': vi.fn()
+        };
+		const request = {
+            'propFind': vi.fn(),
+            'put': vi.fn(),
+            'delete': vi.fn()
+        };
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -57,9 +98,22 @@ describe('Calendar model', () => {
 	});
 
 	it('should inherit expose the property order', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+            'findAll': vi.fn(),
+            'findAllByFilter': vi.fn(),
+            'find': vi.fn(),
+            'createCollection': vi.fn(),
+            'createObject': vi.fn(),
+            'update': vi.fn(),
+            'delete': vi.fn(),
+            'isReadable': vi.fn(),
+            'isWriteable': vi.fn()
+        };
+		const request = {
+            'propFind': vi.fn(),
+            'put': vi.fn(),
+            'delete': vi.fn()
+        };
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -68,9 +122,22 @@ describe('Calendar model', () => {
 	});
 
 	it('should inherit expose the property timezone', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+            'findAll': vi.fn(),
+            'findAllByFilter': vi.fn(),
+            'find': vi.fn(),
+            'createCollection': vi.fn(),
+            'createObject': vi.fn(),
+            'update': vi.fn(),
+            'delete': vi.fn(),
+            'isReadable': vi.fn(),
+            'isWriteable': vi.fn()
+        };
+		const request = {
+            'propFind': vi.fn(),
+            'put': vi.fn(),
+            'delete': vi.fn()
+        };
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -101,9 +168,22 @@ END:VCALENDAR
 	});
 
 	it('should inherit expose the property components', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+            'findAll': vi.fn(),
+            'findAllByFilter': vi.fn(),
+            'find': vi.fn(),
+            'createCollection': vi.fn(),
+            'createObject': vi.fn(),
+            'update': vi.fn(),
+            'delete': vi.fn(),
+            'isReadable': vi.fn(),
+            'isWriteable': vi.fn()
+        };
+		const request = {
+            'propFind': vi.fn(),
+            'put': vi.fn(),
+            'delete': vi.fn()
+        };
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -112,13 +192,27 @@ END:VCALENDAR
 	});
 
 	it('should find all VObjects', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const parent = {
+            'findAll': vi.fn(),
+            'findAllByFilter': vi.fn(),
+            'find': vi.fn(),
+            'createCollection': vi.fn(),
+            'createObject': vi.fn(),
+            'update': vi.fn(),
+            'delete': vi.fn(),
+            'isReadable': vi.fn(),
+            'isWriteable': vi.fn()
+        };
+		const request = {
+            'propFind': vi.fn(),
+            'put': vi.fn(),
+            'delete': vi.fn(),
+            'pathname': vi.fn()
+        };
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
-		request.propFind.and.callFake(() => {
+		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: {
@@ -135,14 +229,14 @@ END:VCALENDAR
 			});
 		});
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		const calendar = new Calendar(parent, request, url, props);
 		return calendar.findAllVObjects().then((res) => {
 			expect(res.length).toEqual(2);
-			expect(res[0]).toEqual(jasmine.any(VObject));
+			expect(res[0]).toEqual(expect.any(VObject));
 			expect(res[0].url).toEqual('/foo/bar/folder/a');
-			expect(res[1]).toEqual(jasmine.any(VObject));
+			expect(res[1]).toEqual(expect.any(VObject));
 			expect(res[1].url).toEqual('/foo/bar/folder/b');
 
 			expect(request.propFind).toHaveBeenCalledTimes(1);
@@ -153,18 +247,33 @@ END:VCALENDAR
 				['DAV:', 'getcontenttype'], ['DAV:', 'getetag'], ['DAV:', 'resourcetype'],
 				['urn:ietf:params:xml:ns:caldav', 'calendar-data']], 1);
 		}).catch(() => {
-			fail('Calendar findAllVObjects was not supposed to fail');
+			assert.fail('Calendar findAllVObjects was not supposed to assert.fail');
 		});
 	});
 
 	it('should find all VObjects filtered by component type', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'report', 'pathname']);
+		const parent = {
+            'findAll': vi.fn(),
+            'findAllByFilter': vi.fn(),
+            'find': vi.fn(),
+            'createCollection': vi.fn(),
+            'createObject': vi.fn(),
+            'update': vi.fn(),
+            'delete': vi.fn(),
+            'isReadable': vi.fn(),
+            'isWriteable': vi.fn()
+        };
+		const request = {
+            'propFind': vi.fn(),
+            'put': vi.fn(),
+            'delete': vi.fn(),
+            'report': vi.fn(),
+            'pathname': vi.fn()
+        };
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
-		request.report.and.callFake(() => {
+		request.report.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: {
@@ -175,32 +284,47 @@ END:VCALENDAR
 			});
 		});
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		const calendar = new Calendar(parent, request, url, props);
 		return calendar.findByType('VEVENT').then((res) => {
 			expect(res.length).toEqual(2);
-			expect(res[0]).toEqual(jasmine.any(VObject));
+			expect(res[0]).toEqual(expect.any(VObject));
 			expect(res[0].url).toEqual('/foo/bar/folder/a');
-			expect(res[1]).toEqual(jasmine.any(VObject));
+			expect(res[1]).toEqual(expect.any(VObject));
 			expect(res[1].url).toEqual('/foo/bar/folder/b');
 
 			expect(request.report).toHaveBeenCalledTimes(1);
 			expect(request.report).toHaveBeenCalledWith('/foo/bar/folder/', { Depth: '1' },
 				'<x0:calendar-query xmlns:x0="urn:ietf:params:xml:ns:caldav"><x1:prop xmlns:x1="DAV:"><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x1:displayname/><x1:owner/><x1:resourcetype/><x1:sync-token/><x1:current-user-privilege-set/><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x0:calendar-data/></x1:prop><x0:filter><x0:comp-filter name="VCALENDAR"><x0:comp-filter name="VEVENT"/></x0:comp-filter></x0:filter></x0:calendar-query>');
 		}).catch(() => {
-			fail('Calendar findByType was not supposed to fail');
+			assert.fail('Calendar findByType was not supposed to assert.fail');
 		});
 	});
 
 	it('should find all VObjects filtered by component types in time-range', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'report', 'pathname']);
+		const parent = {
+            'findAll': vi.fn(),
+            'findAllByFilter': vi.fn(),
+            'find': vi.fn(),
+            'createCollection': vi.fn(),
+            'createObject': vi.fn(),
+            'update': vi.fn(),
+            'delete': vi.fn(),
+            'isReadable': vi.fn(),
+            'isWriteable': vi.fn()
+        };
+		const request = {
+            'propFind': vi.fn(),
+            'put': vi.fn(),
+            'delete': vi.fn(),
+            'report': vi.fn(),
+            'pathname': vi.fn()
+        };
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
-		request.report.and.callFake(() => {
+		request.report.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: {
@@ -210,12 +334,12 @@ END:VCALENDAR
 			});
 		});
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		const calendar = new Calendar(parent, request, url, props);
 		return calendar.findByTypeInTimeRange('VEVENT', new Date(Date.UTC(2018, 9, 1, 0, 0, 0, 0)), new Date(Date.UTC(2018, 9, 31, 0, 0, 0, 0))).then((res) => {
 			expect(res.length).toEqual(1);
-			expect(res[0]).toEqual(jasmine.any(VObject));
+			expect(res[0]).toEqual(expect.any(VObject));
 			expect(res[0].url).toEqual('/foo/bar/folder/b');
 
 			expect(request.report).toHaveBeenCalledTimes(1);
@@ -223,62 +347,91 @@ END:VCALENDAR
 				'<x0:calendar-query xmlns:x0="urn:ietf:params:xml:ns:caldav"><x1:prop xmlns:x1="DAV:"><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x1:displayname/><x1:owner/><x1:resourcetype/><x1:sync-token/><x1:current-user-privilege-set/><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x0:calendar-data/></x1:prop><x0:filter><x0:comp-filter name="VCALENDAR"><x0:comp-filter name="VEVENT"><x0:time-range start="20181001T000000Z" end="20181031T000000Z"/></x0:comp-filter></x0:comp-filter></x0:filter></x0:calendar-query>');
 		}).catch((e) => {
 			console.log(e);
-			fail('Calendar findByTypeInTimeRange was not supposed to fail');
+			assert.fail('Calendar findByTypeInTimeRange was not supposed to assert.fail');
 		});
 	});
 	it('should create a VObject', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete' , 'pathname']);
+		const parent = {
+            'findAll': vi.fn(),
+            'findAllByFilter': vi.fn(),
+            'find': vi.fn(),
+            'createCollection': vi.fn(),
+            'createObject': vi.fn(),
+            'update': vi.fn(),
+            'delete': vi.fn(),
+            'isReadable': vi.fn(),
+            'isWriteable': vi.fn()
+        };
+		const request = {
+            'propFind': vi.fn(),
+            'put': vi.fn(),
+            'delete': vi.fn(),
+            'pathname': vi.fn()
+        };
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
-		request.put.and.callFake(() => {
+		request.put.mockImplementation(() => {
 			return Promise.resolve({
 				status: 204,
 				body: null,
 				xhr: null,
 			})
 		});
-		request.propFind.and.callFake(() => {
+		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: getVEventProps(),
 				xhr: null
 			});
 		});
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		const calendar = new Calendar(parent, request, url, props);
 		return calendar.createVObject('DATA123').then((res) => {
-			expect(res).toEqual(jasmine.any(VObject));
-			expect(res.url).toEqual(jasmine.any(String));
+			expect(res).toEqual(expect.any(VObject));
+			expect(res.url).toEqual(expect.any(String));
 			expect(res.url.startsWith('/foo/bar/folder/')).toEqual(true);
 			expect(res.url.endsWith('.ics')).toEqual(true);
 			expect(res.etag).toEqual('"ce6062093e9d738a970c6242820fab7f"');
 
 			expect(request.put).toHaveBeenCalledTimes(1);
-			expect(request.put).toHaveBeenCalledWith(jasmine.any(String), { 'Content-Type': 'text/calendar; charset=utf-8' }, 'DATA123');
+			expect(request.put).toHaveBeenCalledWith(expect.any(String), { 'Content-Type': 'text/calendar; charset=utf-8' }, 'DATA123');
 			expect(request.propFind).toHaveBeenCalledTimes(1);
-			expect(request.propFind).toHaveBeenCalledWith(jasmine.any(String), [
+			expect(request.propFind).toHaveBeenCalledWith(expect.any(String), [
 				['DAV:', 'getcontenttype'], ['DAV:', 'getetag'], ['DAV:', 'resourcetype'],
 				['DAV:', 'displayname'], ['DAV:', 'owner'], ['DAV:', 'resourcetype'],
 				['DAV:', 'sync-token'], ['DAV:', 'current-user-privilege-set'],
 				['DAV:', 'getcontenttype'], ['DAV:', 'getetag'], ['DAV:', 'resourcetype'],
 				['urn:ietf:params:xml:ns:caldav', 'calendar-data']], 0);
 		}).catch(() => {
-			fail('DavCollection update was not supposed to fail');
+			assert.fail('DavCollection update was not supposed to assert.fail');
 		});
 	});
 
 	it('should provide a calendar-query', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'report', 'pathname']);
+		const parent = {
+            'findAll': vi.fn(),
+            'findAllByFilter': vi.fn(),
+            'find': vi.fn(),
+            'createCollection': vi.fn(),
+            'createObject': vi.fn(),
+            'update': vi.fn(),
+            'delete': vi.fn(),
+            'isReadable': vi.fn(),
+            'isWriteable': vi.fn()
+        };
+		const request = {
+            'propFind': vi.fn(),
+            'put': vi.fn(),
+            'delete': vi.fn(),
+            'report': vi.fn(),
+            'pathname': vi.fn()
+        };
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
-		request.report.and.callFake(() => {
+		request.report.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: {
@@ -288,7 +441,7 @@ END:VCALENDAR
 			});
 		});
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		// Example from https://tools.ietf.org/html/rfc4791#section-7.8.7
 		const calendar = new Calendar(parent, request, url, props);
@@ -330,25 +483,40 @@ END:VCALENDAR
 			}]
 		}]).then((res) => {
 			expect(res.length).toEqual(1);
-			expect(res[0]).toEqual(jasmine.any(VObject));
+			expect(res[0]).toEqual(expect.any(VObject));
 			expect(res[0].url).toEqual('/foo/bar/folder/a');
 
 			expect(request.report).toHaveBeenCalledTimes(1);
 			expect(request.report).toHaveBeenCalledWith('/foo/bar/folder/', { Depth: '1' },
 				'<x0:calendar-query xmlns:x0="urn:ietf:params:xml:ns:caldav"><x1:prop xmlns:x1="DAV:"><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x1:displayname/><x1:owner/><x1:resourcetype/><x1:sync-token/><x1:current-user-privilege-set/><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x0:calendar-data/></x1:prop><x0:filter><x0:comp-filter name="VCALENDAR"><x0:comp-filter name="VEVENT"><x0:prop-filter name="ATTENDEE"><x0:text-match collation="i;ascii-casemap">mailto:lisa@example.com</x0:text-match><x0:param-filter name="PARTSTAT"><x0:text-match collation="i;ascii-casemap">NEEDS-ACTION</x0:text-match></x0:param-filter></x0:prop-filter></x0:comp-filter></x0:comp-filter></x0:filter></x0:calendar-query>');
 		}).catch(() => {
-			fail('Calendar calendarQuery was not supposed to fail');
+			assert.fail('Calendar calendarQuery was not supposed to assert.fail');
 		});
 	});
 
 	it('should provide a calendar-multiget', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'report', 'pathname']);
+		const parent = {
+            'findAll': vi.fn(),
+            'findAllByFilter': vi.fn(),
+            'find': vi.fn(),
+            'createCollection': vi.fn(),
+            'createObject': vi.fn(),
+            'update': vi.fn(),
+            'delete': vi.fn(),
+            'isReadable': vi.fn(),
+            'isWriteable': vi.fn()
+        };
+		const request = {
+            'propFind': vi.fn(),
+            'put': vi.fn(),
+            'delete': vi.fn(),
+            'report': vi.fn(),
+            'pathname': vi.fn()
+        };
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
-		request.report.and.callFake(() => {
+		request.report.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: {
@@ -359,27 +527,25 @@ END:VCALENDAR
 			});
 		});
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		const calendar = new Calendar(parent, request, url, props);
 		return calendar.calendarMultiget(['/foo/bar/folder/a', '/foo/bar/folder/b']).then((res) => {
 			expect(res.length).toEqual(2);
-			expect(res[0]).toEqual(jasmine.any(VObject));
+			expect(res[0]).toEqual(expect.any(VObject));
 			expect(res[0].url).toEqual('/foo/bar/folder/a');
-			expect(res[1]).toEqual(jasmine.any(VObject));
+			expect(res[1]).toEqual(expect.any(VObject));
 			expect(res[1].url).toEqual('/foo/bar/folder/b');
 
 			expect(request.report).toHaveBeenCalledTimes(1);
 			expect(request.report).toHaveBeenCalledWith('/foo/bar/folder/', { Depth: '1' },
 				'<x0:calendar-multiget xmlns:x0="urn:ietf:params:xml:ns:caldav"><x1:prop xmlns:x1="DAV:"><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x1:displayname/><x1:owner/><x1:resourcetype/><x1:sync-token/><x1:current-user-privilege-set/><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x0:calendar-data/></x1:prop><x1:href xmlns:x1="DAV:">/foo/bar/folder/a</x1:href><x1:href xmlns:x1="DAV:">/foo/bar/folder/b</x1:href></x0:calendar-multiget>');
 		}).catch(() => {
-			fail('Calendar calendar-multiget was not supposed to fail');
+			assert.fail('Calendar calendar-multiget was not supposed to assert.fail');
 		});
 	});
 
-	it('should provide a freeBusyQuery', () => {
-		pending('to be implemented ...');
-	});
+	it.todo('should provide a freeBusyQuery')
 
 });
 
