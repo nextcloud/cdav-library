@@ -26,10 +26,10 @@ describe('Calendar home model', () => {
 	it('should inherit from DavCollection', () => {
 		const parent = null;
 		const request = {
-            "propFind": vi.fn(),
-            "put": vi.fn(),
-            "delete": vi.fn()
-        };
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		const calendarHome = new CalendarHome(parent, request, url, {});
@@ -39,11 +39,11 @@ describe('Calendar home model', () => {
 	it('should find all CalDAV specific collections', () => {
 		const parent = null;
 		const request = {
-            "propFind": vi.fn(),
-            "put": vi.fn(),
-            "delete": vi.fn(),
-            "pathname": vi.fn()
-        };
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockImplementation(() => {
@@ -83,11 +83,11 @@ describe('Calendar home model', () => {
 	it('should find all calendars', () => {
 		const parent = null;
 		const request = {
-            "propFind": vi.fn(),
-            "put": vi.fn(),
-            "delete": vi.fn(),
-            "pathname": vi.fn()
-        };
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockImplementation(() => {
@@ -120,11 +120,11 @@ describe('Calendar home model', () => {
 	it('should find all subscriptions', () => {
 		const parent = null;
 		const request = {
-            "propFind": vi.fn(),
-            "put": vi.fn(),
-            "delete": vi.fn(),
-            "pathname": vi.fn()
-        };
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockImplementation(() => {
@@ -155,11 +155,11 @@ describe('Calendar home model', () => {
 	it('should find all schedule inboxes', () => {
 		const parent = null;
 		const request = {
-            "propFind": vi.fn(),
-            "put": vi.fn(),
-            "delete": vi.fn(),
-            "pathname": vi.fn()
-        };
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockImplementation(() => {
@@ -190,11 +190,11 @@ describe('Calendar home model', () => {
 	it('should find all schedule outboxes', () => {
 		const parent = null;
 		const request = {
-            "propFind": vi.fn(),
-            "put": vi.fn(),
-            "delete": vi.fn(),
-            "pathname": vi.fn()
-        };
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockImplementation(() => {
@@ -225,12 +225,12 @@ describe('Calendar home model', () => {
 	it('should create a calendar collection', () => {
 		const parent = null;
 		const request = {
-            "propFind": vi.fn(),
-            "put": vi.fn(),
-            "delete": vi.fn(),
-            "pathname": vi.fn(),
-            "mkCol": vi.fn()
-        };
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn(),
+			"mkCol": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockReturnValueOnce(Promise.resolve({
@@ -285,12 +285,12 @@ describe('Calendar home model', () => {
 	it('should create a calendar collection with additional parameters', () => {
 		const parent = null;
 		const request = {
-            "propFind": vi.fn(),
-            "put": vi.fn(),
-            "delete": vi.fn(),
-            "pathname": vi.fn(),
-            "mkCol": vi.fn()
-        };
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn(),
+			"mkCol": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockReturnValueOnce(Promise.resolve({
@@ -345,12 +345,12 @@ describe('Calendar home model', () => {
 	it('should create a calendar collection with additional parameters and timezone', () => {
 		const parent = null;
 		const request = {
-            "propFind": vi.fn(),
-            "put": vi.fn(),
-            "delete": vi.fn(),
-            "pathname": vi.fn(),
-            "mkCol": vi.fn()
-        };
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn(),
+			"mkCol": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockReturnValueOnce(Promise.resolve({
@@ -406,12 +406,12 @@ describe('Calendar home model', () => {
 	it('should create a subscribed collection', () => {
 		const parent = null;
 		const request = {
-            "propFind": vi.fn(),
-            "put": vi.fn(),
-            "delete": vi.fn(),
-            "pathname": vi.fn(),
-            "mkCol": vi.fn()
-        };
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn(),
+			"mkCol": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockReturnValueOnce(Promise.resolve({
@@ -466,12 +466,12 @@ describe('Calendar home model', () => {
 	it('should create a subscribed collection with additional parameters', () => {
 		const parent = null;
 		const request = {
-            "propFind": vi.fn(),
-            "put": vi.fn(),
-            "delete": vi.fn(),
-            "pathname": vi.fn(),
-            "mkCol": vi.fn()
-        };
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn(),
+			"mkCol": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockReturnValueOnce(Promise.resolve({
@@ -528,8 +528,8 @@ describe('Calendar home model', () => {
 	it('should allow to enable the birthday-calendar', () => {
 		const parent = null;
 		const request = {
-            "post": vi.fn()
-        };
+			"post": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.post.mockReturnValue(Promise.resolve({

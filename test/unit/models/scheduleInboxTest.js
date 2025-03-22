@@ -16,21 +16,21 @@ describe('Schedule inbox model', () => {
 
 	it('should inherit from Calendar', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{urn:ietf:params:xml:ns:caldav}calendar-availability': 'VAVAILABILITY123'
@@ -42,21 +42,21 @@ describe('Schedule inbox model', () => {
 
 	it('should inherit expose the property calendar-availability', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{urn:ietf:params:xml:ns:caldav}calendar-availability': 'VAVAILABILITY123'

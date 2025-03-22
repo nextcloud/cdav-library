@@ -23,21 +23,21 @@ describe('Address book model', () => {
 
 	it('should inherit from DavCollection / shareable ', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -49,21 +49,21 @@ describe('Address book model', () => {
 
 	it('should inherit expose the property description', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -73,21 +73,21 @@ describe('Address book model', () => {
 
 	it('should inherit expose the property enabled', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -97,21 +97,21 @@ describe('Address book model', () => {
 
 	it('should inherit expose the property read-only', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -121,22 +121,22 @@ describe('Address book model', () => {
 
 	it('should find all VCards', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn(),
-            'pathname': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -181,23 +181,23 @@ describe('Address book model', () => {
 
 	it('should find all VCards and request only a set of VCard properties', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn(),
-            'report': vi.fn(),
-            'pathname': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'report': vi.fn(),
+			'pathname': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -229,22 +229,22 @@ describe('Address book model', () => {
 
 	it('should create a new VCard', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn(),
-            'pathname': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -288,23 +288,23 @@ describe('Address book model', () => {
 
 	it('should send an addressbook-query', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn(),
-            'report': vi.fn(),
-            'pathname': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'report': vi.fn(),
+			'pathname': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -363,23 +363,23 @@ describe('Address book model', () => {
 
 	it('should send an addressbook-multiget', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn(),
-            'report': vi.fn(),
-            'pathname': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'report': vi.fn(),
+			'pathname': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -414,23 +414,23 @@ describe('Address book model', () => {
 
 	it('should send an addressbook-multiget and request export of data', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn(),
-            'report': vi.fn(),
-            'pathname': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'report': vi.fn(),
+			'pathname': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 

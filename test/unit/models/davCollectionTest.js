@@ -22,21 +22,21 @@ describe('Dav collection model', () => {
 
 	it('should inherit from DAVEventListener', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -56,22 +56,22 @@ describe('Dav collection model', () => {
 
 	it('should find all children', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn(),
-            'pathname': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -183,22 +183,22 @@ describe('Dav collection model', () => {
 
 	it('should find all children and allow to provide a custom filter', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn(),
-            'pathname': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -306,22 +306,22 @@ describe('Dav collection model', () => {
 
 	it('should find one child by it\'s uri', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn(),
-            'pathname': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -366,23 +366,23 @@ describe('Dav collection model', () => {
 
 	it('should create a collection', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn(),
-            'mkCol': vi.fn(),
-            'pathname': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'mkCol': vi.fn(),
+			'pathname': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -417,53 +417,53 @@ describe('Dav collection model', () => {
 		collection._registerObjectFactory('text/foo2', objectFactory2);
 
 		request.propFind.mockReturnValueOnce(Promise.resolve({
-            status: 207,
-            body: {
-                '/foo/bar/folder': {
-                    '{DAV:}displayname': 'Foo Bar Bla Blub',
-                    '{DAV:}owner': 'https://foo/bar/',
-                    '{DAV:}resourcetype': ['{DAV:}collection'],
-                    '{DAV:}sync-token': 'https://foo/bar/token/3',
-                },
-                '/foo/bar/folder/a': {
-                    '{DAV:}owner': 'https://foo/bar/',
-                    '{DAV:}resourcetype': [],
-                    '{DAV:}sync-token': 'https://foo/bar/token/3',
-                    '{DAV:}getcontenttype': 'text/foo1; charset=utf8'
-                },
-                '/foo/bar/folder/b': {
-                    '{DAV:}owner': 'https://foo/bar/',
-                    '{DAV:}resourcetype': [],
-                    '{DAV:}sync-token': 'https://foo/bar/token/3',
-                    '{DAV:}getcontenttype': 'text/foo2'
-                },
-                '/foo/bar/folder/c': {
-                    '{DAV:}owner': 'https://foo/bar/',
-                    '{DAV:}resourcetype': [],
-                    '{DAV:}sync-token': 'https://foo/bar/token/3',
-                    '{DAV:}getcontenttype': 'text/file'
-                },
-                '/foo/bar/folder/d/': {
-                    '{DAV:}displayname': 'Foo Bar Bla Blub col0',
-                    '{DAV:}owner': 'https://foo/bar/',
-                    '{DAV:}resourcetype': ['{DAV:}collection'],
-                    '{DAV:}sync-token': 'https://foo/bar/token/3',
-                },
-                '/foo/bar/folder/e/': {
-                    '{DAV:}displayname': 'Foo Bar Bla Blub col1',
-                    '{DAV:}owner': 'https://foo/bar/',
-                    '{DAV:}resourcetype': ['{DAV:}collection', '{test}collection1'],
-                    '{DAV:}sync-token': 'https://foo/bar/token/3',
-                },
-                '/foo/bar/folder/f/': {
-                    '{DAV:}displayname': 'Foo Bar Bla Blub col2',
-                    '{DAV:}owner': 'https://foo/bar/',
-                    '{DAV:}resourcetype': ['{DAV:}collection', '{test}collection2'],
-                    '{DAV:}sync-token': 'https://foo/bar/token/3',
-                },
-            },
-            xhr: null
-        })).mockReturnValueOnce(Promise.resolve({
+			status: 207,
+			body: {
+				'/foo/bar/folder': {
+					'{DAV:}displayname': 'Foo Bar Bla Blub',
+					'{DAV:}owner': 'https://foo/bar/',
+					'{DAV:}resourcetype': ['{DAV:}collection'],
+					'{DAV:}sync-token': 'https://foo/bar/token/3',
+				},
+				'/foo/bar/folder/a': {
+					'{DAV:}owner': 'https://foo/bar/',
+					'{DAV:}resourcetype': [],
+					'{DAV:}sync-token': 'https://foo/bar/token/3',
+					'{DAV:}getcontenttype': 'text/foo1; charset=utf8'
+				},
+				'/foo/bar/folder/b': {
+					'{DAV:}owner': 'https://foo/bar/',
+					'{DAV:}resourcetype': [],
+					'{DAV:}sync-token': 'https://foo/bar/token/3',
+					'{DAV:}getcontenttype': 'text/foo2'
+				},
+				'/foo/bar/folder/c': {
+					'{DAV:}owner': 'https://foo/bar/',
+					'{DAV:}resourcetype': [],
+					'{DAV:}sync-token': 'https://foo/bar/token/3',
+					'{DAV:}getcontenttype': 'text/file'
+				},
+				'/foo/bar/folder/d/': {
+					'{DAV:}displayname': 'Foo Bar Bla Blub col0',
+					'{DAV:}owner': 'https://foo/bar/',
+					'{DAV:}resourcetype': ['{DAV:}collection'],
+					'{DAV:}sync-token': 'https://foo/bar/token/3',
+				},
+				'/foo/bar/folder/e/': {
+					'{DAV:}displayname': 'Foo Bar Bla Blub col1',
+					'{DAV:}owner': 'https://foo/bar/',
+					'{DAV:}resourcetype': ['{DAV:}collection', '{test}collection1'],
+					'{DAV:}sync-token': 'https://foo/bar/token/3',
+				},
+				'/foo/bar/folder/f/': {
+					'{DAV:}displayname': 'Foo Bar Bla Blub col2',
+					'{DAV:}owner': 'https://foo/bar/',
+					'{DAV:}resourcetype': ['{DAV:}collection', '{test}collection2'],
+					'{DAV:}sync-token': 'https://foo/bar/token/3',
+				},
+			},
+			xhr: null
+		})).mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: {
 					'{DAV:}displayname': 'Foo Bar Bla Blub col0',
@@ -515,22 +515,22 @@ describe('Dav collection model', () => {
 
 	it('should create an object', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn(),
-            'pathname': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -586,22 +586,22 @@ describe('Dav collection model', () => {
 
 	it('should update the collection', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn(),
-            'propPatch': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'propPatch': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -662,22 +662,22 @@ describe('Dav collection model', () => {
 
 	it('should update the collection only if properties changed', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn(),
-            'propPatch': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'propPatch': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -734,21 +734,21 @@ describe('Dav collection model', () => {
 
 	it('should delete a collection', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -773,21 +773,21 @@ describe('Dav collection model', () => {
 
 	it('should provide a function to check if collection is readable', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -806,21 +806,21 @@ describe('Dav collection model', () => {
 
 	it('should provide a function to check if collection is writeable - writeable', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -840,21 +840,21 @@ describe('Dav collection model', () => {
 
 	it('should provide a function to check if collection is writeable - not writeable', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -873,21 +873,21 @@ describe('Dav collection model', () => {
 
 	it('should expose the property displayname', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -907,21 +907,21 @@ describe('Dav collection model', () => {
 
 	it('should expose the property owner', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -941,21 +941,21 @@ describe('Dav collection model', () => {
 
 	it('should expose the property resource-type', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -975,21 +975,21 @@ describe('Dav collection model', () => {
 
 	it('should expose the property sync-token', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -1009,21 +1009,21 @@ describe('Dav collection model', () => {
 
 	it('should expose the property current-user-privilege-set', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -1047,21 +1047,21 @@ describe('Dav collection model', () => {
 
 	it('should expose the property url', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -1081,10 +1081,10 @@ describe('Dav collection model', () => {
 
 	it('should check whether two collections are of the same type', () => {
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 
 		const collection1 = new DavCollection(null, request, 'a', {
 			'{DAV:}displayname': 'Foo Bar Bla Blub col1',
@@ -1124,22 +1124,22 @@ describe('Dav collection model', () => {
 
 	it('should provide an _updatePropsFromServer method', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn(),
-            'pathname': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',

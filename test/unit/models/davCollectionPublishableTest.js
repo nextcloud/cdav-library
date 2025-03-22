@@ -21,8 +21,8 @@ describe('Publishable dav collection model', () => {
 	it('should extend the base class and expose a publishURL property', () => {
 		function Foo() {}
 		Foo.prototype._request = {
-            'post': vi.fn()
-        };
+			'post': vi.fn()
+		};
 		Foo.prototype._exposeProperty = vi.fn();
 
 		const share = new (davCollectionPublishable(Foo))();
@@ -35,8 +35,8 @@ describe('Publishable dav collection model', () => {
 	it('should provide a publish method', () => {
 		function Foo() {}
 		Foo.prototype._request = {
-            'post': vi.fn()
-        };
+			'post': vi.fn()
+		};
 		Foo.prototype._exposeProperty = vi.fn();
 		Foo.prototype._updatePropsFromServer = vi.fn();
 		Foo.prototype._url = '/foo';
@@ -58,8 +58,8 @@ describe('Publishable dav collection model', () => {
 	it('should provide a unpublish method', () => {
 		function Foo() {}
 		Foo.prototype._request = {
-            'post': vi.fn()
-        };
+			'post': vi.fn()
+		};
 		Foo.prototype._exposeProperty = vi.fn();
 		Foo.prototype._url = '/foo';
 		Foo.prototype._props = [];
@@ -82,8 +82,8 @@ describe('Publishable dav collection model', () => {
 	it('should provide a getPropFindList method', () => {
 		function Foo() {}
 		Foo.prototype._request = {
-            'post': vi.fn()
-        };
+			'post': vi.fn()
+		};
 		Foo.prototype._exposeProperty = vi.fn();
 		Foo.prototype._url = '/foo';
 		Foo.getPropFindList = () => {

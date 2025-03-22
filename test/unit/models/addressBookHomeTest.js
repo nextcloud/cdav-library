@@ -23,11 +23,11 @@ describe('Address book home model', () => {
 	it('should inherit from DavCollection', () => {
 		const parent = null;
 		const request = {
-            "propFind": vi.fn(),
-            "put": vi.fn(),
-            "delete": vi.fn(),
-            "pathname": vi.fn()
-        };
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/addressbooks/users/admin/';
 
 		const addressBookHome = new AddressBookHome(parent, request, url, {});
@@ -37,11 +37,11 @@ describe('Address book home model', () => {
 	it('should find all address-books', () => {
 		const parent = null;
 		const request = {
-            "propFind": vi.fn(),
-            "put": vi.fn(),
-            "delete": vi.fn(),
-            "pathname": vi.fn()
-        };
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/addressbooks/users/admin/';
 
 		request.propFind.mockImplementation(() => {
@@ -70,12 +70,12 @@ describe('Address book home model', () => {
 	it('should create a new address-book collection', () => {
 		const parent = null;
 		const request = {
-            "propFind": vi.fn(),
-            "put": vi.fn(),
-            "delete": vi.fn(),
-            "pathname": vi.fn(),
-            "mkCol": vi.fn()
-        };
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn(),
+			"mkCol": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/addressbooks/users/admin/';
 
 		request.propFind.mockReturnValueOnce(Promise.resolve({

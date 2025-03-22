@@ -16,21 +16,21 @@ describe('Schedule outbox model', () => {
 
 	it('should inherit from DavCollection', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {}
 
@@ -40,22 +40,22 @@ describe('Schedule outbox model', () => {
 
 	it('should provide a method to gather free/busy data', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn(),
-            'post': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'post': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {}
 

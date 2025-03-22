@@ -16,21 +16,21 @@ describe('VCard model', () => {
 
 	it('should inherit from DavObject', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -45,21 +45,21 @@ describe('VCard model', () => {
 
 	it('should expose the address-data as a property', () => {
 		const parent = {
-            'findAll': vi.fn(),
-            'findAllByFilter': vi.fn(),
-            'find': vi.fn(),
-            'createCollection': vi.fn(),
-            'createObject': vi.fn(),
-            'update': vi.fn(),
-            'delete': vi.fn(),
-            'isReadable': vi.fn(),
-            'isWriteable': vi.fn()
-        };
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		const request = {
-            'propFind': vi.fn(),
-            'put': vi.fn(),
-            'delete': vi.fn()
-        };
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',

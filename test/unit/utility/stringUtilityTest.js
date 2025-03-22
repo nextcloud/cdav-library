@@ -12,30 +12,30 @@ import { describe, expect, it, vi } from "vitest";
 import * as StringUtility from '../../../src/utility/stringUtility.js';
 
 describe('StringUtility', () => {
-    it('should return a unique identifier', function () {
-        const uid = StringUtility.uid();
+	it('should return a unique identifier', function () {
+		const uid = StringUtility.uid();
 
-        expect(uid).toEqual(expect.any(String));
-        expect(uid).toEqual(uid.toUpperCase());
-    });
+		expect(uid).toEqual(expect.any(String));
+		expect(uid).toEqual(uid.toUpperCase());
+	});
 
-    it('should return a unique identifier with a prefix and/or a suffix', function () {
-        const uid1 = StringUtility.uid('foobar');
+	it('should return a unique identifier with a prefix and/or a suffix', function () {
+		const uid1 = StringUtility.uid('foobar');
 
-        expect(uid1).toEqual(expect.any(String));
-        expect(uid1.startsWith('foobar-')).toEqual(true);
+		expect(uid1).toEqual(expect.any(String));
+		expect(uid1.startsWith('foobar-')).toEqual(true);
 
-        const uid2 = StringUtility.uid(null, 'ics');
+		const uid2 = StringUtility.uid(null, 'ics');
 
-        expect(uid2).toEqual(expect.any(String));
-        expect(uid2.endsWith('.ics')).toEqual(true);
+		expect(uid2).toEqual(expect.any(String));
+		expect(uid2.endsWith('.ics')).toEqual(true);
 
-        const uid3 = StringUtility.uid('foobar', 'ics');
+		const uid3 = StringUtility.uid('foobar', 'ics');
 
-        expect(uid3).toEqual(expect.any(String));
-        expect(uid3.startsWith('foobar-')).toEqual(true);
-        expect(uid3.endsWith('.ics')).toEqual(true);
-    });
+		expect(uid3).toEqual(expect.any(String));
+		expect(uid3.startsWith('foobar-')).toEqual(true);
+		expect(uid3.endsWith('.ics')).toEqual(true);
+	});
 
 	it('should return the uri if it\'s available', function() {
 		const isAvailable = vi.fn(() => true);
