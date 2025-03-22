@@ -7,6 +7,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { describe, expect, it } from "vitest";
+
 import calendarPropSet from "../../../src/propset/calendarPropSet.js";
 
 describe('Calendar prop-set', () => {

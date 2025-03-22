@@ -7,7 +7,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {CalendarHome} from "../../../src/models/calendarHome.js";
+import { assert, beforeEach, describe, expect, it, vi } from "vitest";
+
+import { CalendarHome } from "../../../src/models/calendarHome.js";
 import {DavCollection} from "../../../src/models/davCollection.js";
 import {Calendar} from "../../../src/models/calendar.js";
 import ScheduleInbox from "../../../src/models/scheduleInbox.js";
@@ -23,19 +25,28 @@ describe('Calendar home model', () => {
 
 	it('should inherit from DavCollection', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const request = {
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		const calendarHome = new CalendarHome(parent, request, url, {});
-		expect(calendarHome).toEqual(jasmine.any(DavCollection));
+		expect(calendarHome).toEqual(expect.any(DavCollection));
 	});
 
 	it('should find all CalDAV specific collections', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const request = {
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
-		request.propFind.and.callFake(() => {
+		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: getDefaultPropFind(),
@@ -43,38 +54,43 @@ describe('Calendar home model', () => {
 			});
 		});
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		const calendarHome = new CalendarHome(parent, request, url, {});
 		return calendarHome.findAllCalDAVCollections().then(res => {
 			expect(res.length).toEqual(5);
-			expect(res[0]).toEqual(jasmine.any(Calendar));
+			expect(res[0]).toEqual(expect.any(Calendar));
 			expect(res[0].url).toEqual('/nextcloud/remote.php/dav/calendars/admin/personal/');
-			expect(res[1]).toEqual(jasmine.any(Calendar));
+			expect(res[1]).toEqual(expect.any(Calendar));
 			expect(res[1].url).toEqual('/nextcloud/remote.php/dav/calendars/admin/contact_birthdays/');
-			expect(res[2]).toEqual(jasmine.any(ScheduleInbox));
+			expect(res[2]).toEqual(expect.any(ScheduleInbox));
 			expect(res[2].url).toEqual('/nextcloud/remote.php/dav/calendars/admin/inbox/');
-			expect(res[3]).toEqual(jasmine.any(ScheduleOutbox));
+			expect(res[3]).toEqual(expect.any(ScheduleOutbox));
 			expect(res[3].url).toEqual('/nextcloud/remote.php/dav/calendars/admin/outbox/');
-			expect(res[4]).toEqual(jasmine.any(Subscription));
+			expect(res[4]).toEqual(expect.any(Subscription));
 			expect(res[4].url).toEqual('/nextcloud/remote.php/dav/calendars/admin/subscribed-calendar/');
 
 			expect(request.propFind).toHaveBeenCalledTimes(1);
 			expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/',
-				jasmine.any(Array), 1);
+				expect.any(Array), 1);
 
 		}).catch((e) => {
 			console.log(e);
-			fail('CalendarHome findAllCalDAVCollections was not supposed to fail');
+			assert.fail('CalendarHome findAllCalDAVCollections was not supposed to assert.fail');
 		});
 	});
 
 	it('should find all calendars', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const request = {
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
-		request.propFind.and.callFake(() => {
+		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: getDefaultPropFind(),
@@ -82,31 +98,36 @@ describe('Calendar home model', () => {
 			});
 		});
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		const calendarHome = new CalendarHome(parent, request, url, {});
 		return calendarHome.findAllCalendars().then(res => {
 			expect(res.length).toEqual(2);
-			expect(res[0]).toEqual(jasmine.any(Calendar));
+			expect(res[0]).toEqual(expect.any(Calendar));
 			expect(res[0].url).toEqual('/nextcloud/remote.php/dav/calendars/admin/personal/');
-			expect(res[1]).toEqual(jasmine.any(Calendar));
+			expect(res[1]).toEqual(expect.any(Calendar));
 			expect(res[1].url).toEqual('/nextcloud/remote.php/dav/calendars/admin/contact_birthdays/');
 
 			expect(request.propFind).toHaveBeenCalledTimes(1);
 			expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/',
-				jasmine.any(Array), 1);
+				expect.any(Array), 1);
 
 		}).catch(() => {
-			fail('CalendarHome findAllCalendars was not supposed to fail');
+			assert.fail('CalendarHome findAllCalendars was not supposed to assert.fail');
 		});
 	});
 
 	it('should find all subscriptions', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const request = {
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
-		request.propFind.and.callFake(() => {
+		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: getDefaultPropFind(),
@@ -114,29 +135,34 @@ describe('Calendar home model', () => {
 			});
 		});
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		const calendarHome = new CalendarHome(parent, request, url, {});
 		return calendarHome.findAllSubscriptions().then(res => {
 			expect(res.length).toEqual(1);
-			expect(res[0]).toEqual(jasmine.any(Subscription));
+			expect(res[0]).toEqual(expect.any(Subscription));
 			expect(res[0].url).toEqual('/nextcloud/remote.php/dav/calendars/admin/subscribed-calendar/');
 
 			expect(request.propFind).toHaveBeenCalledTimes(1);
 			expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/',
-				jasmine.any(Array), 1);
+				expect.any(Array), 1);
 
 		}).catch(() => {
-			fail('CalendarHome findAllSubscriptions was not supposed to fail');
+			assert.fail('CalendarHome findAllSubscriptions was not supposed to assert.fail');
 		});
 	});
 
 	it('should find all schedule inboxes', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const request = {
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
-		request.propFind.and.callFake(() => {
+		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: getDefaultPropFind(),
@@ -144,29 +170,34 @@ describe('Calendar home model', () => {
 			});
 		});
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		const calendarHome = new CalendarHome(parent, request, url, {});
 		return calendarHome.findAllScheduleInboxes().then(res => {
 			expect(res.length).toEqual(1);
-			expect(res[0]).toEqual(jasmine.any(ScheduleInbox));
+			expect(res[0]).toEqual(expect.any(ScheduleInbox));
 			expect(res[0].url).toEqual('/nextcloud/remote.php/dav/calendars/admin/inbox/');
 
 			expect(request.propFind).toHaveBeenCalledTimes(1);
 			expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/',
-				jasmine.any(Array), 1);
+				expect.any(Array), 1);
 
 		}).catch(() => {
-			fail('CalendarHome findAllScheduleInboxes was not supposed to fail');
+			assert.fail('CalendarHome findAllScheduleInboxes was not supposed to assert.fail');
 		});
 	});
 
 	it('should find all schedule outboxes', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const request = {
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
-		request.propFind.and.callFake(() => {
+		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: getDefaultPropFind(),
@@ -174,33 +205,39 @@ describe('Calendar home model', () => {
 			});
 		});
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		const calendarHome = new CalendarHome(parent, request, url, {});
 		return calendarHome.findAllScheduleOutboxes().then(res => {
 			expect(res.length).toEqual(1);
-			expect(res[0]).toEqual(jasmine.any(ScheduleOutbox));
+			expect(res[0]).toEqual(expect.any(ScheduleOutbox));
 			expect(res[0].url).toEqual('/nextcloud/remote.php/dav/calendars/admin/outbox/');
 
 			expect(request.propFind).toHaveBeenCalledTimes(1);
 			expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/',
-				jasmine.any(Array), 1);
+				expect.any(Array), 1);
 
 		}).catch(() => {
-			fail('CalendarHome findAllScheduleOutboxes was not supposed to fail');
+			assert.fail('CalendarHome findAllScheduleOutboxes was not supposed to assert.fail');
 		});
 	});
 
 	it('should create a calendar collection', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname', 'mkCol']);
+		const request = {
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn(),
+			"mkCol": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
-		request.propFind.and.returnValues(Promise.resolve({
+		request.propFind.mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: getDefaultPropFind(),
 				xhr: null
-			}), Promise.resolve({
+			})).mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: {
 					"{DAV:}resourcetype" : [
@@ -212,10 +249,9 @@ describe('Calendar home model', () => {
 					"{DAV:}sync-token" : "http://sabre.io/ns/sync/19",
 				},
 				xhr: null
-			})
-		);
+			}));
 
-		request.mkCol.and.callFake(() => {
+		request.mkCol.mockImplementation(() => {
 			return Promise.resolve({
 				status: 201,
 				body: null,
@@ -223,39 +259,45 @@ describe('Calendar home model', () => {
 			})
 		});
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		const calendarHome = new CalendarHome(parent, request, url, {});
 		return calendarHome.findAllScheduleOutboxes().then(() => {
 			return calendarHome.createCalendarCollection('inbox', '#FFFFFF').then((res) => {
-				expect(res).toEqual(jasmine.any(Calendar));
+				expect(res).toEqual(expect.any(Calendar));
 				expect(res.url).toEqual('/nextcloud/remote.php/dav/calendars/admin/inbox-1/');
 
 				expect(request.propFind).toHaveBeenCalledTimes(2);
-				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/', jasmine.any(Array), 1);
-				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/inbox-1/', jasmine.any(Array), 0);
+				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/', expect.any(Array), 1);
+				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/inbox-1/', expect.any(Array), 0);
 
 				expect(request.mkCol).toHaveBeenCalledTimes(1);
 				expect(request.mkCol).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/inbox-1', {},
 					'<x0:mkcol xmlns:x0="DAV:"><x0:set><x0:prop><x0:resourcetype><x0:collection/><x1:calendar xmlns:x1="urn:ietf:params:xml:ns:caldav"/></x0:resourcetype><x0:displayname>inbox</x0:displayname><x2:calendar-color xmlns:x2="http://apple.com/ns/ical/">#FFFFFF</x2:calendar-color><x3:calendar-enabled xmlns:x3="http://owncloud.org/ns">1</x3:calendar-enabled></x0:prop></x0:set></x0:mkcol>');
 			}).catch(() => {
-				fail('CalendarHome createCalendarCollection was not supposed to fail');
+				assert.fail('CalendarHome createCalendarCollection was not supposed to assert.fail');
 			});
 		}).catch(() => {
-			fail('CalendarHome createCalendarCollection was not supposed to fail');
+			assert.fail('CalendarHome createCalendarCollection was not supposed to assert.fail');
 		});
 	});
 
 	it('should create a calendar collection with additional parameters', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname', 'mkCol']);
+		const request = {
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn(),
+			"mkCol": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
-		request.propFind.and.returnValues(Promise.resolve({
+		request.propFind.mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: getDefaultPropFind(),
 				xhr: null
-			}), Promise.resolve({
+			})).mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: {
 					"{DAV:}resourcetype" : [
@@ -267,10 +309,9 @@ describe('Calendar home model', () => {
 					"{DAV:}sync-token" : "http://sabre.io/ns/sync/19",
 				},
 				xhr: null
-			})
-		);
+			}));
 
-		request.mkCol.and.callFake(() => {
+		request.mkCol.mockImplementation(() => {
 			return Promise.resolve({
 				status: 201,
 				body: null,
@@ -278,39 +319,45 @@ describe('Calendar home model', () => {
 			})
 		});
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		const calendarHome = new CalendarHome(parent, request, url, {});
 		return calendarHome.findAllScheduleOutboxes().then(() => {
 			return calendarHome.createCalendarCollection('inbox', '#FFFFFF', ['VEVENT', 'VJOURNAL'], 99).then((res) => {
-				expect(res).toEqual(jasmine.any(Calendar));
+				expect(res).toEqual(expect.any(Calendar));
 				expect(res.url).toEqual('/nextcloud/remote.php/dav/calendars/admin/inbox-1/');
 
 				expect(request.propFind).toHaveBeenCalledTimes(2);
-				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/', jasmine.any(Array), 1);
-				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/inbox-1/', jasmine.any(Array), 0);
+				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/', expect.any(Array), 1);
+				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/inbox-1/', expect.any(Array), 0);
 
 				expect(request.mkCol).toHaveBeenCalledTimes(1);
 				expect(request.mkCol).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/inbox-1', {},
 					'<x0:mkcol xmlns:x0="DAV:"><x0:set><x0:prop><x0:resourcetype><x0:collection/><x1:calendar xmlns:x1="urn:ietf:params:xml:ns:caldav"/></x0:resourcetype><x0:displayname>inbox</x0:displayname><x2:calendar-color xmlns:x2="http://apple.com/ns/ical/">#FFFFFF</x2:calendar-color><x3:calendar-enabled xmlns:x3="http://owncloud.org/ns">1</x3:calendar-enabled><x1:supported-calendar-component-set xmlns:x1="urn:ietf:params:xml:ns:caldav"><x1:comp name="VEVENT"/><x1:comp name="VJOURNAL"/></x1:supported-calendar-component-set><x2:calendar-order xmlns:x2="http://apple.com/ns/ical/">99</x2:calendar-order></x0:prop></x0:set></x0:mkcol>');
 			}).catch(() => {
-				fail('CalendarHome createCalendarCollection was not supposed to fail');
+				assert.fail('CalendarHome createCalendarCollection was not supposed to assert.fail');
 			});
 		}).catch(() => {
-			fail('CalendarHome createCalendarCollection was not supposed to fail');
+			assert.fail('CalendarHome createCalendarCollection was not supposed to assert.fail');
 		});
 	});
 
 	it('should create a calendar collection with additional parameters and timezone', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname', 'mkCol']);
+		const request = {
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn(),
+			"mkCol": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
-		request.propFind.and.returnValues(Promise.resolve({
+		request.propFind.mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: getDefaultPropFind(),
 				xhr: null
-			}), Promise.resolve({
+			})).mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: {
 					"{DAV:}resourcetype" : [
@@ -323,10 +370,9 @@ describe('Calendar home model', () => {
 					"{urn:ietf:params:xml:ns:caldav}calendar": "FOO",
 				},
 				xhr: null
-			})
-		);
+			}));
 
-		request.mkCol.and.callFake(() => {
+		request.mkCol.mockImplementation(() => {
 			return Promise.resolve({
 				status: 201,
 				body: null,
@@ -334,39 +380,45 @@ describe('Calendar home model', () => {
 			})
 		});
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		const calendarHome = new CalendarHome(parent, request, url, {});
 		return calendarHome.findAllScheduleOutboxes().then(() => {
 			return calendarHome.createCalendarCollection('inbox', '#FFFFFF', ['VEVENT', 'VJOURNAL'], 99, 'ABC').then((res) => {
-				expect(res).toEqual(jasmine.any(Calendar));
+				expect(res).toEqual(expect.any(Calendar));
 				expect(res.url).toEqual('/nextcloud/remote.php/dav/calendars/admin/inbox-1/');
 
 				expect(request.propFind).toHaveBeenCalledTimes(2);
-				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/', jasmine.any(Array), 1);
-				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/inbox-1/', jasmine.any(Array), 0);
+				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/', expect.any(Array), 1);
+				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/inbox-1/', expect.any(Array), 0);
 
 				expect(request.mkCol).toHaveBeenCalledTimes(1);
 				expect(request.mkCol).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/inbox-1', {},
 					'<x0:mkcol xmlns:x0="DAV:"><x0:set><x0:prop><x0:resourcetype><x0:collection/><x1:calendar xmlns:x1="urn:ietf:params:xml:ns:caldav"/></x0:resourcetype><x0:displayname>inbox</x0:displayname><x2:calendar-color xmlns:x2="http://apple.com/ns/ical/">#FFFFFF</x2:calendar-color><x3:calendar-enabled xmlns:x3="http://owncloud.org/ns">1</x3:calendar-enabled><x1:calendar-timezone xmlns:x1="urn:ietf:params:xml:ns:caldav">ABC</x1:calendar-timezone><x1:supported-calendar-component-set xmlns:x1="urn:ietf:params:xml:ns:caldav"><x1:comp name="VEVENT"/><x1:comp name="VJOURNAL"/></x1:supported-calendar-component-set><x2:calendar-order xmlns:x2="http://apple.com/ns/ical/">99</x2:calendar-order></x0:prop></x0:set></x0:mkcol>');
 			}).catch(() => {
-				fail('CalendarHome createCalendarCollection was not supposed to fail');
+				assert.fail('CalendarHome createCalendarCollection was not supposed to assert.fail');
 			});
 		}).catch(() => {
-			fail('CalendarHome createCalendarCollection was not supposed to fail');
+			assert.fail('CalendarHome createCalendarCollection was not supposed to assert.fail');
 		});
 	});
 
 	it('should create a subscribed collection', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname', 'mkCol']);
+		const request = {
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn(),
+			"mkCol": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
-		request.propFind.and.returnValues(Promise.resolve({
+		request.propFind.mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: getDefaultPropFind(),
 				xhr: null
-			}), Promise.resolve({
+			})).mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: {
 					"{DAV:}resourcetype" : [
@@ -378,10 +430,9 @@ describe('Calendar home model', () => {
 					"{DAV:}sync-token" : "http://sabre.io/ns/sync/19",
 				},
 				xhr: null
-			})
-		);
+			}));
 
-		request.mkCol.and.callFake(() => {
+		request.mkCol.mockImplementation(() => {
 			return Promise.resolve({
 				status: 201,
 				body: null,
@@ -389,39 +440,45 @@ describe('Calendar home model', () => {
 			})
 		});
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		const calendarHome = new CalendarHome(parent, request, url, {});
 		return calendarHome.findAllScheduleInboxes().then(() => {
 			return calendarHome.createSubscribedCollection('outbox', '#FFFFFF', 'https://foo/bar').then((res) => {
-				expect(res).toEqual(jasmine.any(Calendar));
+				expect(res).toEqual(expect.any(Calendar));
 				expect(res.url).toEqual('/nextcloud/remote.php/dav/calendars/admin/outbox-1/');
 
 				expect(request.propFind).toHaveBeenCalledTimes(2);
-				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/', jasmine.any(Array), 1);
-				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/outbox-1/', jasmine.any(Array), 0);
+				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/', expect.any(Array), 1);
+				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/outbox-1/', expect.any(Array), 0);
 
 				expect(request.mkCol).toHaveBeenCalledTimes(1);
 				expect(request.mkCol).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/outbox-1', {},
 					'<x0:mkcol xmlns:x0="DAV:"><x0:set><x0:prop><x0:resourcetype><x0:collection/><x1:subscribed xmlns:x1="http://calendarserver.org/ns/"/></x0:resourcetype><x0:displayname>outbox</x0:displayname><x2:calendar-color xmlns:x2="http://apple.com/ns/ical/">#FFFFFF</x2:calendar-color><x3:calendar-enabled xmlns:x3="http://owncloud.org/ns">1</x3:calendar-enabled><x1:source xmlns:x1="http://calendarserver.org/ns/"><x0:href>https://foo/bar</x0:href></x1:source></x0:prop></x0:set></x0:mkcol>');
 			}).catch(() => {
-				fail('CalendarHome createSubscribedCollection was not supposed to fail');
+				assert.fail('CalendarHome createSubscribedCollection was not supposed to assert.fail');
 			});
 		}).catch(() => {
-			fail('CalendarHome createSubscribedCollection was not supposed to fail');
+			assert.fail('CalendarHome createSubscribedCollection was not supposed to assert.fail');
 		});
 	});
 
 	it('should create a subscribed collection with additional parameters', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname', 'mkCol']);
+		const request = {
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn(),
+			"mkCol": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
-		request.propFind.and.returnValues(Promise.resolve({
+		request.propFind.mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: getDefaultPropFind(),
 				xhr: null
-			}), Promise.resolve({
+			})).mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: {
 					"{DAV:}resourcetype" : [
@@ -433,10 +490,9 @@ describe('Calendar home model', () => {
 					"{DAV:}sync-token" : "http://sabre.io/ns/sync/19",
 				},
 				xhr: null
-			})
-		);
+			}));
 
-		request.mkCol.and.callFake(() => {
+		request.mkCol.mockImplementation(() => {
 			return Promise.resolve({
 				status: 201,
 				body: null,
@@ -444,39 +500,39 @@ describe('Calendar home model', () => {
 			})
 		});
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		const calendarHome = new CalendarHome(parent, request, url, {});
 		return calendarHome.findAllScheduleInboxes().then(() => {
 			return calendarHome.createSubscribedCollection('outbox', '#FFFFFF', 'https://foo/bar', 101).then((res) => {
-				expect(res).toEqual(jasmine.any(Calendar));
+				expect(res).toEqual(expect.any(Calendar));
 				expect(res.url).toEqual('/nextcloud/remote.php/dav/calendars/admin/outbox-1/');
 
 				expect(request.propFind).toHaveBeenCalledTimes(2);
-				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/', jasmine.any(Array), 1);
-				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/outbox-1/', jasmine.any(Array), 0);
+				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/', expect.any(Array), 1);
+				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/outbox-1/', expect.any(Array), 0);
 
 				expect(request.mkCol).toHaveBeenCalledTimes(1);
 				expect(request.mkCol).toHaveBeenCalledWith('/nextcloud/remote.php/dav/calendars/admin/outbox-1', {},
 					'<x0:mkcol xmlns:x0="DAV:"><x0:set><x0:prop><x0:resourcetype><x0:collection/><x1:subscribed xmlns:x1="http://calendarserver.org/ns/"/></x0:resourcetype><x0:displayname>outbox</x0:displayname><x2:calendar-color xmlns:x2="http://apple.com/ns/ical/">#FFFFFF</x2:calendar-color><x3:calendar-enabled xmlns:x3="http://owncloud.org/ns">1</x3:calendar-enabled><x1:source xmlns:x1="http://calendarserver.org/ns/"><x0:href>https://foo/bar</x0:href></x1:source><x2:calendar-order xmlns:x2="http://apple.com/ns/ical/">101</x2:calendar-order></x0:prop></x0:set></x0:mkcol>');
 			}).catch(() => {
-				fail('CalendarHome createSubscribedCollection was not supposed to fail');
+				assert.fail('CalendarHome createSubscribedCollection was not supposed to assert.fail');
 			});
 		}).catch(() => {
-			fail('CalendarHome createSubscribedCollection was not supposed to fail');
+			assert.fail('CalendarHome createSubscribedCollection was not supposed to assert.fail');
 		});
 	});
 
-	it('should allow to search an entire calendar-home', () => {
-		pending('to be implemeneted ... ');
-	});
+	it.todo('should allow to search an entire calendar-home');
 
 	it('should allow to enable the birthday-calendar', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['post']);
+		const request = {
+			"post": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
-		request.post.and.returnValue(Promise.resolve({
+		request.post.mockReturnValue(Promise.resolve({
 				status: 204,
 				body: null,
 				xhr: null

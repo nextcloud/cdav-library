@@ -7,6 +7,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
 import { davCollectionShareable } from '../../../src/models/davCollectionShareable.js';
 import * as XMLUtility from "../../../src/utility/xmlUtility.js";
 
@@ -18,25 +20,29 @@ describe('Shareable dav collection model', () => {
 
 	it('should extend the base class and expose two properties', () => {
 		function Foo() {}
-		Foo.prototype._request = jasmine.createSpyObj('Request', ['post']);
-		Foo.prototype._exposeProperty = jasmine.createSpy();
+		Foo.prototype._request = {
+			'post': vi.fn()
+		};
+		Foo.prototype._exposeProperty = vi.fn();
 
 		const share = new (davCollectionShareable(Foo))();
 		expect(Foo.prototype._exposeProperty).toHaveBeenCalledTimes(2);
 		expect(Foo.prototype._exposeProperty).toHaveBeenCalledWith('shares', 'http://owncloud.org/ns', 'invite');
 		expect(Foo.prototype._exposeProperty).toHaveBeenCalledWith('allowedSharingModes', 'http://calendarserver.org/ns/', 'allowed-sharing-modes');
 
-		expect(share).toEqual(jasmine.any(Foo));
+		expect(share).toEqual(expect.any(Foo));
 	});
 
 	it('should provide a share method - new read only share', () => {
 		function Foo() {}
-		Foo.prototype._request = jasmine.createSpyObj('Request', ['post']);
-		Foo.prototype._exposeProperty = jasmine.createSpy();
+		Foo.prototype._request = {
+			'post': vi.fn()
+		};
+		Foo.prototype._exposeProperty = vi.fn();
 		Foo.prototype._url = '/foo';
 		Foo.prototype.shares = [];
 
-		Foo.prototype._request.post.and.callFake(() => Promise.resolve({}));
+		Foo.prototype._request.post.mockImplementation(() => Promise.resolve({}));
 
 		const share = new (davCollectionShareable(Foo))();
 		return share.share('principal:foo/a').then(() => {
@@ -55,12 +61,14 @@ describe('Shareable dav collection model', () => {
 
 	it('should provide a share method - new read write share', () => {
 		function Foo() {}
-		Foo.prototype._request = jasmine.createSpyObj('Request', ['post']);
-		Foo.prototype._exposeProperty = jasmine.createSpy();
+		Foo.prototype._request = {
+			'post': vi.fn()
+		};
+		Foo.prototype._exposeProperty = vi.fn();
 		Foo.prototype._url = '/foo';
 		Foo.prototype.shares = [];
 
-		Foo.prototype._request.post.and.callFake(() => Promise.resolve({}));
+		Foo.prototype._request.post.mockImplementation(() => Promise.resolve({}));
 
 		const share = new (davCollectionShareable(Foo))();
 		return share.share('principal:foo/a', true).then(() => {
@@ -79,8 +87,10 @@ describe('Shareable dav collection model', () => {
 
 	it('should provide a share method - updated read only -> read-write', () => {
 		function Foo() {}
-		Foo.prototype._request = jasmine.createSpyObj('Request', ['post']);
-		Foo.prototype._exposeProperty = jasmine.createSpy();
+		Foo.prototype._request = {
+			'post': vi.fn()
+		};
+		Foo.prototype._exposeProperty = vi.fn();
 		Foo.prototype._url = '/foo';
 		Foo.prototype.shares = [{
 			href: 'principal:foo/a',
@@ -89,7 +99,7 @@ describe('Shareable dav collection model', () => {
 			'invite-accepted': true
 		}];
 
-		Foo.prototype._request.post.and.callFake(() => Promise.resolve({}));
+		Foo.prototype._request.post.mockImplementation(() => Promise.resolve({}));
 
 		const share = new (davCollectionShareable(Foo))();
 		return share.share('principal:foo/a', true).then(() => {
@@ -108,8 +118,10 @@ describe('Shareable dav collection model', () => {
 
 	it('should provide a share method - updated read write -> read only', () => {
 		function Foo() {}
-		Foo.prototype._request = jasmine.createSpyObj('Request', ['post']);
-		Foo.prototype._exposeProperty = jasmine.createSpy();
+		Foo.prototype._request = {
+			'post': vi.fn()
+		};
+		Foo.prototype._exposeProperty = vi.fn();
 		Foo.prototype._url = '/foo';
 		Foo.prototype.shares = [{
 			href: 'principal:foo/a',
@@ -118,7 +130,7 @@ describe('Shareable dav collection model', () => {
 			'invite-accepted': true
 		}];
 
-		Foo.prototype._request.post.and.callFake(() => Promise.resolve({}));
+		Foo.prototype._request.post.mockImplementation(() => Promise.resolve({}));
 
 		const share = new (davCollectionShareable(Foo))();
 		return share.share('principal:foo/a').then(() => {
@@ -138,8 +150,10 @@ describe('Shareable dav collection model', () => {
 
 	it('should provide a unshare method', () => {
 		function Foo() {}
-		Foo.prototype._request = jasmine.createSpyObj('Request', ['post']);
-		Foo.prototype._exposeProperty = jasmine.createSpy();
+		Foo.prototype._request = {
+			'post': vi.fn()
+		};
+		Foo.prototype._exposeProperty = vi.fn();
 		Foo.prototype._url = '/foo';
 		Foo.prototype.shares = [{
 			href: 'principal:foo/a',
@@ -148,7 +162,7 @@ describe('Shareable dav collection model', () => {
 			'invite-accepted': true
 		}];
 
-		Foo.prototype._request.post.and.callFake(() => Promise.resolve({}));
+		Foo.prototype._request.post.mockImplementation(() => Promise.resolve({}));
 
 		const share = new (davCollectionShareable(Foo))();
 		return share.unshare('principal:foo/a').then(() => {
@@ -162,8 +176,10 @@ describe('Shareable dav collection model', () => {
 
 	it('should provide a isShareable method - true', () => {
 		function Foo() {}
-		Foo.prototype._request = jasmine.createSpyObj('Request', ['post']);
-		Foo.prototype._exposeProperty = jasmine.createSpy();
+		Foo.prototype._request = {
+			'post': vi.fn()
+		};
+		Foo.prototype._exposeProperty = vi.fn();
 		Foo.prototype._url = '/foo';
 		Foo.prototype.allowedSharingModes = ['{http://calendarserver.org/ns/}can-be-shared'];
 
@@ -173,8 +189,10 @@ describe('Shareable dav collection model', () => {
 
 	it('should provide a isShareable method - false', () => {
 		function Foo() {}
-		Foo.prototype._request = jasmine.createSpyObj('Request', ['post']);
-		Foo.prototype._exposeProperty = jasmine.createSpy();
+		Foo.prototype._request = {
+			'post': vi.fn()
+		};
+		Foo.prototype._exposeProperty = vi.fn();
 		Foo.prototype._url = '/foo';
 		Foo.prototype.allowedSharingModes = ['{http://calendarserver.org/ns/}can-be-published'];
 
@@ -184,8 +202,10 @@ describe('Shareable dav collection model', () => {
 
 	it('should provide a isPublishable method - false', () => {
 		function Foo() {}
-		Foo.prototype._request = jasmine.createSpyObj('Request', ['post']);
-		Foo.prototype._exposeProperty = jasmine.createSpy();
+		Foo.prototype._request = {
+			'post': vi.fn()
+		};
+		Foo.prototype._exposeProperty = vi.fn();
 		Foo.prototype._url = '/foo';
 		Foo.prototype.allowedSharingModes = ['{http://calendarserver.org/ns/}can-be-shared'];
 
@@ -195,8 +215,10 @@ describe('Shareable dav collection model', () => {
 
 	it('should provide a isPublishable method - true', () => {
 		function Foo() {}
-		Foo.prototype._request = jasmine.createSpyObj('Request', ['post']);
-		Foo.prototype._exposeProperty = jasmine.createSpy();
+		Foo.prototype._request = {
+			'post': vi.fn()
+		};
+		Foo.prototype._exposeProperty = vi.fn();
 		Foo.prototype._url = '/foo';
 		Foo.prototype.allowedSharingModes = ['{http://calendarserver.org/ns/}can-be-published'];
 
@@ -206,8 +228,10 @@ describe('Shareable dav collection model', () => {
 
 	it('should provide a getPropFindList method', () => {
 		function Foo() {}
-		Foo.prototype._request = jasmine.createSpyObj('Request', ['post']);
-		Foo.prototype._exposeProperty = jasmine.createSpy();
+		Foo.prototype._request = {
+			'post': vi.fn()
+		};
+		Foo.prototype._exposeProperty = vi.fn();
 		Foo.prototype._url = '/foo';
 		Foo.getPropFindList = () => {
 			return [['Foo', 'BAR']];

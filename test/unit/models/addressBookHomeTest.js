@@ -7,6 +7,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { assert, beforeEach, describe, expect, it, vi } from "vitest";
+
 import * as XMLUtility from "../../../src/utility/xmlUtility.js";
 import {AddressBookHome} from "../../../src/models/addressBookHome.js";
 import {DavCollection} from "../../../src/models/davCollection.js";
@@ -20,19 +22,29 @@ describe('Address book home model', () => {
 
 	it('should inherit from DavCollection', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const request = {
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/addressbooks/users/admin/';
 
 		const addressBookHome = new AddressBookHome(parent, request, url, {});
-		expect(addressBookHome).toEqual(jasmine.any(DavCollection));
+		expect(addressBookHome).toEqual(expect.any(DavCollection));
 	});
 
 	it('should find all address-books', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const request = {
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/addressbooks/users/admin/';
 
-		request.propFind.and.callFake(() => {
+		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: getDefaultPropFind(),
@@ -40,31 +52,37 @@ describe('Address book home model', () => {
 			});
 		});
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		const addressBookHome = new AddressBookHome(parent, request, url, {});
 		return addressBookHome.findAllAddressBooks().then((res) => {
 			expect(res.length).toEqual(1);
-			expect(res[0]).toEqual(jasmine.any(AddressBook));
+			expect(res[0]).toEqual(expect.any(AddressBook));
 			expect(res[0].url).toEqual('/nextcloud/remote.php/dav/addressbooks/users/admin/contacts/');
 
 			expect(request.propFind).toHaveBeenCalledTimes(1);
-			expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/addressbooks/users/admin/', jasmine.any(Array), 1);
+			expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/addressbooks/users/admin/', expect.any(Array), 1);
 		}).catch(() => {
-			fail('AddressBookGome findAllAddressBooks was not supposed to fail');
+			assert.fail('AddressBookGome findAllAddressBooks was not supposed to assert.fail');
 		});
 	});
 
 	it('should create a new address-book collection', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname', 'mkCol']);
+		const request = {
+			"propFind": vi.fn(),
+			"put": vi.fn(),
+			"delete": vi.fn(),
+			"pathname": vi.fn(),
+			"mkCol": vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/addressbooks/users/admin/';
 
-		request.propFind.and.returnValues(Promise.resolve({
+		request.propFind.mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: getDefaultPropFind(),
 				xhr: null
-			}), Promise.resolve({
+			})).mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: {
 					"{DAV:}resourcetype" : [
@@ -75,12 +93,11 @@ describe('Address book home model', () => {
 					"{urn:ietf:params:xml:ns:carddav}addressbook-description": 'This is a fancy description',
 				},
 				xhr: null
-			})
-		);
+			}));
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
-		request.mkCol.and.callFake(() => {
+		request.mkCol.mockImplementation(() => {
 			return Promise.resolve({
 				status: 201,
 				body: null,
@@ -91,21 +108,21 @@ describe('Address book home model', () => {
 		const addressBookHome = new AddressBookHome(parent, request, url, {});
 		return addressBookHome.findAllAddressBooks().then(() => {
 			return addressBookHome.createAddressBookCollection('contacts').then((res) => {
-				expect(res).toEqual(jasmine.any(AddressBook));
+				expect(res).toEqual(expect.any(AddressBook));
 				expect(res.url).toEqual('/nextcloud/remote.php/dav/addressbooks/users/admin/contacts-1/');
 
 				expect(request.propFind).toHaveBeenCalledTimes(2);
-				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/addressbooks/users/admin/', jasmine.any(Array), 1);
-				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/addressbooks/users/admin/contacts-1/', jasmine.any(Array), 0);
+				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/addressbooks/users/admin/', expect.any(Array), 1);
+				expect(request.propFind).toHaveBeenCalledWith('/nextcloud/remote.php/dav/addressbooks/users/admin/contacts-1/', expect.any(Array), 0);
 
 				expect(request.mkCol).toHaveBeenCalledTimes(1);
 				expect(request.mkCol).toHaveBeenCalledWith('/nextcloud/remote.php/dav/addressbooks/users/admin/contacts-1', {},
 					'<x0:mkcol xmlns:x0="DAV:"><x0:set><x0:prop><x0:resourcetype><x0:collection/><x1:addressbook xmlns:x1="urn:ietf:params:xml:ns:carddav"/></x0:resourcetype><x0:displayname>contacts</x0:displayname></x0:prop></x0:set></x0:mkcol>');
 			}).catch(() => {
-				fail('AddressBookGome createAddressBookCollection was not supposed to fail');
+				assert.fail('AddressBookGome createAddressBookCollection was not supposed to assert.fail');
 			});
 		}).catch(() => {
-			fail('AddressBookGome createAddressBookCollection was not supposed to fail');
+			assert.fail('AddressBookGome createAddressBookCollection was not supposed to assert.fail');
 		});
 	});
 

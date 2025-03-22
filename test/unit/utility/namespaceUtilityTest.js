@@ -7,22 +7,24 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { describe, expect, it } from "vitest";
+
 import * as NS from '../../../src/utility/namespaceUtility.js';
 
 describe('NamespaceUtility', () => {
-    it('should provide namespaces', () => {
-        expect(NS.DAV).toEqual('DAV:');
-        expect(NS.IETF_CALDAV).toEqual('urn:ietf:params:xml:ns:caldav');
-        expect(NS.IETF_CARDDAV).toEqual('urn:ietf:params:xml:ns:carddav');
-        expect(NS.OWNCLOUD).toEqual('http://owncloud.org/ns');
-        expect(NS.NEXTCLOUD).toEqual('http://nextcloud.com/ns');
-        expect(NS.APPLE).toEqual('http://apple.com/ns/ical/');
-        expect(NS.CALENDARSERVER).toEqual('http://calendarserver.org/ns/');
-        expect(NS.SABREDAV).toEqual('http://sabredav.org/ns');
-    });
+	it('should provide namespaces', () => {
+		expect(NS.DAV).toEqual('DAV:');
+		expect(NS.IETF_CALDAV).toEqual('urn:ietf:params:xml:ns:caldav');
+		expect(NS.IETF_CARDDAV).toEqual('urn:ietf:params:xml:ns:carddav');
+		expect(NS.OWNCLOUD).toEqual('http://owncloud.org/ns');
+		expect(NS.NEXTCLOUD).toEqual('http://nextcloud.com/ns');
+		expect(NS.APPLE).toEqual('http://apple.com/ns/ical/');
+		expect(NS.CALENDARSERVER).toEqual('http://calendarserver.org/ns/');
+		expect(NS.SABREDAV).toEqual('http://sabredav.org/ns');
+	});
 
-    it('should provide namespace map', () => {
-    	expect(NS.NS_MAP).toEqual({
+	it('should provide namespace map', () => {
+		expect(NS.NS_MAP).toEqual({
 			d: 'DAV:',
 			cl: 'urn:ietf:params:xml:ns:caldav',
 			cr: 'urn:ietf:params:xml:ns:carddav',
@@ -34,7 +36,7 @@ describe('NamespaceUtility', () => {
 		});
 	});
 
-    it ('should provide namespace resolver', () => {
+	it ('should provide namespace resolver', () => {
 		expect(NS.resolve('d')).toEqual('DAV:');
 		expect(NS.resolve('cl')).toEqual('urn:ietf:params:xml:ns:caldav');
 		expect(NS.resolve('cr')).toEqual('urn:ietf:params:xml:ns:carddav');
@@ -46,7 +48,7 @@ describe('NamespaceUtility', () => {
 		expect(NS.resolve('bliblablub')).toEqual(null);
 	});
 
-    it('should only export namespaces', () => {
-        expect(Object.keys(NS).length).toEqual(10);
-    });
+	it('should only export namespaces', () => {
+		expect(Object.keys(NS).length).toEqual(10);
+	});
 });

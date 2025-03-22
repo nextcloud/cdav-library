@@ -7,7 +7,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {DavCollection} from "../../../src/models/davCollection.js";
+import { assert, beforeEach, describe, expect, it, vi } from "vitest";
+
+import { DavCollection } from "../../../src/models/davCollection.js";
 import DAVEventListener from "../../../src/models/davEventListener.js";
 import {DavObject} from "../../../src/models/davObject.js";
 import * as XMLUtility from '../../../src/utility/xmlUtility.js';
@@ -19,9 +21,22 @@ describe('Dav collection model', () => {
 	});
 
 	it('should inherit from DAVEventListener', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -36,13 +51,27 @@ describe('Dav collection model', () => {
 		};
 
 		const collection = new DavCollection(parent, request, url, props);
-		expect(collection).toEqual(jasmine.any(DAVEventListener));
+		expect(collection).toEqual(expect.any(DAVEventListener));
 	});
 
 	it('should find all children', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -56,16 +85,16 @@ describe('Dav collection model', () => {
 				'{DAV:}read-current-user-privilege-set'],
 		};
 
-		const collectionFactory1 = jasmine.createSpy().and.callFake(function() {
+		const collectionFactory1 = vi.fn(function() {
 			this.name = 'collectionFactory1';
 		});
-		const collectionFactory2 = jasmine.createSpy().and.callFake(function() {
+		const collectionFactory2 = vi.fn(function() {
 			this.name = 'collectionFactory2';
 		});
-		const objectFactory1 = jasmine.createSpy().and.callFake(function() {
+		const objectFactory1 = vi.fn(function() {
 			this.name = 'objectFactory1';
 		});
-		const objectFactory2 = jasmine.createSpy().and.callFake(function() {
+		const objectFactory2 = vi.fn(function() {
 			this.name = 'objectFactory2';
 		});
 
@@ -76,7 +105,7 @@ describe('Dav collection model', () => {
 		collection._registerObjectFactory('text/foo1', objectFactory1);
 		collection._registerObjectFactory('text/foo2', objectFactory2);
 
-		request.propFind.and.callFake(() => {
+		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: {
@@ -127,15 +156,15 @@ describe('Dav collection model', () => {
 			});
 		});
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		return collection.findAll().then((result) => {
 			expect(result.length).toEqual(6);
 			expect(result[0].name).toEqual('objectFactory1');
 			expect(result[1].name).toEqual('objectFactory2');
-			expect(result[2]).toEqual(jasmine.any(DavObject));
+			expect(result[2]).toEqual(expect.any(DavObject));
 			expect(result[2].url).toEqual('/foo/bar/folder/c');
-			expect(result[3]).toEqual(jasmine.any(DavCollection));
+			expect(result[3]).toEqual(expect.any(DavCollection));
 			expect(result[3].displayname).toEqual('Foo Bar Bla Blub col0');
 			expect(result[4].name).toEqual('collectionFactory1');
 			expect(result[5].name).toEqual('collectionFactory2');
@@ -148,14 +177,28 @@ describe('Dav collection model', () => {
 					['DAV:', 'sync-token'], ['DAV:', 'current-user-privilege-set']],
 				1);
 		}).catch(() => {
-			fail('request was not supposed to fail');
+			assert.fail('request was not supposed to assert.fail');
 		});
 	});
 
 	it('should find all children and allow to provide a custom filter', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -169,16 +212,16 @@ describe('Dav collection model', () => {
 				'{DAV:}read-current-user-privilege-set'],
 		};
 
-		const collectionFactory1 = jasmine.createSpy().and.callFake(function() {
+		const collectionFactory1 = vi.fn(function() {
 			this.name = 'collectionFactory1';
 		});
-		const collectionFactory2 = jasmine.createSpy().and.callFake(function() {
+		const collectionFactory2 = vi.fn(function() {
 			this.name = 'collectionFactory2';
 		});
-		const objectFactory1 = jasmine.createSpy().and.callFake(function() {
+		const objectFactory1 = vi.fn(function() {
 			this.name = 'objectFactory1';
 		});
-		const objectFactory2 = jasmine.createSpy().and.callFake(function() {
+		const objectFactory2 = vi.fn(function() {
 			this.name = 'objectFactory2';
 		});
 
@@ -189,7 +232,7 @@ describe('Dav collection model', () => {
 		collection._registerObjectFactory('text/foo1', objectFactory1);
 		collection._registerObjectFactory('text/foo2', objectFactory2);
 
-		request.propFind.and.callFake(() => {
+		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: {
@@ -240,7 +283,7 @@ describe('Dav collection model', () => {
 			});
 		});
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		return collection.findAllByFilter(((o) => !!o.name)).then((result) => {
 			expect(result.length).toEqual(4);
@@ -257,14 +300,28 @@ describe('Dav collection model', () => {
 					['DAV:', 'sync-token'], ['DAV:', 'current-user-privilege-set']],
 				1);
 		}).catch(() => {
-			fail('request was not supposed to fail');
+			assert.fail('request was not supposed to assert.fail');
 		});
 	});
 
 	it('should find one child by it\'s uri', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -278,14 +335,14 @@ describe('Dav collection model', () => {
 				'{DAV:}read-current-user-privilege-set'],
 		};
 
-		const objectFactory1 = jasmine.createSpy().and.callFake(function() {
+		const objectFactory1 = vi.fn(function() {
 			this.name = 'objectFactory1';
 		});
 
 		const collection = new DavCollection(parent, request, url, props);
 		collection._registerObjectFactory('text/foo1', objectFactory1);
 
-		request.propFind.and.callFake(() => {
+		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: {
@@ -298,19 +355,34 @@ describe('Dav collection model', () => {
 			});
 		});
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		return collection.find('a').then((result) => {
 			expect(result.name).toEqual('objectFactory1');
 		}).catch(() => {
-			fail('request was not supposed to fail');
+			assert.fail('request was not supposed to assert.fail');
 		});
 	});
 
 	it('should create a collection', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'mkCol', 'pathname']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'mkCol': vi.fn(),
+			'pathname': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -324,16 +396,16 @@ describe('Dav collection model', () => {
 				'{DAV:}read-current-user-privilege-set'],
 		};
 
-		const collectionFactory1 = jasmine.createSpy().and.callFake(function() {
+		const collectionFactory1 = vi.fn(function() {
 			this.name = 'collectionFactory1';
 		});
-		const collectionFactory2 = jasmine.createSpy().and.callFake(function() {
+		const collectionFactory2 = vi.fn(function() {
 			this.name = 'collectionFactory2';
 		});
-		const objectFactory1 = jasmine.createSpy().and.callFake(function() {
+		const objectFactory1 = vi.fn(function() {
 			this.name = 'objectFactory1';
 		});
-		const objectFactory2 = jasmine.createSpy().and.callFake(function() {
+		const objectFactory2 = vi.fn(function() {
 			this.name = 'objectFactory2';
 		});
 
@@ -344,55 +416,54 @@ describe('Dav collection model', () => {
 		collection._registerObjectFactory('text/foo1', objectFactory1);
 		collection._registerObjectFactory('text/foo2', objectFactory2);
 
-		request.propFind.and.returnValues(
-			Promise.resolve({
-				status: 207,
-				body: {
-					'/foo/bar/folder': {
-						'{DAV:}displayname': 'Foo Bar Bla Blub',
-						'{DAV:}owner': 'https://foo/bar/',
-						'{DAV:}resourcetype': ['{DAV:}collection'],
-						'{DAV:}sync-token': 'https://foo/bar/token/3',
-					},
-					'/foo/bar/folder/a': {
-						'{DAV:}owner': 'https://foo/bar/',
-						'{DAV:}resourcetype': [],
-						'{DAV:}sync-token': 'https://foo/bar/token/3',
-						'{DAV:}getcontenttype': 'text/foo1; charset=utf8'
-					},
-					'/foo/bar/folder/b': {
-						'{DAV:}owner': 'https://foo/bar/',
-						'{DAV:}resourcetype': [],
-						'{DAV:}sync-token': 'https://foo/bar/token/3',
-						'{DAV:}getcontenttype': 'text/foo2'
-					},
-					'/foo/bar/folder/c': {
-						'{DAV:}owner': 'https://foo/bar/',
-						'{DAV:}resourcetype': [],
-						'{DAV:}sync-token': 'https://foo/bar/token/3',
-						'{DAV:}getcontenttype': 'text/file'
-					},
-					'/foo/bar/folder/d/': {
-						'{DAV:}displayname': 'Foo Bar Bla Blub col0',
-						'{DAV:}owner': 'https://foo/bar/',
-						'{DAV:}resourcetype': ['{DAV:}collection'],
-						'{DAV:}sync-token': 'https://foo/bar/token/3',
-					},
-					'/foo/bar/folder/e/': {
-						'{DAV:}displayname': 'Foo Bar Bla Blub col1',
-						'{DAV:}owner': 'https://foo/bar/',
-						'{DAV:}resourcetype': ['{DAV:}collection', '{test}collection1'],
-						'{DAV:}sync-token': 'https://foo/bar/token/3',
-					},
-					'/foo/bar/folder/f/': {
-						'{DAV:}displayname': 'Foo Bar Bla Blub col2',
-						'{DAV:}owner': 'https://foo/bar/',
-						'{DAV:}resourcetype': ['{DAV:}collection', '{test}collection2'],
-						'{DAV:}sync-token': 'https://foo/bar/token/3',
-					},
+		request.propFind.mockReturnValueOnce(Promise.resolve({
+			status: 207,
+			body: {
+				'/foo/bar/folder': {
+					'{DAV:}displayname': 'Foo Bar Bla Blub',
+					'{DAV:}owner': 'https://foo/bar/',
+					'{DAV:}resourcetype': ['{DAV:}collection'],
+					'{DAV:}sync-token': 'https://foo/bar/token/3',
 				},
-				xhr: null
-			}), Promise.resolve({
+				'/foo/bar/folder/a': {
+					'{DAV:}owner': 'https://foo/bar/',
+					'{DAV:}resourcetype': [],
+					'{DAV:}sync-token': 'https://foo/bar/token/3',
+					'{DAV:}getcontenttype': 'text/foo1; charset=utf8'
+				},
+				'/foo/bar/folder/b': {
+					'{DAV:}owner': 'https://foo/bar/',
+					'{DAV:}resourcetype': [],
+					'{DAV:}sync-token': 'https://foo/bar/token/3',
+					'{DAV:}getcontenttype': 'text/foo2'
+				},
+				'/foo/bar/folder/c': {
+					'{DAV:}owner': 'https://foo/bar/',
+					'{DAV:}resourcetype': [],
+					'{DAV:}sync-token': 'https://foo/bar/token/3',
+					'{DAV:}getcontenttype': 'text/file'
+				},
+				'/foo/bar/folder/d/': {
+					'{DAV:}displayname': 'Foo Bar Bla Blub col0',
+					'{DAV:}owner': 'https://foo/bar/',
+					'{DAV:}resourcetype': ['{DAV:}collection'],
+					'{DAV:}sync-token': 'https://foo/bar/token/3',
+				},
+				'/foo/bar/folder/e/': {
+					'{DAV:}displayname': 'Foo Bar Bla Blub col1',
+					'{DAV:}owner': 'https://foo/bar/',
+					'{DAV:}resourcetype': ['{DAV:}collection', '{test}collection1'],
+					'{DAV:}sync-token': 'https://foo/bar/token/3',
+				},
+				'/foo/bar/folder/f/': {
+					'{DAV:}displayname': 'Foo Bar Bla Blub col2',
+					'{DAV:}owner': 'https://foo/bar/',
+					'{DAV:}resourcetype': ['{DAV:}collection', '{test}collection2'],
+					'{DAV:}sync-token': 'https://foo/bar/token/3',
+				},
+			},
+			xhr: null
+		})).mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: {
 					'{DAV:}displayname': 'Foo Bar Bla Blub col0',
@@ -401,7 +472,7 @@ describe('Dav collection model', () => {
 					'{DAV:}sync-token': 'https://foo/bar/token/3',
 				},
 				xhr: null
-			}), Promise.resolve({
+			})).mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: {
 					'{DAV:}displayname': 'Foo Bar Bla Blub col0',
@@ -410,10 +481,9 @@ describe('Dav collection model', () => {
 					'{DAV:}sync-token': 'https://foo/bar/token/3',
 				},
 				xhr: null
-			})
-		);
+			}));
 
-		request.mkCol.and.callFake(() => {
+		request.mkCol.mockImplementation(() => {
 			return Promise.resolve({
 				status: 201,
 				body: null,
@@ -421,7 +491,7 @@ describe('Dav collection model', () => {
 			})
 		});
 
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		return collection.findAll().then(() => {
 			return collection.createCollection('b').then((fileName) => {
@@ -432,21 +502,35 @@ describe('Dav collection model', () => {
 
 					expect(request.propFind).toHaveBeenCalledTimes(3);
 
-					expect(fileName).toEqual(jasmine.any(DavCollection));
+					expect(fileName).toEqual(expect.any(DavCollection));
 					expect(fileName.url).toEqual('/foo/bar/folder/b-1/');
-					expect(folderName).toEqual(jasmine.any(DavCollection));
+					expect(folderName).toEqual(expect.any(DavCollection));
 					expect(folderName.url).toEqual('/foo/bar/folder/d-1/');
-				})
+				});
 			});
 		}).catch(() => {
-			fail('DavCollection create was not supposed to fail');
+			assert.fail('DavCollection create was not supposed to assert.fail');
 		});
 	});
 
 	it('should create an object', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete' , 'pathname']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -460,14 +544,14 @@ describe('Dav collection model', () => {
 				'{DAV:}read-current-user-privilege-set'],
 		};
 
-		request.put.and.callFake(() => {
+		request.put.mockImplementation(() => {
 			return Promise.resolve({
 				status: 204,
 				body: null,
 				xhr: null,
 			})
 		});
-		request.propFind.and.callFake(() => {
+		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: {
@@ -480,11 +564,11 @@ describe('Dav collection model', () => {
 				xhr: null
 			});
 		});
-		request.pathname.and.callFake((p) => p);
+		request.pathname.mockImplementation((p) => p);
 
 		const collection = new DavCollection(parent, request, url, props);
 		return collection.createObject('foo.bar', {'Content-Type': 'text/calendar'}, 'DATA123').then((res) => {
-			expect(res).toEqual(jasmine.any(DavObject));
+			expect(res).toEqual(expect.any(DavObject));
 			expect(res.url).toEqual('/foo/bar/folder/foo.bar');
 			expect(res.etag).toEqual('"etag foo bar tralala"');
 
@@ -496,14 +580,28 @@ describe('Dav collection model', () => {
 				['DAV:', 'displayname'], ['DAV:', 'owner'], ['DAV:', 'resourcetype'],
 				['DAV:', 'sync-token'], ['DAV:', 'current-user-privilege-set']], 0);
 		}).catch(() => {
-			fail('DavCollection update was not supposed to fail');
+			assert.fail('DavCollection update was not supposed to assert.fail');
 		});
 	});
 
 	it('should update the collection', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'propPatch']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'propPatch': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -518,7 +616,7 @@ describe('Dav collection model', () => {
 				'{DAV:}read-current-user-privilege-set'],
 		};
 
-		request.propPatch.and.callFake(() => {
+		request.propPatch.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: {
@@ -558,14 +656,28 @@ describe('Dav collection model', () => {
 			expect(request.propPatch).toHaveBeenCalledTimes(1);
 			expect(request.propPatch).toHaveBeenCalledWith( '/foo/bar/folder/', {}, '<x0:propertyupdate xmlns:x0="DAV:"><x0:set><x0:prop><x0:displayname>New displayname 123</x0:displayname><x1:property xmlns:x1="custom">updated custom property value 456</x1:property></x0:prop></x0:set></x0:propertyupdate>');
 		}).catch(() => {
-			fail('DavCollection update was not supposed to fail');
+			assert.fail('DavCollection update was not supposed to assert.fail');
 		});
 	});
 
 	it('should update the collection only if properties changed', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'propPatch']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'propPatch': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -580,7 +692,7 @@ describe('Dav collection model', () => {
 				'{DAV:}read-current-user-privilege-set'],
 		};
 
-		request.propPatch.and.callFake(() => {
+		request.propPatch.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: {
@@ -616,14 +728,27 @@ describe('Dav collection model', () => {
 		return collection.update().then(() => {
 			expect(request.propPatch).toHaveBeenCalledTimes(0);
 		}).catch(() => {
-			fail('DavCollection update was not supposed to fail');
+			assert.fail('DavCollection update was not supposed to assert.fail');
 		});
 	});
 
 	it('should delete a collection', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -642,14 +767,27 @@ describe('Dav collection model', () => {
 			expect(request.delete).toHaveBeenCalledTimes(1);
 			expect(request.delete).toHaveBeenCalledWith('/foo/bar/folder/',  {});
 		}).catch(() => {
-			fail('DavCollection::delete was not supposed to fail');
+			assert.fail('DavCollection::delete was not supposed to assert.fail');
 		});
 	});
 
 	it('should provide a function to check if collection is readable', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -667,9 +805,22 @@ describe('Dav collection model', () => {
 	});
 
 	it('should provide a function to check if collection is writeable - writeable', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -688,9 +839,22 @@ describe('Dav collection model', () => {
 	});
 
 	it('should provide a function to check if collection is writeable - not writeable', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -708,9 +872,22 @@ describe('Dav collection model', () => {
 	});
 
 	it('should expose the property displayname', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -729,9 +906,22 @@ describe('Dav collection model', () => {
 	});
 
 	it('should expose the property owner', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -750,9 +940,22 @@ describe('Dav collection model', () => {
 	});
 
 	it('should expose the property resource-type', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -771,9 +974,22 @@ describe('Dav collection model', () => {
 	});
 
 	it('should expose the property sync-token', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -792,9 +1008,22 @@ describe('Dav collection model', () => {
 	});
 
 	it('should expose the property current-user-privilege-set', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -817,9 +1046,22 @@ describe('Dav collection model', () => {
 	});
 
 	it('should expose the property url', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -838,7 +1080,11 @@ describe('Dav collection model', () => {
 	});
 
 	it('should check whether two collections are of the same type', () => {
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 
 		const collection1 = new DavCollection(null, request, 'a', {
 			'{DAV:}displayname': 'Foo Bar Bla Blub col1',
@@ -877,9 +1123,23 @@ describe('Dav collection model', () => {
 	});
 
 	it('should provide an _updatePropsFromServer method', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -895,7 +1155,7 @@ describe('Dav collection model', () => {
 
 		const collection = new DavCollection(parent, request, url, props);
 
-		request.propFind.and.callFake(() => {
+		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: {

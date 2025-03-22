@@ -28,5 +28,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install Playwright Browsers
+        run: npx playwright install firefox --with-deps
+
       - name: Test
         run: npm run test

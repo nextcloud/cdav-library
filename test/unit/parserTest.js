@@ -7,6 +7,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { describe, expect, it } from "vitest";
+
 import Parser from '../../src/parser.js';
 
 describe('Parser', () => {
@@ -626,9 +628,9 @@ describe('Parser', () => {
 		<D:propstat>
 			<D:prop>
 				<card:supported-collation-set>
-        			<card:supported-collation>i;ascii-casemap</card:supported-collation>
-        			<card:supported-collation>i;octet</card:supported-collation>
-        			<card:supported-collation>i;unicode-casemap</card:supported-collation>
+					<card:supported-collation>i;ascii-casemap</card:supported-collation>
+					<card:supported-collation>i;octet</card:supported-collation>
+					<card:supported-collation>i;unicode-casemap</card:supported-collation>
 				</card:supported-collation-set>
 			</D:prop>
 			<D:status>HTTP/1.1 200 OK</D:status>
@@ -1760,7 +1762,7 @@ END:VALARM`);
 		<D:href>/foo</D:href>
 		<D:propstat>
 			<D:prop>
-    			<oc:calendar-enabled>1</oc:calendar-enabled>
+				<oc:calendar-enabled>1</oc:calendar-enabled>
 			</D:prop>
 			<D:status>HTTP/1.1 200 OK</D:status>
 		</D:propstat>
@@ -1782,7 +1784,7 @@ END:VALARM`);
 		<D:href>/foo</D:href>
 		<D:propstat>
 			<D:prop>
-    			<oc:calendar-enabled>0</oc:calendar-enabled>
+				<oc:calendar-enabled>0</oc:calendar-enabled>
 			</D:prop>
 			<D:status>HTTP/1.1 200 OK</D:status>
 		</D:propstat>
@@ -1804,7 +1806,7 @@ END:VALARM`);
 		<D:href>/foo</D:href>
 		<D:propstat>
 			<D:prop>
-    			<oc:enabled>1</oc:enabled>
+				<oc:enabled>1</oc:enabled>
 			</D:prop>
 			<D:status>HTTP/1.1 200 OK</D:status>
 		</D:propstat>
@@ -1826,7 +1828,7 @@ END:VALARM`);
 		<D:href>/foo</D:href>
 		<D:propstat>
 			<D:prop>
-    			<oc:enabled>0</oc:enabled>
+				<oc:enabled>0</oc:enabled>
 			</D:prop>
 			<D:status>HTTP/1.1 200 OK</D:status>
 		</D:propstat>
@@ -1848,7 +1850,7 @@ END:VALARM`);
 		<D:href>/foo</D:href>
 		<D:propstat>
 			<D:prop>
-    			<oc:read-only>1</oc:read-only>
+				<oc:read-only>1</oc:read-only>
 			</D:prop>
 			<D:status>HTTP/1.1 200 OK</D:status>
 		</D:propstat>
@@ -1870,7 +1872,7 @@ END:VALARM`);
 		<D:href>/foo</D:href>
 		<D:propstat>
 			<D:prop>
-    			<oc:read-only>0</oc:read-only>
+				<oc:read-only>0</oc:read-only>
 			</D:prop>
 			<D:status>HTTP/1.1 200 OK</D:status>
 		</D:propstat>

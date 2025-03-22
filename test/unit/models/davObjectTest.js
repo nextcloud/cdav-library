@@ -7,16 +7,31 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import {DavObject} from "../../../src/models/davObject.js";
+import { assert, describe, expect, it, vi } from "vitest";
+
+import { DavObject } from "../../../src/models/davObject.js";
 import DAVEventListener from "../../../src/models/davEventListener.js";
 import NetworkRequestClientError from "../../../src/errors/networkRequestClientError.js";
 
 describe('Dav object model', () => {
 
 	it('should inherit from DavEventListener', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -25,13 +40,26 @@ describe('Dav object model', () => {
 		};
 
 		const davObject = new DavObject(parent, request, url, props);
-		expect(davObject).toEqual(jasmine.any(DAVEventListener));
+		expect(davObject).toEqual(expect.any(DAVEventListener));
 	});
 
 	it('should fetch complete data', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -45,7 +73,7 @@ describe('Dav object model', () => {
 		expect(davObject.isDirty()).toEqual(false);
 		expect(davObject._props['{FOO:}bar']).toEqual('data1');
 
-		request.propFind.and.callFake(() => {
+		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				body: {
 					'{DAV:}getetag': '"new etag foo bar tralala"',
@@ -69,14 +97,27 @@ describe('Dav object model', () => {
 			expect(request.propFind).toHaveBeenCalledWith('/foo/bar/file',
 				[['DAV:', 'getcontenttype'], ['DAV:', 'getetag'], ['DAV:', 'resourcetype']], 0);
 		}).catch((e) => {
-			fail('fetchCompleteData was not supposed to throw error');
+			assert.fail('fetchCompleteData was not supposed to throw error');
 		});
 	});
 
 	it('should fetch complete data only if data is partial', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -90,7 +131,7 @@ describe('Dav object model', () => {
 		expect(davObject.isDirty()).toEqual(false);
 		expect(davObject._props['{FOO:}bar']).toEqual('data1');
 
-		request.propFind.and.callFake(() => {
+		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				body: {
 					'{DAV:}getetag': '"new etag foo bar tralala"',
@@ -112,14 +153,27 @@ describe('Dav object model', () => {
 
 			expect(request.propFind).toHaveBeenCalledTimes(0);
 		}).catch((e) => {
-			fail('fetchCompleteData was not supposed to throw error');
+			assert.fail('fetchCompleteData was not supposed to throw error');
 		});
 	});
 
 	it('should fetch complete data if forcing', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -133,7 +187,7 @@ describe('Dav object model', () => {
 		expect(davObject.isDirty()).toEqual(false);
 		expect(davObject._props['{FOO:}bar']).toEqual('data1');
 
-		request.propFind.and.callFake(() => {
+		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				body: {
 					'{DAV:}getetag': '"new etag foo bar tralala"',
@@ -157,14 +211,27 @@ describe('Dav object model', () => {
 			expect(request.propFind).toHaveBeenCalledWith('/foo/bar/file',
 				[['DAV:', 'getcontenttype'], ['DAV:', 'getetag'], ['DAV:', 'resourcetype']], 0);
 		}).catch((e) => {
-			fail('fetchCompleteData was not supposed to throw error');
+			assert.fail('fetchCompleteData was not supposed to throw error');
 		});
 	});
 
 	it('should fetch complete data if forcing, even if data is not partial', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -178,7 +245,7 @@ describe('Dav object model', () => {
 		expect(davObject.isDirty()).toEqual(false);
 		expect(davObject._props['{FOO:}bar']).toEqual('data1');
 
-		request.propFind.and.callFake(() => {
+		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				body: {
 					'{DAV:}getetag': '"new etag foo bar tralala"',
@@ -202,14 +269,27 @@ describe('Dav object model', () => {
 			expect(request.propFind).toHaveBeenCalledWith('/foo/bar/file',
 				[['DAV:', 'getcontenttype'], ['DAV:', 'getetag'], ['DAV:', 'resourcetype']], 0);
 		}).catch((e) => {
-			fail('fetchCompleteData was not supposed to throw error');
+			assert.fail('fetchCompleteData was not supposed to throw error');
 		});
 	});
 
 	it('should fetch complete data and pass thru rejected Promises', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -224,10 +304,10 @@ describe('Dav object model', () => {
 		expect(davObject._props['{FOO:}bar']).toEqual('data1');
 
 		const error = new Error('Foo Bar');
-		request.propFind.and.callFake(() => Promise.reject(error));
+		request.propFind.mockImplementation(() => Promise.reject(error));
 
 		return davObject.fetchCompleteData().then((foo) => {
-			fail('fetchCompleteData was not supposed to succeed');
+			assert.fail('fetchCompleteData was not supposed to succeed');
 		}).catch((e) => {
 			expect(e).toEqual(error);
 
@@ -244,9 +324,22 @@ describe('Dav object model', () => {
 	});
 
 	it('should update an object', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -260,10 +353,12 @@ describe('Dav object model', () => {
 		davObject.data = 'FooBar';
 		davObject._isDirty = true;
 
-		const xhr = jasmine.createSpyObj('XHR', ['getResponseHeader']);
-		xhr.getResponseHeader.and.returnValues('"new etag foo bar tralala"');
+		const xhr = {
+			'getResponseHeader': vi.fn()
+		};
+		xhr.getResponseHeader.mockReturnValueOnce('"new etag foo bar tralala"');
 
-		request.put.and.callFake(() => {
+		request.put.mockImplementation(() => {
 			return Promise.resolve({
 				body: null,
 				status: 204,
@@ -284,9 +379,22 @@ describe('Dav object model', () => {
 	});
 
 	it('should not update partial data', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -300,10 +408,12 @@ describe('Dav object model', () => {
 		davObject.data = 'FooBar';
 		davObject._isDirty = true;
 
-		const xhr = jasmine.createSpyObj('XHR', ['getResponseHeader']);
-		xhr.getResponseHeader.and.returnValues('"new etag foo bar tralala"');
+		const xhr = {
+			'getResponseHeader': vi.fn()
+		};
+		xhr.getResponseHeader.mockReturnValueOnce('"new etag foo bar tralala"');
 
-		request.put.and.callFake(() => {
+		request.put.mockImplementation(() => {
 			return Promise.resolve({
 				body: null,
 				status: 204,
@@ -321,9 +431,22 @@ describe('Dav object model', () => {
 	});
 
 	it('should not update unchanged data', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -336,10 +459,12 @@ describe('Dav object model', () => {
 		// DavObject doesnt have it's own data property, so this is kind of a hack:
 		davObject.data = 'FooBar';
 
-		const xhr = jasmine.createSpyObj('XHR', ['getResponseHeader']);
-		xhr.getResponseHeader.and.returnValues('"new etag foo bar tralala"');
+		const xhr = {
+			'getResponseHeader': vi.fn()
+		};
+		xhr.getResponseHeader.mockReturnValueOnce('"new etag foo bar tralala"');
 
-		request.put.and.callFake(() => {
+		request.put.mockImplementation(() => {
 			return Promise.resolve({
 				body: null,
 				status: 204,
@@ -357,9 +482,22 @@ describe('Dav object model', () => {
 	});
 
 	it('should not send a null etag', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getcontenttype': 'text/blub',
@@ -372,10 +510,12 @@ describe('Dav object model', () => {
 		davObject.data = 'FooBar';
 		davObject._isDirty = true;
 
-		const xhr = jasmine.createSpyObj('XHR', ['getResponseHeader']);
-		xhr.getResponseHeader.and.returnValues('"new etag foo bar tralala"');
+		const xhr = {
+			'getResponseHeader': vi.fn()
+		};
+		xhr.getResponseHeader.mockReturnValueOnce('"new etag foo bar tralala"');
 
-		request.put.and.callFake(() => {
+		request.put.mockImplementation(() => {
 			return Promise.resolve({
 				body: null,
 				status: 204,
@@ -396,9 +536,22 @@ describe('Dav object model', () => {
 	})
 
 	it('should not update if no data is given', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -409,10 +562,12 @@ describe('Dav object model', () => {
 
 		const davObject = new DavObject(parent, request, url, props, false);
 
-		const xhr = jasmine.createSpyObj('XHR', ['getResponseHeader']);
-		xhr.getResponseHeader.and.returnValues('"new etag foo bar tralala"');
+		const xhr = {
+			'getResponseHeader': vi.fn()
+		};
+		xhr.getResponseHeader.mockReturnValueOnce('"new etag foo bar tralala"');
 
-		request.put.and.callFake(() => {
+		request.put.mockImplementation(() => {
 			return Promise.resolve({
 				body: null,
 				status: 204,
@@ -430,9 +585,22 @@ describe('Dav object model', () => {
 	});
 
 	it('should update an object and passthru rejected promises', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -446,14 +614,16 @@ describe('Dav object model', () => {
 		davObject.data = 'FooBar';
 		davObject._isDirty = true;
 
-		const xhr = jasmine.createSpyObj('XHR', ['getResponseHeader']);
-		xhr.getResponseHeader.and.returnValues('"new etag foo bar tralala"');
+		const xhr = {
+			'getResponseHeader': vi.fn()
+		};
+		xhr.getResponseHeader.mockReturnValueOnce('"new etag foo bar tralala"');
 
 		const error = new Error('Foo Bar');
-		request.put.and.callFake(() => Promise.reject(error));
+		request.put.mockImplementation(() => Promise.reject(error));
 
 		return davObject.update().then(() => {
-			fail('Update was not supposed to succeed');
+			assert.fail('Update was not supposed to succeed');
 		}).catch((e) => {
 			expect(e).toEqual(error);
 
@@ -466,9 +636,22 @@ describe('Dav object model', () => {
 	});
 
 	it('should update an object and passthru rejected promises and set partial on 412', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -483,14 +666,16 @@ describe('Dav object model', () => {
 		davObject._isDirty = true;
 		davObject._isPartial = false;
 
-		const xhr = jasmine.createSpyObj('XHR', ['getResponseHeader']);
-		xhr.getResponseHeader.and.returnValues('"new etag foo bar tralala"');
+		const xhr = {
+			'getResponseHeader': vi.fn()
+		};
+		xhr.getResponseHeader.mockReturnValueOnce('"new etag foo bar tralala"');
 
 		const error = new NetworkRequestClientError({status: 412});
-		request.put.and.callFake(() => Promise.reject(error));
+		request.put.mockImplementation(() => Promise.reject(error));
 
 		return davObject.update().then(() => {
-			fail('Update was not supposed to succeed');
+			assert.fail('Update was not supposed to succeed');
 		}).catch((e) => {
 			expect(e).toEqual(error);
 
@@ -504,9 +689,22 @@ describe('Dav object model', () => {
 	});
 
 	it('should delete an object', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -520,7 +718,7 @@ describe('Dav object model', () => {
 		expect(davObject.isDirty()).toEqual(false);
 		expect(davObject._props['{FOO:}bar']).toEqual('data1');
 
-		request.delete.and.callFake(() => {
+		request.delete.mockImplementation(() => {
 			return Promise.resolve({
 				body: null,
 				status: 204,
@@ -532,14 +730,27 @@ describe('Dav object model', () => {
 			expect(request.delete).toHaveBeenCalledTimes(1);
 			expect(request.delete).toHaveBeenCalledWith('/foo/bar/file', {});
 		}).catch((e) => {
-			fail('delete was not supposed to throw error');
+			assert.fail('delete was not supposed to throw error');
 		});
 	});
 
 	it('should expose the etag as a property', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -553,9 +764,22 @@ describe('Dav object model', () => {
 	});
 
 	it('should expose the content-type as a property', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -569,9 +793,22 @@ describe('Dav object model', () => {
 	});
 
 	it('should expose the url as a property', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn()
+		};
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -585,13 +822,37 @@ describe('Dav object model', () => {
 	});
 
 	it('should copy a DavObject into a different collection', () => {
-		const davCollection1 = jasmine.createSpyObj('DavCollection1', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable', 'isSameCollectionTypeAs']);
+		const davCollection1 = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn(),
+			'isSameCollectionTypeAs': vi.fn()
+		};
 		davCollection1.url = '/foo/bar/';
-		const davCollection2 = jasmine.createSpyObj('DavCollection2', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
+		const davCollection2 = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		davCollection2.url = '/foo/bla/';
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'copy']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'copy': vi.fn()
+		};
 		const url = '/foo/bar/file-tri-tra-tralala';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar"',
@@ -600,9 +861,9 @@ describe('Dav object model', () => {
 			'{FOO:}bar': 'data1'
 		};
 
-		davCollection1.isSameCollectionTypeAs.and.callFake(() => true);
-		davCollection2.isWriteable.and.callFake(() => true);
-		davCollection2.find.and.callFake(() => 'copied_object');
+		davCollection1.isSameCollectionTypeAs.mockImplementation(() => true);
+		davCollection2.isWriteable.mockImplementation(() => true);
+		davCollection2.find.mockImplementation(() => 'copied_object');
 
 		const davObject = new DavObject(davCollection1, request, url, props, false);
 		return davObject.copy(davCollection2, true).then(() => {
@@ -620,10 +881,25 @@ describe('Dav object model', () => {
 	});
 
 	it('should copy a DavObject into a different collection, but not if destination is the same as the current collection', () => {
-		const davCollection1 = jasmine.createSpyObj('DavCollection1', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable', 'isSameCollectionTypeAs']);
+		const davCollection1 = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn(),
+			'isSameCollectionTypeAs': vi.fn()
+		};
 		davCollection1.url = '/foo/bar/';
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'copy']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'copy': vi.fn()
+		};
 		const url = '/foo/bar/file-tri-tra-tralala';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar"',
@@ -632,24 +908,48 @@ describe('Dav object model', () => {
 			'{FOO:}bar': 'data1'
 		};
 
-		davCollection1.isSameCollectionTypeAs.and.callFake(() => true);
+		davCollection1.isSameCollectionTypeAs.mockImplementation(() => true);
 
 		const davObject = new DavObject(davCollection1, request, url, props, false);
 		return davObject.copy(davCollection1, true).then(() => {
-			fail('Copy was not supposed to succeed')
+			assert.fail('Copy was not supposed to succeed')
 		}).catch((e) => {
 			expect(e.message).toEqual('Copying an object to the collection it\'s already part of is not supported');
 		});
 	});
 
 	it('should copy a DavObject into a different collection, but not if destination is of a different collection type', () => {
-		const davCollection1 = jasmine.createSpyObj('DavCollection1', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable', 'isSameCollectionTypeAs']);
+		const davCollection1 = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn(),
+			'isSameCollectionTypeAs': vi.fn()
+		};
 		davCollection1.url = '/foo/bar/';
-		const davCollection2 = jasmine.createSpyObj('DavCollection2', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
+		const davCollection2 = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		davCollection2.url = '/foo/bla/';
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'copy']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'copy': vi.fn()
+		};
 		const url = '/foo/bar/file-tri-tra-tralala';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar"',
@@ -658,26 +958,50 @@ describe('Dav object model', () => {
 			'{FOO:}bar': 'data1'
 		};
 
-		davCollection1.isSameCollectionTypeAs.and.callFake(() => false);
-		davCollection2.isWriteable.and.callFake(() => true);
-		davCollection2.find.and.callFake(() => 'copied_object');
+		davCollection1.isSameCollectionTypeAs.mockImplementation(() => false);
+		davCollection2.isWriteable.mockImplementation(() => true);
+		davCollection2.find.mockImplementation(() => 'copied_object');
 
 		const davObject = new DavObject(davCollection1, request, url, props, false);
 		return davObject.copy(davCollection2, true).then(() => {
-			fail('Copy was not supposed to succeed')
+			assert.fail('Copy was not supposed to succeed')
 		}).catch((e) => {
 			expect(e.message).toEqual('Copying an object to a collection of a different type is not supported');
 		});
 	});
 
 	it('should copy a DavObject into a different collection, but not if destination is read-only', () => {
-		const davCollection1 = jasmine.createSpyObj('DavCollection1', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable', 'isSameCollectionTypeAs']);
+		const davCollection1 = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn(),
+			'isSameCollectionTypeAs': vi.fn()
+		};
 		davCollection1.url = '/foo/bar/';
-		const davCollection2 = jasmine.createSpyObj('DavCollection2', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
+		const davCollection2 = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		davCollection2.url = '/foo/bla/';
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'copy']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'copy': vi.fn()
+		};
 		const url = '/foo/bar/file-tri-tra-tralala';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar"',
@@ -686,26 +1010,50 @@ describe('Dav object model', () => {
 			'{FOO:}bar': 'data1'
 		};
 
-		davCollection1.isSameCollectionTypeAs.and.callFake(() => true);
-		davCollection2.isWriteable.and.callFake(() => false);
-		davCollection2.find.and.callFake(() => 'copied_object');
+		davCollection1.isSameCollectionTypeAs.mockImplementation(() => true);
+		davCollection2.isWriteable.mockImplementation(() => false);
+		davCollection2.find.mockImplementation(() => 'copied_object');
 
 		const davObject = new DavObject(davCollection1, request, url, props, false);
 		return davObject.copy(davCollection2, true).then(() => {
-			fail('Copy was not supposed to succeed')
+			assert.fail('Copy was not supposed to succeed')
 		}).catch((e) => {
 			expect(e.message).toEqual('Can not copy object into read-only destination collection');
 		});
 	});
 
 	it('should move a DavObject into a different collection', () => {
-		const davCollection1 = jasmine.createSpyObj('DavCollection1', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable', 'isSameCollectionTypeAs']);
+		const davCollection1 = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn(),
+			'isSameCollectionTypeAs': vi.fn()
+		};
 		davCollection1.url = '/foo/bar/';
-		const davCollection2 = jasmine.createSpyObj('DavCollection2', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
+		const davCollection2 = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		davCollection2.url = '/foo/bla/';
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'move']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'move': vi.fn()
+		};
 		const url = '/foo/bar/file-tri-tra-tralala';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar"',
@@ -714,9 +1062,9 @@ describe('Dav object model', () => {
 			'{FOO:}bar': 'data1'
 		};
 
-		davCollection1.isSameCollectionTypeAs.and.callFake(() => true);
-		davCollection2.isWriteable.and.callFake(() => true);
-		davCollection2.find.and.callFake(() => 'copied_object');
+		davCollection1.isSameCollectionTypeAs.mockImplementation(() => true);
+		davCollection2.isWriteable.mockImplementation(() => true);
+		davCollection2.find.mockImplementation(() => 'copied_object');
 
 		const davObject = new DavObject(davCollection1, request, url, props, false);
 		return davObject.move(davCollection2, true).then(() => {
@@ -735,10 +1083,25 @@ describe('Dav object model', () => {
 	});
 
 	it('should move a DavObject into a different collection, but not if destination is the same as the current collection', () => {
-		const davCollection1 = jasmine.createSpyObj('DavCollection1', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable', 'isSameCollectionTypeAs']);
+		const davCollection1 = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn(),
+			'isSameCollectionTypeAs': vi.fn()
+		};
 		davCollection1.url = '/foo/bar/';
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'move']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'move': vi.fn()
+		};
 		const url = '/foo/bar/file-tri-tra-tralala';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar"',
@@ -747,24 +1110,48 @@ describe('Dav object model', () => {
 			'{FOO:}bar': 'data1'
 		};
 
-		davCollection1.isSameCollectionTypeAs.and.callFake(() => true);
+		davCollection1.isSameCollectionTypeAs.mockImplementation(() => true);
 
 		const davObject = new DavObject(davCollection1, request, url, props, false);
 		return davObject.move(davCollection1, true).then(() => {
-			fail('Copy was not supposed to succeed')
+			assert.fail('Copy was not supposed to succeed')
 		}).catch((e) => {
 			expect(e.message).toEqual('Moving an object to the collection it\'s already part of is not supported');
 		});
 	});
 
 	it('should move a DavObject into a different collection, but not if destination is of a different collection type', () => {
-		const davCollection1 = jasmine.createSpyObj('DavCollection1', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable', 'isSameCollectionTypeAs']);
+		const davCollection1 = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn(),
+			'isSameCollectionTypeAs': vi.fn()
+		};
 		davCollection1.url = '/foo/bar/';
-		const davCollection2 = jasmine.createSpyObj('DavCollection2', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
+		const davCollection2 = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		davCollection2.url = '/foo/bla/';
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'move']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'move': vi.fn()
+		};
 		const url = '/foo/bar/file-tri-tra-tralala';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar"',
@@ -773,26 +1160,50 @@ describe('Dav object model', () => {
 			'{FOO:}bar': 'data1'
 		};
 
-		davCollection1.isSameCollectionTypeAs.and.callFake(() => false);
-		davCollection2.isWriteable.and.callFake(() => true);
-		davCollection2.find.and.callFake(() => 'copied_object');
+		davCollection1.isSameCollectionTypeAs.mockImplementation(() => false);
+		davCollection2.isWriteable.mockImplementation(() => true);
+		davCollection2.find.mockImplementation(() => 'copied_object');
 
 		const davObject = new DavObject(davCollection1, request, url, props, false);
 		return davObject.move(davCollection2, true).then(() => {
-			fail('Copy was not supposed to succeed')
+			assert.fail('Copy was not supposed to succeed')
 		}).catch((e) => {
 			expect(e.message).toEqual('Moving an object to a collection of a different type is not supported');
 		});
 	});
 
 	it('should move a DavObject into a different collection, but not if destination is read-only', () => {
-		const davCollection1 = jasmine.createSpyObj('DavCollection1', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable', 'isSameCollectionTypeAs']);
+		const davCollection1 = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn(),
+			'isSameCollectionTypeAs': vi.fn()
+		};
 		davCollection1.url = '/foo/bar/';
-		const davCollection2 = jasmine.createSpyObj('DavCollection2', ['findAll', 'findAllByFilter', 'find',
-			'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
+		const davCollection2 = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
 		davCollection2.url = '/foo/bla/';
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'move']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'move': vi.fn()
+		};
 		const url = '/foo/bar/file-tri-tra-tralala';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar"',
@@ -801,13 +1212,13 @@ describe('Dav object model', () => {
 			'{FOO:}bar': 'data1'
 		};
 
-		davCollection1.isSameCollectionTypeAs.and.callFake(() => true);
-		davCollection2.isWriteable.and.callFake(() => false);
-		davCollection2.find.and.callFake(() => 'copied_object');
+		davCollection1.isSameCollectionTypeAs.mockImplementation(() => true);
+		davCollection2.isWriteable.mockImplementation(() => false);
+		davCollection2.find.mockImplementation(() => 'copied_object');
 
 		const davObject = new DavObject(davCollection1, request, url, props, false);
 		return davObject.move(davCollection2, true).then(() => {
-			fail('Copy was not supposed to succeed')
+			assert.fail('Copy was not supposed to succeed')
 		}).catch((e) => {
 			expect(e.message).toEqual('Can not move object into read-only destination collection');
 		});

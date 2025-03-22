@@ -7,6 +7,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { assert, beforeEach, describe, expect, it, vi } from "vitest";
+
 import { DavObject } from '../../../src/models/davObject.js';
 import { Principal } from '../../../src/models/principal.js';
 import * as XMLUtility from '../../../src/utility/xmlUtility.js';
@@ -18,7 +20,12 @@ describe('Principal model', () => {
 
 	it('should inherit from DavObject', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -34,12 +41,17 @@ describe('Principal model', () => {
 		};
 
 		const principal = new Principal(parent, request, url, props);
-		expect(principal).toEqual(jasmine.any(DavObject));
+		expect(principal).toEqual(expect.any(DavObject));
 	});
 
 	it('should expose displayname as property', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -60,7 +72,12 @@ describe('Principal model', () => {
 
 	it('should expose calendarUserType as property', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -81,7 +98,12 @@ describe('Principal model', () => {
 
 	it('should expose calendarUserAddressSet as property', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -102,7 +124,12 @@ describe('Principal model', () => {
 
 	it('should expose principalUrl as property', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -123,7 +150,12 @@ describe('Principal model', () => {
 
 	it('should expose email as property', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -144,7 +176,12 @@ describe('Principal model', () => {
 
 	it('should expose calendarHomes as property', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -165,7 +202,12 @@ describe('Principal model', () => {
 
 	it('should expose scheduleInbox as property', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -186,7 +228,12 @@ describe('Principal model', () => {
 
 	it('should expose scheduleOutbox as property', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -207,7 +254,12 @@ describe('Principal model', () => {
 
 	it('should expose addressBookHomes as property', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -228,7 +280,12 @@ describe('Principal model', () => {
 
 	it('should expose principalScheme as property', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav/';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -243,7 +300,7 @@ describe('Principal model', () => {
 			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/']
 		};
 
-		request.pathname.and.callFake((p) => {
+		request.pathname.mockImplementation((p) => {
 			if (p === 'http://all.local/nextcloud/remote.php/dav/') {
 				return '/nextcloud/remote.php/dav/';
 			}
@@ -255,7 +312,12 @@ describe('Principal model', () => {
 
 	it('should expose userId as property if principal is a user', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav/';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -272,7 +334,12 @@ describe('Principal model', () => {
 
 	it('should expose groupId as property if principal is a group', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav/';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -289,7 +356,12 @@ describe('Principal model', () => {
 
 	it('should expose resourceId as property if principal is a resource', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav/';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -306,7 +378,12 @@ describe('Principal model', () => {
 
 	it('should expose roomId as property if principal is a room', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav/';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -323,7 +400,12 @@ describe('Principal model', () => {
 
 	it('should expose userId as property if principal is a user even if url ends without slash', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav/';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz';
 		const props = {
@@ -340,7 +422,12 @@ describe('Principal model', () => {
 
 	it('should expose scheduleDefaultCalendarUrl as property', () => {
 		const parent = null;
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'pathname']);
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'pathname': vi.fn()
+		};
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -418,8 +505,23 @@ describe('Principal model', () => {
 	});
 
 	it('should update the principal', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find', 'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'propPatch']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'propPatch': vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
 			'{DAV:}displayname': 'Umberto',
@@ -436,7 +538,7 @@ describe('Principal model', () => {
 
 		const principal = new Principal(parent, request, url, props);
 
-		request.propPatch.and.callFake(() => {
+		request.propPatch.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: {
@@ -454,13 +556,28 @@ describe('Principal model', () => {
 			expect(request.propPatch).toHaveBeenCalledTimes(1);
 			expect(request.propPatch).toHaveBeenCalledWith('/nextcloud/remote.php/dav/foo/bar/baz/', {}, '<x0:propertyupdate xmlns:x0="DAV:"><x0:set><x0:prop><x1:schedule-default-calendar-URL xmlns:x1="urn:ietf:params:xml:ns:caldav"><x0:href>/nextcloud/remote.php/dav/calendars/admin/calendar2/</x0:href></x1:schedule-default-calendar-URL></x0:prop></x0:set></x0:propertyupdate>');
 		}).catch(() => {
-			fail('Principal update was not supposed to fail');
+			assert.fail('Principal update was not supposed to assert.fail');
 		});
 	});
 
 	it('should update the principal only if properties changed', () => {
-		const parent = jasmine.createSpyObj('DavCollection', ['findAll', 'findAllByFilter', 'find', 'createCollection', 'createObject', 'update', 'delete', 'isReadable', 'isWriteable']);
-		const request = jasmine.createSpyObj('Request', ['propFind', 'put', 'delete', 'propPatch']);
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = {
+			'propFind': vi.fn(),
+			'put': vi.fn(),
+			'delete': vi.fn(),
+			'propPatch': vi.fn()
+		};
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
 			'{DAV:}displayname': 'Umberto',
@@ -477,7 +594,7 @@ describe('Principal model', () => {
 
 		const principal = new Principal(parent, request, url, props);
 
-		request.propPatch.and.callFake(() => {
+		request.propPatch.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: {
@@ -492,7 +609,7 @@ describe('Principal model', () => {
 
 			expect(request.propPatch).toHaveBeenCalledTimes(0);
 		}).catch(() => {
-			fail('Principal update was not supposed to fail');
+			assert.fail('Principal update was not supposed to assert.fail');
 		});
 	});
 });

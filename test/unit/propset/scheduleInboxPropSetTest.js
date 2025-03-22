@@ -7,6 +7,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { describe, expect, it } from "vitest";
+
 import scheduleInboxPropSet from "../../../src/propset/scheduleInboxPropSet.js";
 
 describe('Schedule Inbox collection prop-set', () => {
