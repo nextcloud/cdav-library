@@ -6,6 +6,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## v1.5.3 - 2025-03-22
+### Fixed
+- Update vulnerable dependencies
+
 ## v1.5.2 - 2024-10-14
 ### Fixed
 - Update vulnerable dependencies
