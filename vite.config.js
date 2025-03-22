@@ -11,7 +11,6 @@ export default createLibConfig({
 	libraryFormats: ['es', 'cjs'],
 	config: {
 		test: {
-			passWithNoTests: true,
 			restoreMocks: true,
 			include: [
 				'test/unit/**/*.js',
