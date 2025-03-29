@@ -11,8 +11,9 @@ import { assert, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { DavCollection } from "../../../src/models/davCollection.js";
 import DAVEventListener from "../../../src/models/davEventListener.js";
-import {DavObject} from "../../../src/models/davObject.js";
+import { DavObject } from "../../../src/models/davObject.js";
 import * as XMLUtility from '../../../src/utility/xmlUtility.js';
+import RequestMock from "../../mocks/request.mock.js";
 
 describe('Dav collection model', () => {
 
@@ -32,11 +33,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -66,12 +63,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'pathname': vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -85,16 +77,16 @@ describe('Dav collection model', () => {
 				'{DAV:}read-current-user-privilege-set'],
 		};
 
-		const collectionFactory1 = vi.fn(function() {
+		const collectionFactory1 = vi.fn(function () {
 			this.name = 'collectionFactory1';
 		});
-		const collectionFactory2 = vi.fn(function() {
+		const collectionFactory2 = vi.fn(function () {
 			this.name = 'collectionFactory2';
 		});
-		const objectFactory1 = vi.fn(function() {
+		const objectFactory1 = vi.fn(function () {
 			this.name = 'objectFactory1';
 		});
-		const objectFactory2 = vi.fn(function() {
+		const objectFactory2 = vi.fn(function () {
 			this.name = 'objectFactory2';
 		});
 
@@ -152,7 +144,7 @@ describe('Dav collection model', () => {
 						'{DAV:}sync-token': 'https://foo/bar/token/3',
 					},
 				},
-				xhr: null
+				headers: {}
 			});
 		});
 
@@ -193,12 +185,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'pathname': vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -279,7 +266,7 @@ describe('Dav collection model', () => {
 						'{DAV:}sync-token': 'https://foo/bar/token/3',
 					},
 				},
-				xhr: null
+				headers: {}
 			});
 		});
 
@@ -316,12 +303,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'pathname': vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -335,7 +317,7 @@ describe('Dav collection model', () => {
 				'{DAV:}read-current-user-privilege-set'],
 		};
 
-		const objectFactory1 = vi.fn(function() {
+		const objectFactory1 = vi.fn(function () {
 			this.name = 'objectFactory1';
 		});
 
@@ -351,7 +333,7 @@ describe('Dav collection model', () => {
 					'{DAV:}sync-token': 'https://foo/bar/token/3',
 					'{DAV:}getcontenttype': 'text/foo1; charset=utf8'
 				},
-				xhr: null
+				headers: {}
 			});
 		});
 
@@ -376,13 +358,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'mkCol': vi.fn(),
-			'pathname': vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -462,7 +438,7 @@ describe('Dav collection model', () => {
 					'{DAV:}sync-token': 'https://foo/bar/token/3',
 				},
 			},
-			xhr: null
+			headers: {}
 		})).mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: {
@@ -471,7 +447,7 @@ describe('Dav collection model', () => {
 					'{DAV:}resourcetype': ['{DAV:}collection'],
 					'{DAV:}sync-token': 'https://foo/bar/token/3',
 				},
-				xhr: null
+				headers: {}
 			})).mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: {
@@ -480,14 +456,14 @@ describe('Dav collection model', () => {
 					'{DAV:}resourcetype': ['{DAV:}collection'],
 					'{DAV:}sync-token': 'https://foo/bar/token/3',
 				},
-				xhr: null
+				headers: {}
 			}));
 
 		request.mkCol.mockImplementation(() => {
 			return Promise.resolve({
 				status: 201,
 				body: null,
-				xhr: null
+				headers: {}
 			})
 		});
 
@@ -525,12 +501,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'pathname': vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -548,7 +519,7 @@ describe('Dav collection model', () => {
 			return Promise.resolve({
 				status: 204,
 				body: null,
-				xhr: null,
+				headers: {},
 			})
 		});
 		request.propFind.mockImplementation(() => {
@@ -561,13 +532,13 @@ describe('Dav collection model', () => {
 					'{DAV:}sync-token': 'https://foo/bar/token/3',
 					'{DAV:}getcontenttype': 'text/foo1; charset=utf8'
 				},
-				xhr: null
+				headers: {}
 			});
 		});
 		request.pathname.mockImplementation((p) => p);
 
 		const collection = new DavCollection(parent, request, url, props);
-		return collection.createObject('foo.bar', {'Content-Type': 'text/calendar'}, 'DATA123').then((res) => {
+		return collection.createObject('foo.bar', { 'Content-Type': 'text/calendar' }, 'DATA123').then((res) => {
 			expect(res).toEqual(expect.any(DavObject));
 			expect(res.url).toEqual('/foo/bar/folder/foo.bar');
 			expect(res.etag).toEqual('"etag foo bar tralala"');
@@ -596,12 +567,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'propPatch': vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -623,7 +589,7 @@ describe('Dav collection model', () => {
 					'{DAV:}displayname': '',
 					'{http://apple.com/ns/ical/}calendar-color': ''
 				},
-				xhr: null
+				headers: {}
 			});
 		});
 
@@ -654,7 +620,7 @@ describe('Dav collection model', () => {
 
 		return collection.update().then(() => {
 			expect(request.propPatch).toHaveBeenCalledTimes(1);
-			expect(request.propPatch).toHaveBeenCalledWith( '/foo/bar/folder/', {}, '<x0:propertyupdate xmlns:x0="DAV:"><x0:set><x0:prop><x0:displayname>New displayname 123</x0:displayname><x1:property xmlns:x1="custom">updated custom property value 456</x1:property></x0:prop></x0:set></x0:propertyupdate>');
+			expect(request.propPatch).toHaveBeenCalledWith('/foo/bar/folder/', {}, '<x0:propertyupdate xmlns:x0="DAV:"><x0:set><x0:prop><x0:displayname>New displayname 123</x0:displayname><x1:property xmlns:x1="custom">updated custom property value 456</x1:property></x0:prop></x0:set></x0:propertyupdate>');
 		}).catch(() => {
 			assert.fail('DavCollection update was not supposed to assert.fail');
 		});
@@ -672,12 +638,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'propPatch': vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -699,7 +660,7 @@ describe('Dav collection model', () => {
 					'{DAV:}displayname': '',
 					'{http://apple.com/ns/ical/}calendar-color': ''
 				},
-				xhr: null
+				headers: {}
 			});
 		});
 
@@ -744,11 +705,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -783,11 +740,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -816,11 +769,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -850,11 +799,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -883,11 +828,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -917,11 +858,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -951,11 +888,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -985,11 +918,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -1019,11 +948,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -1057,11 +982,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -1080,11 +1001,7 @@ describe('Dav collection model', () => {
 	});
 
 	it('should check whether two collections are of the same type', () => {
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new RequestMock();
 
 		const collection1 = new DavCollection(null, request, 'a', {
 			'{DAV:}displayname': 'Foo Bar Bla Blub col1',
@@ -1134,12 +1051,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'pathname': vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -1169,7 +1081,7 @@ describe('Dav collection model', () => {
 						'{DAV:}write-acl', '{DAV:}read', '{DAV:}read-acl',
 						'{DAV:}read-current-user-privilege-set'],
 				},
-				xhr: null
+				headers: {}
 			});
 		});
 

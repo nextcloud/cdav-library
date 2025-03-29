@@ -27,10 +27,9 @@ export default class DavClient {
 	/**
 	 * @param {object} options
 	 * @param {string} options.rootUrl
-	 * @param {Function} xhrProvider
 	 * @param {object} factories
 	 */
-	constructor(options, xhrProvider = null, factories = {}) {
+	constructor(options, factories = {}) {
 		/**
 		 * root URL of DAV Server
 		 *
@@ -109,7 +108,7 @@ export default class DavClient {
 		 * @type {Request}
 		 * @private
 		 */
-		this._request = new Request(this.rootUrl, this.parser, xhrProvider)
+		this._request = new Request(this.rootUrl, this.parser)
 	}
 
 	/**
@@ -141,7 +140,7 @@ export default class DavClient {
 		const response = await this._request.propFind(principalUrl, propFindList)
 
 		this.currentUserPrincipal = new Principal(null, this._request, principalUrl, response.body)
-		this._extractAdvertisedDavFeatures(response.xhr)
+		this._extractAdvertisedDavFeatures(response.headers)
 		this._extractAddressBookHomes(response.body)
 		this._extractCalendarHomes(response.body)
 		this._extractPrincipalCollectionSets(response.body)
@@ -549,12 +548,12 @@ export default class DavClient {
 	/**
 	 * extracts the advertised features supported by the DAV server
 	 *
-	 * @param {XMLHttpRequest} xhr
+	 * @param {object} headers
 	 * @return void
 	 * @private
 	 */
-	_extractAdvertisedDavFeatures(xhr) {
-		const dav = xhr.getResponseHeader('DAV')
+	_extractAdvertisedDavFeatures(headers) {
+		const dav = headers.dav
 		this.advertisedFeatures.push(...dav.split(',').map((s) => s.trim()))
 	}
 

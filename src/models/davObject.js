@@ -146,7 +146,7 @@ export class DavObject extends DAVEventListener {
 		return this._request.put(this.url, headers, this.data).then((res) => {
 			this._isDirty = false
 			// Don't overwrite content-type, it's set to text/html in the response ...
-			this._props['{DAV:}getetag'] = res.xhr.getResponseHeader('etag')
+			this._props['{DAV:}getetag'] = res.headers.etag || null
 		}).catch((ex) => {
 			this._isDirty = true
 
@@ -162,7 +162,7 @@ export class DavObject extends DAVEventListener {
 	 * deletes the DavObject on the server
 	 *
 	 * @param headers
-	 * @return {Promise<void>}
+	 * @return {Promise<{body: string|object, status: number, headers: object}>}
 	 */
 	async delete(headers = {}) {
 		return this._request.delete(this.url, headers)

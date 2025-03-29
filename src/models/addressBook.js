@@ -195,10 +195,7 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 	 *
 	 * @param {string[]} hrefs
 	 * @param {object[]} prop
-	 * @return {Promise<{Object}>}
-	 * @property {string | object} body
-	 * @property {number} status
-	 * @property {XMLHttpRequest} xhr
+	 * @return {Promise<{body: string|object, status: number, headers: object}>}
 	 */
 	async addressbookMultigetExport(hrefs = [], prop) {
 		debug('sending an addressbook-multiget request and request download')
