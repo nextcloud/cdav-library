@@ -9,6 +9,7 @@
 
 import * as NS from './utility/namespaceUtility.js'
 import * as XMLUtility from './utility/xmlUtility.js'
+import axios from '@nextcloud/axios'
 
 import NetworkRequestAbortedError from './errors/networkRequestAbortedError.js'
 import NetworkRequestError from './errors/networkRequestError.js'
@@ -27,12 +28,11 @@ export default class Request {
 	 *
 	 * @param {string} baseUrl - root url of DAV server, use OC.remote('dav')
 	 * @param {Parser} parser - instance of Parser class
-	 * @param {Function} xhrProvider - Function that returns new XMLHttpRequest objects
+	 * @param {object} axiosProvider - Function that returns an axios reference
 	 */
-	constructor(baseUrl, parser, xhrProvider = () => new XMLHttpRequest()) {
+	constructor(baseUrl, parser) {
 		this.baseUrl = baseUrl
 		this.parser = parser
-		this.xhrProvider = xhrProvider
 	}
 
 	/**
@@ -43,10 +43,10 @@ export default class Request {
 	 * @param {string} body - request body
 	 * @param {Function} beforeRequestHandler - custom function to be called before the request is made
 	 * @param {Function} afterRequestHandler - custom function to be called after the request was made
+	 * @param {object} config - the axios configuration object
 	 * @return {Promise<{Object}>}
 	 * @property {string | object} body
 	 * @property {number} status
-	 * @property {XMLHttpRequest} xhr
 	 */
 	async get(url, headers = {}, body = null, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 		return this.request('GET', url, headers, body, beforeRequestHandler, afterRequestHandler)
@@ -63,7 +63,6 @@ export default class Request {
 	 * @return {Promise<{Object}>}
 	 * @property {string | object} body
 	 * @property {number} status
-	 * @property {XMLHttpRequest} xhr
 	 */
 	async patch(url, headers, body, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 		return this.request('PATCH', url, headers, body, beforeRequestHandler, afterRequestHandler)
@@ -80,7 +79,6 @@ export default class Request {
 	 * @return {Promise<{Object}>}
 	 * @property {string | object} body
 	 * @property {number} status
-	 * @property {XMLHttpRequest} xhr
 	 */
 	async post(url, headers, body, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 		return this.request('POST', url, headers, body, beforeRequestHandler, afterRequestHandler)
@@ -97,7 +95,6 @@ export default class Request {
 	 * @return {Promise<{Object}>}
 	 * @property {string | object} body
 	 * @property {number} status
-	 * @property {XMLHttpRequest} xhr
 	 */
 	async put(url, headers, body, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 		return this.request('PUT', url, headers, body, beforeRequestHandler, afterRequestHandler)
@@ -114,7 +111,6 @@ export default class Request {
 	 * @return {Promise<{Object}>}
 	 * @property {string | object} body
 	 * @property {number} status
-	 * @property {XMLHttpRequest} xhr
 	 */
 	async delete(url, headers = {}, body = null, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 		return this.request('DELETE', url, headers, body, beforeRequestHandler, afterRequestHandler)
@@ -135,7 +131,6 @@ export default class Request {
 	 * @return {Promise<{Object}>}
 	 * @property {string | object} body
 	 * @property {number} status
-	 * @property {XMLHttpRequest} xhr
 	 */
 	async copy(url, destination, depth = 0, overwrite = false, headers = {}, body = null, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 		headers.Destination = destination
@@ -159,7 +154,6 @@ export default class Request {
 	 * @return {Promise<{Object}>}
 	 * @property {string | object} body
 	 * @property {number} status
-	 * @property {XMLHttpRequest} xhr
 	 */
 	async move(url, destination, overwrite = false, headers = {}, body = null, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 		headers.Destination = destination
@@ -181,7 +175,6 @@ export default class Request {
 	 * @return {Promise<{Object}>}
 	 * @property {string | object} body
 	 * @property {number} status
-	 * @property {XMLHttpRequest} xhr
 	 */
 	async lock(url, headers = {}, body = null, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 
@@ -202,7 +195,6 @@ export default class Request {
 	 * @return {Promise<{Object}>}
 	 * @property {string | object} body
 	 * @property {number} status
-	 * @property {XMLHttpRequest} xhr
 	 */
 	async unlock(url, headers = {}, body = null, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 
@@ -224,7 +216,6 @@ export default class Request {
 	 * @return {Promise<{Object}>}
 	 * @property {string | object} body
 	 * @property {number} status
-	 * @property {XMLHttpRequest} xhr
 	 */
 	async propFind(url, properties, depth = 0, headers = {}, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 		// adjust headers
@@ -250,7 +241,6 @@ export default class Request {
 	 * @return {Promise<{Object}>}
 	 * @property {string | object} body
 	 * @property {number} status
-	 * @property {XMLHttpRequest} xhr
 	 */
 	async propPatch(url, headers, body, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 		return this.request('PROPPATCH', url, headers, body, beforeRequestHandler, afterRequestHandler)
@@ -269,7 +259,6 @@ export default class Request {
 	 * @return {Promise<{Object}>}
 	 * @property {string | object} body
 	 * @property {number} status
-	 * @property {XMLHttpRequest} xhr
 	 */
 	async mkCol(url, headers, body, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 		return this.request('MKCOL', url, headers, body, beforeRequestHandler, afterRequestHandler)
@@ -287,7 +276,6 @@ export default class Request {
 	 * @return {Promise<{Object}>}
 	 * @property {string | object} body
 	 * @property {number} status
-	 * @property {XMLHttpRequest} xhr
 	 */
 	async report(url, headers, body, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
 		return this.request('REPORT', url, headers, body, beforeRequestHandler, afterRequestHandler)
@@ -302,90 +290,73 @@ export default class Request {
 	 * @param {string} body - request body
 	 * @param {Function} beforeRequestHandler - custom function to be called before the request is made
 	 * @param {Function} afterRequestHandler - custom function to be called after the request was made
+	 * @param {object} config - additional axios configuration
 	 * @return {Promise<{Object}>}
 	 * @property {string | object} body
 	 * @property {number} status
-	 * @property {XMLHttpRequest} xhr
 	 */
+	// FIXME: implement use of beforeRequestHandler and afterRequestHandler
 	async request(method, url, headers, body, beforeRequestHandler = () => null, afterRequestHandler = () => null) {
-		const xhr = this.xhrProvider()
 		const assignHeaders = Object.assign({}, getDefaultHeaders(), headers)
+		// all statuses not in success are treated as errors in catch
+		axios.defaults.validateStatus = (status) => wasRequestSuccessful(status)
+		const request = axios.request({
+			url: this.absoluteUrl(url),
+			method,
+			headers: assignHeaders,
+			data: body,
+		})
 
-		xhr.open(method, this.absoluteUrl(url), true)
-
-		for (const header in assignHeaders) {
-			xhr.setRequestHeader(header, assignHeaders[header])
-		}
-
-		beforeRequestHandler(xhr)
-
-		if (body === null || body === undefined) {
-			xhr.send()
-		} else {
-			xhr.send(body)
-		}
-
-		return new Promise((resolve, reject) => {
-			xhr.onreadystatechange = () => {
-				if (xhr.readyState !== 4) {
-					return
+		return request.then(response => {
+			let responseBody = response.data
+			if (response.status === 207) {
+				responseBody = this._parseMultiStatusResponse(responseBody)
+				if (parseInt(assignHeaders.Depth, 10) === 0 && method === 'PROPFIND') {
+					responseBody = responseBody[Object.keys(responseBody)[0]]
 				}
-
-				afterRequestHandler(xhr)
-
-				let responseBody = xhr.response
-				if (!wasRequestSuccessful(xhr.status)) {
-					if (xhr.status >= 400 && xhr.status < 500) {
-						reject(new NetworkRequestClientError({
-							body: responseBody,
-							status: xhr.status,
-							xhr,
-						}))
-						return
-					}
-					if (xhr.status >= 500 && xhr.status < 600) {
-						reject(new NetworkRequestServerError({
-							body: responseBody,
-							status: xhr.status,
-							xhr,
-						}))
-						return
-					}
-
-					reject(new NetworkRequestHttpError({
-						body: responseBody,
-						status: xhr.status,
-						xhr,
-					}))
-					return
-				}
-
-				if (xhr.status === 207) {
-					responseBody = this._parseMultiStatusResponse(responseBody)
-					if (parseInt(assignHeaders.Depth, 10) === 0 && method === 'PROPFIND') {
-						responseBody = responseBody[Object.keys(responseBody)[0]]
-					}
-				}
-
-				resolve({
-					body: responseBody,
-					status: xhr.status,
-					xhr,
-				})
 			}
 
-			xhr.onerror = () => reject(new NetworkRequestError({
-				body: null,
-				status: -1,
-				xhr,
-			}))
-
-			xhr.onabort = () => reject(new NetworkRequestAbortedError({
-				body: null,
-				status: -1,
-				xhr,
-			}))
+			return Promise.resolve({
+				body: responseBody,
+				status: response.status,
+			})
 		})
+			.catch((error) => {
+				if (axios.isCancel(error)) {
+					// xhr.onabort
+					// AbortController.abort
+					return Promise.reject(new NetworkRequestAbortedError({
+						body: null,
+						status: -1,
+					}))
+				}
+
+				if (error.request) {
+					// xhr.onerror
+					return Promise.reject(new NetworkRequestError({
+						body: null,
+						status: -1,
+					}))
+				}
+
+				if (error.status >= 400 && error.status < 500) {
+					return Promise.reject(new NetworkRequestClientError({
+						body: error.data,
+						status: error.status,
+					}))
+				}
+				if (error.status >= 500 && error.status < 600) {
+					return Promise.reject(new NetworkRequestServerError({
+						body: error.data,
+						status: error.status,
+					}))
+				}
+
+				return Promise.reject(new NetworkRequestHttpError({
+					body: error.data,
+					status: error.status,
+				}))
+			})
 	}
 
 	/**

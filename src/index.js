@@ -109,7 +109,7 @@ export default class DavClient {
 		 * @type {Request}
 		 * @private
 		 */
-		this._request = new Request(this.rootUrl, this.parser, xhrProvider)
+		this._request = new Request(this.rootUrl, this.parser)
 	}
 
 	/**
