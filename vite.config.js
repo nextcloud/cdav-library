@@ -21,6 +21,8 @@ export default createLibConfig({
 				headless: true,
 				provider: 'playwright',
 				instances: [
+					{ browser: 'webkit' },
+					{ browser: 'chromium' },
 					{ browser: 'firefox' },
 				],
 			},
