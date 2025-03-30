@@ -7,7 +7,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { assert, describe, expect, it } from "vitest";
+import { assert, describe, expect, it, vi } from "vitest";
 
 import { DavObject } from "../../../src/models/davObject.js";
 import DAVEventListener from "../../../src/models/davEventListener.js";
@@ -257,21 +257,23 @@ describe('Dav object model', () => {
 		davObject.data = 'FooBar';
 		davObject._isDirty = true;
 
-		request.put.mockResolvedValue({
+		const response = {
 			body: null,
 			status: 204,
 			headers: {
-				etag: '"new etag foo bar tralala"'
+				etag: null
 			}
-		});
+		}
+		request.put.mockResolvedValue(response);
+
+		const spyEtag = vi.spyOn(response.headers, 'etag', 'get').mockReturnValue('"new etag foo bar tralala"');
 
 		return davObject.update().then(() => {
 			expect(request.put).toHaveBeenCalledTimes(1);
 			expect(request.put).toHaveBeenCalledWith('/foo/bar/file', { 'If-Match': '"etag foo bar tralala"', 'Content-Type': 'text/blub; charset=utf-8' }, 'FooBar');
 
 			expect(davObject._props['{DAV:}getetag']).toEqual('"new etag foo bar tralala"')
-			// expect(xhr.getResponseHeader).toHaveBeenCalledTimes(1);
-			// expect(xhr.getResponseHeader).toHaveBeenCalledWith('etag');
+			expect(spyEtag).toHaveBeenCalledTimes(1);
 
 			expect(davObject.etag).toEqual('"new etag foo bar tralala"');
 			expect(davObject.isDirty()).toEqual(false);
@@ -294,19 +296,23 @@ describe('Dav object model', () => {
 		davObject.data = 'FooBar';
 		davObject._isDirty = true;
 
+		const response = {
+			body: null,
+			status: 204,
+			headers: {
+				etag: null
+			}
+		};
+
 		request.put.mockImplementation(() => {
-			return Promise.resolve({
-				body: null,
-				status: 204,
-				headers: {
-					etag: '"new etag foo bar tralala"'
-				}
-			});
+			return Promise.resolve(response);
 		});
+
+		const spyEtag = vi.spyOn(response.headers, 'etag', 'get').mockReturnValue('"new etag foo bar tralala"');
 
 		return davObject.update().then(() => {
 			expect(request.put).toHaveBeenCalledTimes(0);
-			// expect(xhr.getResponseHeader).toHaveBeenCalledTimes(0);
+			expect(spyEtag).toHaveBeenCalledTimes(0);
 
 			expect(davObject.etag).toEqual('"etag foo bar tralala"');
 			expect(davObject.isDirty()).toEqual(true);
@@ -327,20 +333,23 @@ describe('Dav object model', () => {
 		const davObject = new DavObject(parent, request, url, props, false);
 		// DavObject doesnt have it's own data property, so this is kind of a hack:
 		davObject.data = 'FooBar';
+		const response = {
+			body: null,
+			status: 204,
+			headers: {
+				etag: null
+			}
+		}
 
 		request.put.mockImplementation(() => {
-			return Promise.resolve({
-				body: null,
-				status: 204,
-				headers: {
-					etag: '"new etag foo bar tralala"'
-				}
-			});
+			return Promise.resolve(response);
 		});
+
+		const spyEtag = vi.spyOn(response.headers, 'etag', 'get').mockReturnValue('"new etag foo bar tralala"');
 
 		return davObject.update().then(() => {
 			expect(request.put).toHaveBeenCalledTimes(0);
-			// expect(xhr.getResponseHeader).toHaveBeenCalledTimes(0);
+			expect(spyEtag).toHaveBeenCalledTimes(0);
 
 			expect(davObject.etag).toEqual('"etag foo bar tralala"');
 			expect(davObject.isDirty()).toEqual(false);
@@ -362,22 +371,24 @@ describe('Dav object model', () => {
 		davObject.data = 'FooBar';
 		davObject._isDirty = true;
 
+		const response = {
+			body: null,
+			status: 204,
+			headers: {
+				etag: null
+			}
+		}
 		request.put.mockImplementation(() => {
-			return Promise.resolve({
-				body: null,
-				status: 204,
-				headers: {
-					etag: '"new etag foo bar tralala"'
-				}
-			});
+			return Promise.resolve(response);
 		});
+
+		const spyEtag = vi.spyOn(response.headers, 'etag', 'get').mockReturnValue('"new etag foo bar tralala"');
 
 		return davObject.update().then(() => {
 			expect(request.put).toHaveBeenCalledTimes(1);
 			expect(request.put).toHaveBeenCalledWith('/foo/bar/file', { 'Content-Type': 'text/blub; charset=utf-8' }, 'FooBar');
 
-			// expect(xhr.getResponseHeader).toHaveBeenCalledTimes(1);
-			// expect(xhr.getResponseHeader).toHaveBeenCalledWith('etag');
+			expect(spyEtag).toHaveBeenCalledTimes(1);
 
 			expect(davObject.etag).toEqual('"new etag foo bar tralala"');
 			expect(davObject.isDirty()).toEqual(false);
@@ -397,19 +408,22 @@ describe('Dav object model', () => {
 
 		const davObject = new DavObject(parent, request, url, props, false);
 
+		const response = {
+			body: null,
+			status: 204,
+			headers: {
+				etag: null
+			}
+		}
 		request.put.mockImplementation(() => {
-			return Promise.resolve({
-				body: null,
-				status: 204,
-				headers: {
-					etag: '"new etag foo bar tralala"'
-				}
-			});
+			return Promise.resolve(response);
 		});
+
+		const spyEtag = vi.spyOn(response.headers, 'etag', 'get').mockReturnValue('"new etag foo bar tralala"');
 
 		return davObject.update().then(() => {
 			expect(request.put).toHaveBeenCalledTimes(0);
-			// expect(xhr.getResponseHeader).toHaveBeenCalledTimes(0);
+			expect(spyEtag).toHaveBeenCalledTimes(0);
 
 			expect(davObject.etag).toEqual('"etag foo bar tralala"');
 			expect(davObject.isDirty()).toEqual(false);
@@ -434,6 +448,12 @@ describe('Dav object model', () => {
 
 		const error = new Error('Foo Bar');
 		request.put.mockImplementation(() => Promise.reject(error));
+		const response = {
+			headers: {
+				etag: null
+			}
+		};
+		const spyEtag = vi.spyOn(response.headers, 'etag', 'get').mockReturnValue('"new etag foo bar tralala"');
 
 		return davObject.update().then(() => {
 			assert.fail('Update was not supposed to succeed');
@@ -441,7 +461,7 @@ describe('Dav object model', () => {
 			expect(e).toEqual(error);
 
 			expect(request.put).toHaveBeenCalledTimes(1);
-			// expect(xhr.getResponseHeader).toHaveBeenCalledTimes(0);
+			expect(spyEtag).toHaveBeenCalledTimes(0);
 
 			expect(davObject.etag).toEqual('"etag foo bar tralala"');
 			expect(davObject.isDirty()).toEqual(true);
@@ -468,13 +488,20 @@ describe('Dav object model', () => {
 		const error = new NetworkRequestClientError({ status: 412 });
 		request.put.mockImplementation(() => Promise.reject(error));
 
+		const response = {
+			headers: {
+				etag: null
+			}
+		}
+		const spyEtag = vi.spyOn(response.headers, 'etag', 'get').mockReturnValue('"new etag foo bar tralala"');
+
 		return davObject.update().then(() => {
 			assert.fail('Update was not supposed to succeed');
 		}).catch((e) => {
 			expect(e).toEqual(error);
 
 			expect(request.put).toHaveBeenCalledTimes(1);
-			// expect(xhr.getResponseHeader).toHaveBeenCalledTimes(0);
+			expect(spyEtag).toHaveBeenCalledTimes(0);
 
 			expect(davObject.etag).toEqual('"etag foo bar tralala"');
 			expect(davObject.isDirty()).toEqual(true);
