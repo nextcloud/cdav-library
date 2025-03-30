@@ -554,7 +554,7 @@ export default class DavClient {
 	 * @private
 	 */
 	_extractAdvertisedDavFeatures(headers) {
-		const dav = headers['dav']
+		const dav = headers.dav
 		this.advertisedFeatures.push(...dav.split(',').map((s) => s.trim()))
 	}
 
