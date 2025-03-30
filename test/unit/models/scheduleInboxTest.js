@@ -11,6 +11,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import ScheduleInbox from "../../../src/models/scheduleInbox.js";
 import { Calendar } from "../../../src/models/calendar.js";
+import Request from "../../mocks/request.mock.js";
 
 describe('Schedule inbox model', () => {
 
@@ -26,11 +27,7 @@ describe('Schedule inbox model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{urn:ietf:params:xml:ns:caldav}calendar-availability': 'VAVAILABILITY123'
@@ -52,11 +49,7 @@ describe('Schedule inbox model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{urn:ietf:params:xml:ns:caldav}calendar-availability': 'VAVAILABILITY123'

@@ -10,7 +10,8 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { DavObject } from "../../../src/models/davObject.js";
-import {VObject} from "../../../src/models/vobject.js";
+import { VObject } from "../../../src/models/vobject.js";
+import Request from "../../mocks/request.mock.js";
 
 describe('VObject model', () => {
 
@@ -26,11 +27,7 @@ describe('VObject model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -55,11 +52,7 @@ describe('VObject model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',

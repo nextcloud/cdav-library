@@ -14,6 +14,7 @@ import {AddressBook} from "../../../src/models/addressBook.js";
 import * as XMLUtility from "../../../src/utility/xmlUtility.js";
 import {VCard} from "../../../src/models/vcard.js";
 import * as NS from "../../../src/utility/namespaceUtility.js";
+import Request from "../../mocks/request.mock.js";
 
 describe('Address book model', () => {
 
@@ -33,11 +34,7 @@ describe('Address book model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -59,11 +56,7 @@ describe('Address book model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -83,11 +76,7 @@ describe('Address book model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -107,11 +96,7 @@ describe('Address book model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -131,12 +116,7 @@ describe('Address book model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'pathname': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -153,7 +133,7 @@ describe('Address book model', () => {
 						'{DAV:}getcontenttype': 'text/foo1; charset=utf8'
 					},
 				},
-				xhr: null
+				headers: {}
 			});
 		});
 
@@ -191,13 +171,7 @@ describe('Address book model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'report': vi.fn(),
-			'pathname': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -207,7 +181,7 @@ describe('Address book model', () => {
 				body: {
 					'/foo/bar/folder/b': getVCardProps()
 				},
-				xhr: null
+				headers: {}
 			});
 		});
 
@@ -239,12 +213,7 @@ describe('Address book model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'pathname': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -252,14 +221,14 @@ describe('Address book model', () => {
 			return Promise.resolve({
 				status: 204,
 				body: null,
-				xhr: null,
+				headers: {},
 			})
 		});
 		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: getVCardProps(),
-				xhr: null
+				headers: {}
 			});
 		});
 		request.pathname.mockImplementation((p) => p);
@@ -298,13 +267,7 @@ describe('Address book model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'report': vi.fn(),
-			'pathname': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -314,7 +277,7 @@ describe('Address book model', () => {
 				body: {
 					'/foo/bar/folder/b': getVCardProps()
 				},
-				xhr: null
+				headers: {}
 			});
 		});
 
@@ -373,13 +336,7 @@ describe('Address book model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'report': vi.fn(),
-			'pathname': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -390,7 +347,7 @@ describe('Address book model', () => {
 					'/foo/bar/folder/a': getVCardProps(),
 					'/foo/bar/folder/b': getVCardProps()
 				},
-				xhr: null
+				headers: {}
 			});
 		});
 
@@ -424,13 +381,7 @@ describe('Address book model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'report': vi.fn(),
-			'pathname': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -438,7 +389,7 @@ describe('Address book model', () => {
 			return Promise.resolve({
 				status: 200,
 				body: 'RAW DATA',
-				xhr: null
+				headers: {}
 			});
 		});
 

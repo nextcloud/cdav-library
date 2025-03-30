@@ -11,6 +11,7 @@ import { assert, describe, expect, it, vi } from "vitest";
 
 import ScheduleOutbox from "../../../src/models/scheduleOutbox.js";
 import { DavCollection } from "../../../src/models/davCollection.js";
+import Request from "../../mocks/request.mock.js";
 
 describe('Schedule outbox model', () => {
 
@@ -26,11 +27,7 @@ describe('Schedule outbox model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = {}
 
@@ -50,12 +47,7 @@ describe('Schedule outbox model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'post': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = {}
 
@@ -125,7 +117,7 @@ END:VCALENDAR
 			return Promise.resolve({
 				status: 207,
 				body: response,
-				xhr: null
+				headers: {}
 			})
 		});
 

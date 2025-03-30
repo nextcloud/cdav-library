@@ -12,6 +12,7 @@ import { assert, describe, expect, it, vi } from "vitest";
 import { DavObject } from "../../../src/models/davObject.js";
 import DAVEventListener from "../../../src/models/davEventListener.js";
 import NetworkRequestClientError from "../../../src/errors/networkRequestClientError.js";
+import Request from "../../mocks/request.mock.js";
 
 describe('Dav object model', () => {
 
@@ -27,11 +28,7 @@ describe('Dav object model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -55,11 +52,7 @@ describe('Dav object model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -82,7 +75,7 @@ describe('Dav object model', () => {
 					'{FOO:}bar': 'data2'
 				},
 				status: 200,
-				xhr: null
+				headers: {}
 			})
 		});
 
@@ -113,11 +106,7 @@ describe('Dav object model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -140,7 +129,7 @@ describe('Dav object model', () => {
 					'{FOO:}bar': 'data2'
 				},
 				status: 200,
-				xhr: null
+				headers: {}
 			})
 		});
 
@@ -169,11 +158,7 @@ describe('Dav object model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -196,7 +181,7 @@ describe('Dav object model', () => {
 					'{FOO:}bar': 'data2'
 				},
 				status: 200,
-				xhr: null
+				headers: {}
 			})
 		});
 
@@ -227,11 +212,7 @@ describe('Dav object model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -254,7 +235,7 @@ describe('Dav object model', () => {
 					'{FOO:}bar': 'data2'
 				},
 				status: 200,
-				xhr: null
+				headers: {}
 			})
 		});
 
@@ -285,11 +266,7 @@ describe('Dav object model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -335,11 +312,7 @@ describe('Dav object model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -353,25 +326,21 @@ describe('Dav object model', () => {
 		davObject.data = 'FooBar';
 		davObject._isDirty = true;
 
-		const xhr = {
-			'getResponseHeader': vi.fn()
-		};
-		xhr.getResponseHeader.mockReturnValueOnce('"new etag foo bar tralala"');
-
-		request.put.mockImplementation(() => {
-			return Promise.resolve({
-				body: null,
-				status: 204,
-				xhr: xhr
-			});
+		request.put.mockResolvedValue({
+			body: null,
+			status: 204,
+			headers: {
+				etag: '"new etag foo bar tralala"'
+			}
 		});
 
 		return davObject.update().then(() => {
 			expect(request.put).toHaveBeenCalledTimes(1);
-			expect(request.put).toHaveBeenCalledWith('/foo/bar/file', {'If-Match': '"etag foo bar tralala"', 'Content-Type': 'text/blub; charset=utf-8'}, 'FooBar');
+			expect(request.put).toHaveBeenCalledWith('/foo/bar/file', { 'If-Match': '"etag foo bar tralala"', 'Content-Type': 'text/blub; charset=utf-8' }, 'FooBar');
 
-			expect(xhr.getResponseHeader).toHaveBeenCalledTimes(1);
-			expect(xhr.getResponseHeader).toHaveBeenCalledWith('etag');
+			expect(davObject._props['{DAV:}getetag']).toEqual('"new etag foo bar tralala"')
+			// expect(xhr.getResponseHeader).toHaveBeenCalledTimes(1);
+			// expect(xhr.getResponseHeader).toHaveBeenCalledWith('etag');
 
 			expect(davObject.etag).toEqual('"new etag foo bar tralala"');
 			expect(davObject.isDirty()).toEqual(false);
@@ -390,11 +359,7 @@ describe('Dav object model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -408,22 +373,19 @@ describe('Dav object model', () => {
 		davObject.data = 'FooBar';
 		davObject._isDirty = true;
 
-		const xhr = {
-			'getResponseHeader': vi.fn()
-		};
-		xhr.getResponseHeader.mockReturnValueOnce('"new etag foo bar tralala"');
-
 		request.put.mockImplementation(() => {
 			return Promise.resolve({
 				body: null,
 				status: 204,
-				xhr: xhr
+				headers: {
+					etag: '"new etag foo bar tralala"'
+				}
 			});
 		});
 
 		return davObject.update().then(() => {
 			expect(request.put).toHaveBeenCalledTimes(0);
-			expect(xhr.getResponseHeader).toHaveBeenCalledTimes(0);
+			// expect(xhr.getResponseHeader).toHaveBeenCalledTimes(0);
 
 			expect(davObject.etag).toEqual('"etag foo bar tralala"');
 			expect(davObject.isDirty()).toEqual(true);
@@ -442,11 +404,7 @@ describe('Dav object model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -459,22 +417,19 @@ describe('Dav object model', () => {
 		// DavObject doesnt have it's own data property, so this is kind of a hack:
 		davObject.data = 'FooBar';
 
-		const xhr = {
-			'getResponseHeader': vi.fn()
-		};
-		xhr.getResponseHeader.mockReturnValueOnce('"new etag foo bar tralala"');
-
 		request.put.mockImplementation(() => {
 			return Promise.resolve({
 				body: null,
 				status: 204,
-				xhr: xhr
+				headers: {
+					etag: '"new etag foo bar tralala"'
+				}
 			});
 		});
 
 		return davObject.update().then(() => {
 			expect(request.put).toHaveBeenCalledTimes(0);
-			expect(xhr.getResponseHeader).toHaveBeenCalledTimes(0);
+			// expect(xhr.getResponseHeader).toHaveBeenCalledTimes(0);
 
 			expect(davObject.etag).toEqual('"etag foo bar tralala"');
 			expect(davObject.isDirty()).toEqual(false);
@@ -493,11 +448,7 @@ describe('Dav object model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getcontenttype': 'text/blub',
@@ -510,16 +461,13 @@ describe('Dav object model', () => {
 		davObject.data = 'FooBar';
 		davObject._isDirty = true;
 
-		const xhr = {
-			'getResponseHeader': vi.fn()
-		};
-		xhr.getResponseHeader.mockReturnValueOnce('"new etag foo bar tralala"');
-
 		request.put.mockImplementation(() => {
 			return Promise.resolve({
 				body: null,
 				status: 204,
-				xhr: xhr
+				headers: {
+					etag: '"new etag foo bar tralala"'
+				}
 			});
 		});
 
@@ -527,8 +475,8 @@ describe('Dav object model', () => {
 			expect(request.put).toHaveBeenCalledTimes(1);
 			expect(request.put).toHaveBeenCalledWith('/foo/bar/file', { 'Content-Type': 'text/blub; charset=utf-8' }, 'FooBar');
 
-			expect(xhr.getResponseHeader).toHaveBeenCalledTimes(1);
-			expect(xhr.getResponseHeader).toHaveBeenCalledWith('etag');
+			// expect(xhr.getResponseHeader).toHaveBeenCalledTimes(1);
+			// expect(xhr.getResponseHeader).toHaveBeenCalledWith('etag');
 
 			expect(davObject.etag).toEqual('"new etag foo bar tralala"');
 			expect(davObject.isDirty()).toEqual(false);
@@ -547,11 +495,7 @@ describe('Dav object model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -562,22 +506,19 @@ describe('Dav object model', () => {
 
 		const davObject = new DavObject(parent, request, url, props, false);
 
-		const xhr = {
-			'getResponseHeader': vi.fn()
-		};
-		xhr.getResponseHeader.mockReturnValueOnce('"new etag foo bar tralala"');
-
 		request.put.mockImplementation(() => {
 			return Promise.resolve({
 				body: null,
 				status: 204,
-				xhr: xhr
+				headers: {
+					etag: '"new etag foo bar tralala"'
+				}
 			});
 		});
 
 		return davObject.update().then(() => {
 			expect(request.put).toHaveBeenCalledTimes(0);
-			expect(xhr.getResponseHeader).toHaveBeenCalledTimes(0);
+			// expect(xhr.getResponseHeader).toHaveBeenCalledTimes(0);
 
 			expect(davObject.etag).toEqual('"etag foo bar tralala"');
 			expect(davObject.isDirty()).toEqual(false);
@@ -596,11 +537,7 @@ describe('Dav object model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -614,11 +551,6 @@ describe('Dav object model', () => {
 		davObject.data = 'FooBar';
 		davObject._isDirty = true;
 
-		const xhr = {
-			'getResponseHeader': vi.fn()
-		};
-		xhr.getResponseHeader.mockReturnValueOnce('"new etag foo bar tralala"');
-
 		const error = new Error('Foo Bar');
 		request.put.mockImplementation(() => Promise.reject(error));
 
@@ -628,7 +560,7 @@ describe('Dav object model', () => {
 			expect(e).toEqual(error);
 
 			expect(request.put).toHaveBeenCalledTimes(1);
-			expect(xhr.getResponseHeader).toHaveBeenCalledTimes(0);
+			// expect(xhr.getResponseHeader).toHaveBeenCalledTimes(0);
 
 			expect(davObject.etag).toEqual('"etag foo bar tralala"');
 			expect(davObject.isDirty()).toEqual(true);
@@ -647,11 +579,7 @@ describe('Dav object model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -666,12 +594,7 @@ describe('Dav object model', () => {
 		davObject._isDirty = true;
 		davObject._isPartial = false;
 
-		const xhr = {
-			'getResponseHeader': vi.fn()
-		};
-		xhr.getResponseHeader.mockReturnValueOnce('"new etag foo bar tralala"');
-
-		const error = new NetworkRequestClientError({status: 412});
+		const error = new NetworkRequestClientError({ status: 412 });
 		request.put.mockImplementation(() => Promise.reject(error));
 
 		return davObject.update().then(() => {
@@ -680,7 +603,7 @@ describe('Dav object model', () => {
 			expect(e).toEqual(error);
 
 			expect(request.put).toHaveBeenCalledTimes(1);
-			expect(xhr.getResponseHeader).toHaveBeenCalledTimes(0);
+			// expect(xhr.getResponseHeader).toHaveBeenCalledTimes(0);
 
 			expect(davObject.etag).toEqual('"etag foo bar tralala"');
 			expect(davObject.isDirty()).toEqual(true);
@@ -700,11 +623,7 @@ describe('Dav object model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -722,7 +641,7 @@ describe('Dav object model', () => {
 			return Promise.resolve({
 				body: null,
 				status: 204,
-				xhr: null
+				headers: {}
 			});
 		});
 
@@ -746,11 +665,7 @@ describe('Dav object model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -775,11 +690,7 @@ describe('Dav object model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -804,11 +715,7 @@ describe('Dav object model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -847,12 +754,7 @@ describe('Dav object model', () => {
 			'isWriteable': vi.fn()
 		};
 		davCollection2.url = '/foo/bla/';
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'copy': vi.fn()
-		};
+		const request = new Request()
 		const url = '/foo/bar/file-tri-tra-tralala';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar"',
@@ -894,12 +796,7 @@ describe('Dav object model', () => {
 			'isSameCollectionTypeAs': vi.fn()
 		};
 		davCollection1.url = '/foo/bar/';
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'copy': vi.fn()
-		};
+		const request = new Request()
 		const url = '/foo/bar/file-tri-tra-tralala';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar"',
@@ -944,12 +841,7 @@ describe('Dav object model', () => {
 			'isWriteable': vi.fn()
 		};
 		davCollection2.url = '/foo/bla/';
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'copy': vi.fn()
-		};
+		const request = new Request()
 		const url = '/foo/bar/file-tri-tra-tralala';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar"',
@@ -996,12 +888,7 @@ describe('Dav object model', () => {
 			'isWriteable': vi.fn()
 		};
 		davCollection2.url = '/foo/bla/';
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'copy': vi.fn()
-		};
+		const request = new Request()
 		const url = '/foo/bar/file-tri-tra-tralala';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar"',
@@ -1048,12 +935,7 @@ describe('Dav object model', () => {
 			'isWriteable': vi.fn()
 		};
 		davCollection2.url = '/foo/bla/';
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'move': vi.fn()
-		};
+		const request = new Request()
 		const url = '/foo/bar/file-tri-tra-tralala';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar"',
@@ -1096,12 +978,7 @@ describe('Dav object model', () => {
 			'isSameCollectionTypeAs': vi.fn()
 		};
 		davCollection1.url = '/foo/bar/';
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'move': vi.fn()
-		};
+		const request = new Request()
 		const url = '/foo/bar/file-tri-tra-tralala';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar"',
@@ -1146,12 +1023,7 @@ describe('Dav object model', () => {
 			'isWriteable': vi.fn()
 		};
 		davCollection2.url = '/foo/bla/';
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'move': vi.fn()
-		};
+		const request = new Request()
 		const url = '/foo/bar/file-tri-tra-tralala';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar"',
@@ -1198,12 +1070,7 @@ describe('Dav object model', () => {
 			'isWriteable': vi.fn()
 		};
 		davCollection2.url = '/foo/bla/';
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'move': vi.fn()
-		};
+		const request = new Request()
 		const url = '/foo/bar/file-tri-tra-tralala';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar"',

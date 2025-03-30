@@ -11,6 +11,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import { DavObject } from "../../../src/models/davObject.js";
 import {VCard} from "../../../src/models/vcard.js";
+import Request from "../../mocks/request.mock.js";
 
 describe('VCard model', () => {
 
@@ -26,11 +27,7 @@ describe('VCard model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -55,11 +52,7 @@ describe('VCard model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',

@@ -141,7 +141,7 @@ export default class DavClient {
 		const response = await this._request.propFind(principalUrl, propFindList)
 
 		this.currentUserPrincipal = new Principal(null, this._request, principalUrl, response.body)
-		this._extractAdvertisedDavFeatures(response.xhr)
+		this._extractAdvertisedDavFeatures(response.headers)
 		this._extractAddressBookHomes(response.body)
 		this._extractCalendarHomes(response.body)
 		this._extractPrincipalCollectionSets(response.body)
@@ -549,12 +549,12 @@ export default class DavClient {
 	/**
 	 * extracts the advertised features supported by the DAV server
 	 *
-	 * @param {XMLHttpRequest} xhr
+	 * @param {object} headers
 	 * @return void
 	 * @private
 	 */
-	_extractAdvertisedDavFeatures(xhr) {
-		const dav = xhr.getResponseHeader('DAV')
+	_extractAdvertisedDavFeatures(headers) {
+		const dav = headers['dav']
 		this.advertisedFeatures.push(...dav.split(',').map((s) => s.trim()))
 	}
 

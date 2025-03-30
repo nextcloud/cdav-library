@@ -14,6 +14,7 @@ import {Calendar} from "../../../src/models/calendar.js";
 import {VObject} from "../../../src/models/vobject.js";
 import * as NS from "../../../src/utility/namespaceUtility.js";
 import * as XMLUtility from "../../../src/utility/xmlUtility.js";
+import Request from "../../mocks/request.mock.js";
 
 describe('Calendar model', () => {
 
@@ -33,11 +34,7 @@ describe('Calendar model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -61,11 +58,7 @@ describe('Calendar model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -85,11 +78,7 @@ describe('Calendar model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -109,11 +98,7 @@ describe('Calendar model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -133,11 +118,7 @@ describe('Calendar model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -179,11 +160,7 @@ END:VCALENDAR
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -203,12 +180,7 @@ END:VCALENDAR
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'pathname': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -225,7 +197,7 @@ END:VCALENDAR
 						'{DAV:}getcontenttype': 'text/foo1; charset=utf8'
 					},
 				},
-				xhr: null
+				headers: {}
 			});
 		});
 
@@ -263,13 +235,7 @@ END:VCALENDAR
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'report': vi.fn(),
-			'pathname': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -280,7 +246,7 @@ END:VCALENDAR
 					'/foo/bar/folder/a': getVEventProps(),
 					'/foo/bar/folder/b': getVEventProps()
 				},
-				xhr: null
+				headers: {}
 			});
 		});
 
@@ -314,13 +280,7 @@ END:VCALENDAR
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'report': vi.fn(),
-			'pathname': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -330,7 +290,7 @@ END:VCALENDAR
 				body: {
 					'/foo/bar/folder/b': getVEventProps()
 				},
-				xhr: null
+				headers: {}
 			});
 		});
 
@@ -362,12 +322,7 @@ END:VCALENDAR
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'pathname': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -375,14 +330,14 @@ END:VCALENDAR
 			return Promise.resolve({
 				status: 204,
 				body: null,
-				xhr: null,
+				headers: {},
 			})
 		});
 		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: getVEventProps(),
-				xhr: null
+				headers: {}
 			});
 		});
 		request.pathname.mockImplementation((p) => p);
@@ -421,13 +376,7 @@ END:VCALENDAR
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'report': vi.fn(),
-			'pathname': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -437,7 +386,7 @@ END:VCALENDAR
 				body: {
 					'/foo/bar/folder/a': getVEventProps()
 				},
-				xhr: null
+				headers: {}
 			});
 		});
 
@@ -506,13 +455,7 @@ END:VCALENDAR
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'report': vi.fn(),
-			'pathname': vi.fn()
-		};
+		const request = new Request();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -523,7 +466,7 @@ END:VCALENDAR
 					'/foo/bar/folder/a': getVEventProps(),
 					'/foo/bar/folder/b': getVEventProps()
 				},
-				xhr: null
+				headers: {}
 			});
 		});
 

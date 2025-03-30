@@ -319,6 +319,7 @@ export default class Request {
 			return Promise.resolve({
 				body: responseBody,
 				status: response.status,
+				headers: response.headers
 			})
 		})
 			.catch((error) => {
@@ -328,6 +329,7 @@ export default class Request {
 					return Promise.reject(new NetworkRequestAbortedError({
 						body: null,
 						status: -1,
+						headers: error.headers || {}
 					}))
 				}
 
@@ -336,6 +338,7 @@ export default class Request {
 					return Promise.reject(new NetworkRequestError({
 						body: null,
 						status: -1,
+						headers: error.headers || {}
 					}))
 				}
 
@@ -343,18 +346,21 @@ export default class Request {
 					return Promise.reject(new NetworkRequestClientError({
 						body: error.data,
 						status: error.status,
+						headers: error.headers || {}
 					}))
 				}
 				if (error.status >= 500 && error.status < 600) {
 					return Promise.reject(new NetworkRequestServerError({
 						body: error.data,
 						status: error.status,
+						headers: error.headers || {}
 					}))
 				}
 
 				return Promise.reject(new NetworkRequestHttpError({
 					body: error.data,
 					status: error.status,
+					headers: error.headers || {}
 				}))
 			})
 	}
