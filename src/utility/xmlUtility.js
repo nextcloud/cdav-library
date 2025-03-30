@@ -70,7 +70,7 @@ function xmlify(xmlDoc, parent, json) {
 			element.setAttribute(name, value)
 		} else {
 			const [namespace, localName, value] = attribute
-			element.setAttributeNS(namespace, localName, value)
+			element.setAttributeNS(namespace, getPrefixedNameForNamespace(namespace, localName), value)
 		}
 	})
 
