@@ -16,7 +16,7 @@ import ScheduleInbox from "../../../src/models/scheduleInbox.js";
 import ScheduleOutbox from "../../../src/models/scheduleOutbox.js";
 import {Subscription} from "../../../src/models/subscription.js";
 import * as XMLUtility from "../../../src/utility/xmlUtility.js";
-import Request from "../../mocks/request.mock.js";
+import RequestMock from "../../mocks/request.mock.js";
 
 describe('Calendar home model', () => {
 
@@ -26,7 +26,7 @@ describe('Calendar home model', () => {
 
 	it('should inherit from DavCollection', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		const calendarHome = new CalendarHome(parent, request, url, {});
@@ -35,7 +35,7 @@ describe('Calendar home model', () => {
 
 	it('should find all CalDAV specific collections', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockImplementation(() => {
@@ -74,7 +74,7 @@ describe('Calendar home model', () => {
 
 	it('should find all calendars', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockImplementation(() => {
@@ -106,7 +106,7 @@ describe('Calendar home model', () => {
 
 	it('should find all subscriptions', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockImplementation(() => {
@@ -136,7 +136,7 @@ describe('Calendar home model', () => {
 
 	it('should find all schedule inboxes', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockImplementation(() => {
@@ -166,7 +166,7 @@ describe('Calendar home model', () => {
 
 	it('should find all schedule outboxes', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockImplementation(() => {
@@ -196,7 +196,7 @@ describe('Calendar home model', () => {
 
 	it('should create a calendar collection', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockReturnValueOnce(Promise.resolve({
@@ -250,7 +250,7 @@ describe('Calendar home model', () => {
 
 	it('should create a calendar collection with additional parameters', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockReturnValueOnce(Promise.resolve({
@@ -304,7 +304,7 @@ describe('Calendar home model', () => {
 
 	it('should create a calendar collection with additional parameters and timezone', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockReturnValueOnce(Promise.resolve({
@@ -359,7 +359,7 @@ describe('Calendar home model', () => {
 
 	it('should create a subscribed collection', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockReturnValueOnce(Promise.resolve({
@@ -413,7 +413,7 @@ describe('Calendar home model', () => {
 
 	it('should create a subscribed collection with additional parameters', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockReturnValueOnce(Promise.resolve({
@@ -469,7 +469,7 @@ describe('Calendar home model', () => {
 
 	it('should allow to enable the birthday-calendar', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.post.mockReturnValue(Promise.resolve({

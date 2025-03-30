@@ -11,23 +11,14 @@ import { assert, describe, expect, it, vi } from "vitest";
 
 import ScheduleOutbox from "../../../src/models/scheduleOutbox.js";
 import { DavCollection } from "../../../src/models/davCollection.js";
-import Request from "../../mocks/request.mock.js";
+import RequestMock from "../../mocks/request.mock.js";
+import { DavCollection as DavCollectionMock } from "../../mocks/davCollection.mock.js";
 
 describe('Schedule outbox model', () => {
 
 	it('should inherit from DavCollection', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = new Request();
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {}
 
@@ -36,18 +27,8 @@ describe('Schedule outbox model', () => {
 	});
 
 	it('should provide a method to gather free/busy data', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = new Request();
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {}
 

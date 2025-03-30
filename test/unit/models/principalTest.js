@@ -12,7 +12,8 @@ import { assert, beforeEach, describe, expect, it, vi } from "vitest";
 import { DavObject } from '../../../src/models/davObject.js';
 import { Principal } from '../../../src/models/principal.js';
 import * as XMLUtility from '../../../src/utility/xmlUtility.js';
-import Request from "../../mocks/request.mock.js";
+import RequestMock from "../../mocks/request.mock.js";
+import { DavCollection as DavCollectionMock } from "../../mocks/davCollection.mock.js";
 
 describe('Principal model', () => {
 	beforeEach(() => {
@@ -21,7 +22,7 @@ describe('Principal model', () => {
 
 	it('should inherit from DavObject', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -42,7 +43,7 @@ describe('Principal model', () => {
 
 	it('should expose displayname as property', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -63,7 +64,7 @@ describe('Principal model', () => {
 
 	it('should expose calendarUserType as property', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -84,7 +85,7 @@ describe('Principal model', () => {
 
 	it('should expose calendarUserAddressSet as property', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -105,7 +106,7 @@ describe('Principal model', () => {
 
 	it('should expose principalUrl as property', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -126,7 +127,7 @@ describe('Principal model', () => {
 
 	it('should expose email as property', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -147,7 +148,7 @@ describe('Principal model', () => {
 
 	it('should expose calendarHomes as property', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -168,7 +169,7 @@ describe('Principal model', () => {
 
 	it('should expose scheduleInbox as property', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -189,7 +190,7 @@ describe('Principal model', () => {
 
 	it('should expose scheduleOutbox as property', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -210,7 +211,7 @@ describe('Principal model', () => {
 
 	it('should expose addressBookHomes as property', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -231,7 +232,7 @@ describe('Principal model', () => {
 
 	it('should expose principalScheme as property', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav/';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -258,7 +259,7 @@ describe('Principal model', () => {
 
 	it('should expose userId as property if principal is a user', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav/';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -275,7 +276,7 @@ describe('Principal model', () => {
 
 	it('should expose groupId as property if principal is a group', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav/';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -292,7 +293,7 @@ describe('Principal model', () => {
 
 	it('should expose resourceId as property if principal is a resource', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav/';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -309,7 +310,7 @@ describe('Principal model', () => {
 
 	it('should expose roomId as property if principal is a room', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav/';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -326,7 +327,7 @@ describe('Principal model', () => {
 
 	it('should expose userId as property if principal is a user even if url ends without slash', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav/';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz';
 		const props = {
@@ -343,7 +344,7 @@ describe('Principal model', () => {
 
 	it('should expose scheduleDefaultCalendarUrl as property', () => {
 		const parent = null;
-		const request = new Request();
+		const request = new RequestMock();
 		request.baseUrl = 'http://all.local/nextcloud/remote.php/dav';
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
@@ -421,18 +422,8 @@ describe('Principal model', () => {
 	});
 
 	it('should update the principal', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = new Request();
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
 			'{DAV:}displayname': 'Umberto',
@@ -472,18 +463,8 @@ describe('Principal model', () => {
 	});
 
 	it('should update the principal only if properties changed', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = new Request();
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
 		const props = {
 			'{DAV:}displayname': 'Umberto',

@@ -13,7 +13,7 @@ import { DavCollection } from "../../../src/models/davCollection.js";
 import DAVEventListener from "../../../src/models/davEventListener.js";
 import { DavObject } from "../../../src/models/davObject.js";
 import * as XMLUtility from '../../../src/utility/xmlUtility.js';
-import Request from "../../mocks/request.mock.js";
+import RequestMock from "../../mocks/request.mock.js";
 
 describe('Dav collection model', () => {
 
@@ -33,7 +33,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -63,7 +63,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -185,7 +185,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -303,7 +303,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -358,7 +358,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -501,7 +501,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -567,7 +567,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -638,7 +638,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -705,7 +705,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -740,7 +740,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -769,7 +769,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -799,7 +799,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -828,7 +828,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -858,7 +858,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -888,7 +888,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -918,7 +918,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -948,7 +948,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -982,7 +982,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',
@@ -1001,7 +1001,7 @@ describe('Dav collection model', () => {
 	});
 
 	it('should check whether two collections are of the same type', () => {
-		const request = new Request();
+		const request = new RequestMock();
 
 		const collection1 = new DavCollection(null, request, 'a', {
 			'{DAV:}displayname': 'Foo Bar Bla Blub col1',
@@ -1051,7 +1051,7 @@ describe('Dav collection model', () => {
 			'isReadable': vi.fn(),
 			'isWriteable': vi.fn()
 		};
-		const request = new Request();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{DAV:}displayname': 'Foo Bar Bla Blub',

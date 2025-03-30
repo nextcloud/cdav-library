@@ -7,14 +7,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { assert, beforeEach, describe, expect, it, vi } from "vitest";
+import { assert, beforeEach, describe, expect, it } from "vitest";
 
 import { DavCollection } from "../../../src/models/davCollection.js";
 import {Calendar} from "../../../src/models/calendar.js";
 import {VObject} from "../../../src/models/vobject.js";
 import * as NS from "../../../src/utility/namespaceUtility.js";
 import * as XMLUtility from "../../../src/utility/xmlUtility.js";
-import Request from "../../mocks/request.mock.js";
+import RequestMock from "../../mocks/request.mock.js";
+import { DavCollection as DavCollectionMock } from "../../mocks/davCollection.mock.js";
 
 describe('Calendar model', () => {
 
@@ -23,18 +24,8 @@ describe('Calendar model', () => {
 	});
 
 	it('should inherit from DavCollection / shareable / publishable', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = new Request();
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -47,18 +38,8 @@ describe('Calendar model', () => {
 	});
 
 	it('should inherit expose the property color', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = new Request();
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -67,18 +48,8 @@ describe('Calendar model', () => {
 	});
 
 	it('should inherit expose the property enabled', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = new Request();
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -87,18 +58,8 @@ describe('Calendar model', () => {
 	});
 
 	it('should inherit expose the property order', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = new Request();
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -107,18 +68,8 @@ describe('Calendar model', () => {
 	});
 
 	it('should inherit expose the property timezone', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = new Request();
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -149,18 +100,8 @@ END:VCALENDAR
 	});
 
 	it('should inherit expose the property components', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = new Request();
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -169,18 +110,8 @@ END:VCALENDAR
 	});
 
 	it('should find all VObjects', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = new Request();
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -224,18 +155,8 @@ END:VCALENDAR
 	});
 
 	it('should find all VObjects filtered by component type', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = new Request();
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -269,18 +190,8 @@ END:VCALENDAR
 	});
 
 	it('should find all VObjects filtered by component types in time-range', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = new Request();
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -311,18 +222,8 @@ END:VCALENDAR
 		});
 	});
 	it('should create a VObject', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = new Request();
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -365,18 +266,8 @@ END:VCALENDAR
 	});
 
 	it('should provide a calendar-query', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = new Request();
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
@@ -444,18 +335,8 @@ END:VCALENDAR
 	});
 
 	it('should provide a calendar-multiget', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = new Request();
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = returnDefaultProps();
 
