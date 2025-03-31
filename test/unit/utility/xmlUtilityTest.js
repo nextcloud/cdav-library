@@ -8,6 +8,7 @@
  */
 
 import { beforeEach, describe, expect, it } from "vitest";
+import { server } from '@vitest/browser/context';
 
 import * as XMLUtility from '../../../src/utility/xmlUtility.js';
 
@@ -41,6 +42,24 @@ describe('XMLUtility', () => {
 		})).toEqual('<x0:element xmlns:x0="NS123" abc="123" def="456"/>');
 	});
 
+	it('should return correct xml for one element with namespaced attributes', () => {
+		let expectedXml = '<x0:element xmlns:x0="NS123" xmlns:x1="myNs1" x1:abc="123" xmlns:x2="myNs2" x2:def="456"/>'
+		if (server.browser === 'firefox') {
+			// As of now, Firefox orders the XML attributes differently than Chromium and WebKit.
+			// It uses the namespace `x1` in the attribute `x1:abc="123"` before declaring it with `xmlns:x1="myNs1"`.
+			// It is legal XML but does not follow the specification of XML serialization described in https://w3c.github.io/DOM-Parsing/#dom-xmlserializer-serializetostring
+			// See https://bugzilla.mozilla.org/show_bug.cgi?id=1837472
+			expectedXml = '<x0:element xmlns:x0="NS123" x1:abc="123" xmlns:x1="myNs1" x2:def="456" xmlns:x2="myNs2"/>';
+		}
+		expect(XMLUtility.serialize({
+			name: ['NS123', 'element'],
+			attributes: [
+				['myNs1', 'abc', '123'],
+				['myNs2', 'def', '456']
+			]
+		})).toEqual(expectedXml);
+	});
+
 	it('should return correct xml for one element with attributes and value', () => {
 		expect(XMLUtility.serialize({
 			name: ['NS123', 'element'],
@@ -55,15 +74,12 @@ describe('XMLUtility', () => {
 	it('should prefer value over children', () => {
 		expect(XMLUtility.serialize({
 			name: ['NS123', 'element'],
-			attributes: [
-				['SPECIALNS', 'abc', '123'],
-				['def', '456']
-			],
+			attributes: [],
 			value: 'it value',
 			children: [{
 				name: 'element2'
 			}]
-		})).toEqual('<x0:element xmlns:x0="NS123" a0:abc="123" xmlns:a0="SPECIALNS" def="456">it value</x0:element>');
+		})).toEqual('<x0:element xmlns:x0="NS123">it value</x0:element>');
 	});
 
 	it('should return correct xml for one child', () => {
