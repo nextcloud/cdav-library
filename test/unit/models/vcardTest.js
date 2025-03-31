@@ -10,27 +10,15 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { DavObject } from "../../../src/models/davObject.js";
-import {VCard} from "../../../src/models/vcard.js";
+import { VCard } from "../../../src/models/vcard.js";
+import RequestMock from "../../mocks/request.mock.js";
+import { DavCollection as DavCollectionMock } from "../../mocks/davCollection.mock.js";
 
 describe('VCard model', () => {
 
 	it('should inherit from DavObject', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -44,22 +32,8 @@ describe('VCard model', () => {
 	});
 
 	it('should expose the address-data as a property', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',

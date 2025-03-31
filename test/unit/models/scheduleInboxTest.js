@@ -7,30 +7,18 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import ScheduleInbox from "../../../src/models/scheduleInbox.js";
 import { Calendar } from "../../../src/models/calendar.js";
+import RequestMock from "../../mocks/request.mock.js";
+import { DavCollection as DavCollectionMock } from "../../mocks/davCollection.mock.js";
 
 describe('Schedule inbox model', () => {
 
 	it('should inherit from Calendar', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{urn:ietf:params:xml:ns:caldav}calendar-availability': 'VAVAILABILITY123'
@@ -41,22 +29,8 @@ describe('Schedule inbox model', () => {
 	});
 
 	it('should inherit expose the property calendar-availability', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
 		const url = '/foo/bar/folder';
 		const props = {
 			'{urn:ietf:params:xml:ns:caldav}calendar-availability': 'VAVAILABILITY123'

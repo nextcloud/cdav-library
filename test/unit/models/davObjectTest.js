@@ -12,26 +12,14 @@ import { assert, describe, expect, it, vi } from "vitest";
 import { DavObject } from "../../../src/models/davObject.js";
 import DAVEventListener from "../../../src/models/davEventListener.js";
 import NetworkRequestClientError from "../../../src/errors/networkRequestClientError.js";
+import RequestMock from "../../mocks/request.mock.js";
+import { DavCollection as DavCollectionMock } from "../../mocks/davCollection.mock.js";
 
 describe('Dav object model', () => {
 
 	it('should inherit from DavEventListener', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const parent = new DavCollectionMock();
+		const request = new RequestMock()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -44,22 +32,8 @@ describe('Dav object model', () => {
 	});
 
 	it('should fetch complete data', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -82,7 +56,7 @@ describe('Dav object model', () => {
 					'{FOO:}bar': 'data2'
 				},
 				status: 200,
-				xhr: null
+				headers: {}
 			})
 		});
 
@@ -102,22 +76,8 @@ describe('Dav object model', () => {
 	});
 
 	it('should fetch complete data only if data is partial', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -140,7 +100,7 @@ describe('Dav object model', () => {
 					'{FOO:}bar': 'data2'
 				},
 				status: 200,
-				xhr: null
+				headers: {}
 			})
 		});
 
@@ -158,22 +118,8 @@ describe('Dav object model', () => {
 	});
 
 	it('should fetch complete data if forcing', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const parent = new DavCollectionMock();
+		const request = new RequestMock()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -196,7 +142,7 @@ describe('Dav object model', () => {
 					'{FOO:}bar': 'data2'
 				},
 				status: 200,
-				xhr: null
+				headers: {}
 			})
 		});
 
@@ -216,22 +162,8 @@ describe('Dav object model', () => {
 	});
 
 	it('should fetch complete data if forcing, even if data is not partial', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const parent = new DavCollectionMock();
+		const request = new RequestMock()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -254,7 +186,7 @@ describe('Dav object model', () => {
 					'{FOO:}bar': 'data2'
 				},
 				status: 200,
-				xhr: null
+				headers: {}
 			})
 		});
 
@@ -274,22 +206,8 @@ describe('Dav object model', () => {
 	});
 
 	it('should fetch complete data and pass thru rejected Promises', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const parent = new DavCollectionMock();
+		const request = new RequestMock()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -324,22 +242,8 @@ describe('Dav object model', () => {
 	});
 
 	it('should update an object', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const parent = new DavCollectionMock();
+		const request = new RequestMock()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -353,25 +257,23 @@ describe('Dav object model', () => {
 		davObject.data = 'FooBar';
 		davObject._isDirty = true;
 
-		const xhr = {
-			'getResponseHeader': vi.fn()
-		};
-		xhr.getResponseHeader.mockReturnValueOnce('"new etag foo bar tralala"');
+		const response = {
+			body: null,
+			status: 204,
+			headers: {
+				etag: null
+			}
+		}
+		request.put.mockResolvedValue(response);
 
-		request.put.mockImplementation(() => {
-			return Promise.resolve({
-				body: null,
-				status: 204,
-				xhr: xhr
-			});
-		});
+		const spyEtag = vi.spyOn(response.headers, 'etag', 'get').mockReturnValue('"new etag foo bar tralala"');
 
 		return davObject.update().then(() => {
 			expect(request.put).toHaveBeenCalledTimes(1);
-			expect(request.put).toHaveBeenCalledWith('/foo/bar/file', {'If-Match': '"etag foo bar tralala"', 'Content-Type': 'text/blub; charset=utf-8'}, 'FooBar');
+			expect(request.put).toHaveBeenCalledWith('/foo/bar/file', { 'If-Match': '"etag foo bar tralala"', 'Content-Type': 'text/blub; charset=utf-8' }, 'FooBar');
 
-			expect(xhr.getResponseHeader).toHaveBeenCalledTimes(1);
-			expect(xhr.getResponseHeader).toHaveBeenCalledWith('etag');
+			expect(davObject._props['{DAV:}getetag']).toEqual('"new etag foo bar tralala"')
+			expect(spyEtag).toHaveBeenCalledTimes(1);
 
 			expect(davObject.etag).toEqual('"new etag foo bar tralala"');
 			expect(davObject.isDirty()).toEqual(false);
@@ -379,22 +281,8 @@ describe('Dav object model', () => {
 	});
 
 	it('should not update partial data', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const parent = new DavCollectionMock();
+		const request = new RequestMock()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -408,22 +296,23 @@ describe('Dav object model', () => {
 		davObject.data = 'FooBar';
 		davObject._isDirty = true;
 
-		const xhr = {
-			'getResponseHeader': vi.fn()
+		const response = {
+			body: null,
+			status: 204,
+			headers: {
+				etag: null
+			}
 		};
-		xhr.getResponseHeader.mockReturnValueOnce('"new etag foo bar tralala"');
 
 		request.put.mockImplementation(() => {
-			return Promise.resolve({
-				body: null,
-				status: 204,
-				xhr: xhr
-			});
+			return Promise.resolve(response);
 		});
+
+		const spyEtag = vi.spyOn(response.headers, 'etag', 'get').mockReturnValue('"new etag foo bar tralala"');
 
 		return davObject.update().then(() => {
 			expect(request.put).toHaveBeenCalledTimes(0);
-			expect(xhr.getResponseHeader).toHaveBeenCalledTimes(0);
+			expect(spyEtag).toHaveBeenCalledTimes(0);
 
 			expect(davObject.etag).toEqual('"etag foo bar tralala"');
 			expect(davObject.isDirty()).toEqual(true);
@@ -431,22 +320,8 @@ describe('Dav object model', () => {
 	});
 
 	it('should not update unchanged data', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const parent = new DavCollectionMock();
+		const request = new RequestMock()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -458,23 +333,23 @@ describe('Dav object model', () => {
 		const davObject = new DavObject(parent, request, url, props, false);
 		// DavObject doesnt have it's own data property, so this is kind of a hack:
 		davObject.data = 'FooBar';
-
-		const xhr = {
-			'getResponseHeader': vi.fn()
-		};
-		xhr.getResponseHeader.mockReturnValueOnce('"new etag foo bar tralala"');
+		const response = {
+			body: null,
+			status: 204,
+			headers: {
+				etag: null
+			}
+		}
 
 		request.put.mockImplementation(() => {
-			return Promise.resolve({
-				body: null,
-				status: 204,
-				xhr: xhr
-			});
+			return Promise.resolve(response);
 		});
+
+		const spyEtag = vi.spyOn(response.headers, 'etag', 'get').mockReturnValue('"new etag foo bar tralala"');
 
 		return davObject.update().then(() => {
 			expect(request.put).toHaveBeenCalledTimes(0);
-			expect(xhr.getResponseHeader).toHaveBeenCalledTimes(0);
+			expect(spyEtag).toHaveBeenCalledTimes(0);
 
 			expect(davObject.etag).toEqual('"etag foo bar tralala"');
 			expect(davObject.isDirty()).toEqual(false);
@@ -482,22 +357,8 @@ describe('Dav object model', () => {
 	});
 
 	it('should not send a null etag', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const parent = new DavCollectionMock();
+		const request = new RequestMock()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getcontenttype': 'text/blub',
@@ -510,25 +371,24 @@ describe('Dav object model', () => {
 		davObject.data = 'FooBar';
 		davObject._isDirty = true;
 
-		const xhr = {
-			'getResponseHeader': vi.fn()
-		};
-		xhr.getResponseHeader.mockReturnValueOnce('"new etag foo bar tralala"');
-
+		const response = {
+			body: null,
+			status: 204,
+			headers: {
+				etag: null
+			}
+		}
 		request.put.mockImplementation(() => {
-			return Promise.resolve({
-				body: null,
-				status: 204,
-				xhr: xhr
-			});
+			return Promise.resolve(response);
 		});
+
+		const spyEtag = vi.spyOn(response.headers, 'etag', 'get').mockReturnValue('"new etag foo bar tralala"');
 
 		return davObject.update().then(() => {
 			expect(request.put).toHaveBeenCalledTimes(1);
 			expect(request.put).toHaveBeenCalledWith('/foo/bar/file', { 'Content-Type': 'text/blub; charset=utf-8' }, 'FooBar');
 
-			expect(xhr.getResponseHeader).toHaveBeenCalledTimes(1);
-			expect(xhr.getResponseHeader).toHaveBeenCalledWith('etag');
+			expect(spyEtag).toHaveBeenCalledTimes(1);
 
 			expect(davObject.etag).toEqual('"new etag foo bar tralala"');
 			expect(davObject.isDirty()).toEqual(false);
@@ -536,22 +396,8 @@ describe('Dav object model', () => {
 	})
 
 	it('should not update if no data is given', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const parent = new DavCollectionMock();
+		const request = new RequestMock()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -562,22 +408,22 @@ describe('Dav object model', () => {
 
 		const davObject = new DavObject(parent, request, url, props, false);
 
-		const xhr = {
-			'getResponseHeader': vi.fn()
-		};
-		xhr.getResponseHeader.mockReturnValueOnce('"new etag foo bar tralala"');
-
+		const response = {
+			body: null,
+			status: 204,
+			headers: {
+				etag: null
+			}
+		}
 		request.put.mockImplementation(() => {
-			return Promise.resolve({
-				body: null,
-				status: 204,
-				xhr: xhr
-			});
+			return Promise.resolve(response);
 		});
+
+		const spyEtag = vi.spyOn(response.headers, 'etag', 'get').mockReturnValue('"new etag foo bar tralala"');
 
 		return davObject.update().then(() => {
 			expect(request.put).toHaveBeenCalledTimes(0);
-			expect(xhr.getResponseHeader).toHaveBeenCalledTimes(0);
+			expect(spyEtag).toHaveBeenCalledTimes(0);
 
 			expect(davObject.etag).toEqual('"etag foo bar tralala"');
 			expect(davObject.isDirty()).toEqual(false);
@@ -585,22 +431,8 @@ describe('Dav object model', () => {
 	});
 
 	it('should update an object and passthru rejected promises', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const parent = new DavCollectionMock();
+		const request = new RequestMock()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -614,13 +446,14 @@ describe('Dav object model', () => {
 		davObject.data = 'FooBar';
 		davObject._isDirty = true;
 
-		const xhr = {
-			'getResponseHeader': vi.fn()
-		};
-		xhr.getResponseHeader.mockReturnValueOnce('"new etag foo bar tralala"');
-
 		const error = new Error('Foo Bar');
 		request.put.mockImplementation(() => Promise.reject(error));
+		const response = {
+			headers: {
+				etag: null
+			}
+		};
+		const spyEtag = vi.spyOn(response.headers, 'etag', 'get').mockReturnValue('"new etag foo bar tralala"');
 
 		return davObject.update().then(() => {
 			assert.fail('Update was not supposed to succeed');
@@ -628,7 +461,7 @@ describe('Dav object model', () => {
 			expect(e).toEqual(error);
 
 			expect(request.put).toHaveBeenCalledTimes(1);
-			expect(xhr.getResponseHeader).toHaveBeenCalledTimes(0);
+			expect(spyEtag).toHaveBeenCalledTimes(0);
 
 			expect(davObject.etag).toEqual('"etag foo bar tralala"');
 			expect(davObject.isDirty()).toEqual(true);
@@ -636,22 +469,8 @@ describe('Dav object model', () => {
 	});
 
 	it('should update an object and passthru rejected promises and set partial on 412', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const parent = new DavCollectionMock();
+		const request = new RequestMock()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -666,13 +485,15 @@ describe('Dav object model', () => {
 		davObject._isDirty = true;
 		davObject._isPartial = false;
 
-		const xhr = {
-			'getResponseHeader': vi.fn()
-		};
-		xhr.getResponseHeader.mockReturnValueOnce('"new etag foo bar tralala"');
-
-		const error = new NetworkRequestClientError({status: 412});
+		const error = new NetworkRequestClientError({ status: 412 });
 		request.put.mockImplementation(() => Promise.reject(error));
+
+		const response = {
+			headers: {
+				etag: null
+			}
+		}
+		const spyEtag = vi.spyOn(response.headers, 'etag', 'get').mockReturnValue('"new etag foo bar tralala"');
 
 		return davObject.update().then(() => {
 			assert.fail('Update was not supposed to succeed');
@@ -680,7 +501,7 @@ describe('Dav object model', () => {
 			expect(e).toEqual(error);
 
 			expect(request.put).toHaveBeenCalledTimes(1);
-			expect(xhr.getResponseHeader).toHaveBeenCalledTimes(0);
+			expect(spyEtag).toHaveBeenCalledTimes(0);
 
 			expect(davObject.etag).toEqual('"etag foo bar tralala"');
 			expect(davObject.isDirty()).toEqual(true);
@@ -689,22 +510,8 @@ describe('Dav object model', () => {
 	});
 
 	it('should delete an object', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const parent = new DavCollectionMock();
+		const request = new RequestMock()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -722,7 +529,7 @@ describe('Dav object model', () => {
 			return Promise.resolve({
 				body: null,
 				status: 204,
-				xhr: null
+				headers: {}
 			});
 		});
 
@@ -735,22 +542,8 @@ describe('Dav object model', () => {
 	});
 
 	it('should expose the etag as a property', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const parent = new DavCollectionMock();
+		const request = new RequestMock()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -764,22 +557,8 @@ describe('Dav object model', () => {
 	});
 
 	it('should expose the content-type as a property', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const parent = new DavCollectionMock();
+		const request = new RequestMock()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -793,22 +572,8 @@ describe('Dav object model', () => {
 	});
 
 	it('should expose the url as a property', () => {
-		const parent = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn()
-		};
+		const parent = new DavCollectionMock();
+		const request = new RequestMock()
 		const url = '/foo/bar/file';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar tralala"',
@@ -822,37 +587,11 @@ describe('Dav object model', () => {
 	});
 
 	it('should copy a DavObject into a different collection', () => {
-		const davCollection1 = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn(),
-			'isSameCollectionTypeAs': vi.fn()
-		};
+		const davCollection1 = new DavCollectionMock();
 		davCollection1.url = '/foo/bar/';
-		const davCollection2 = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
+		const davCollection2 = new DavCollectionMock();
 		davCollection2.url = '/foo/bla/';
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'copy': vi.fn()
-		};
+		const request = new RequestMock()
 		const url = '/foo/bar/file-tri-tra-tralala';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar"',
@@ -881,25 +620,9 @@ describe('Dav object model', () => {
 	});
 
 	it('should copy a DavObject into a different collection, but not if destination is the same as the current collection', () => {
-		const davCollection1 = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn(),
-			'isSameCollectionTypeAs': vi.fn()
-		};
+		const davCollection1 = new DavCollectionMock();
 		davCollection1.url = '/foo/bar/';
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'copy': vi.fn()
-		};
+		const request = new RequestMock()
 		const url = '/foo/bar/file-tri-tra-tralala';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar"',
@@ -919,37 +642,11 @@ describe('Dav object model', () => {
 	});
 
 	it('should copy a DavObject into a different collection, but not if destination is of a different collection type', () => {
-		const davCollection1 = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn(),
-			'isSameCollectionTypeAs': vi.fn()
-		};
+		const davCollection1 = new DavCollectionMock();
 		davCollection1.url = '/foo/bar/';
-		const davCollection2 = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
+		const davCollection2 = new DavCollectionMock();
 		davCollection2.url = '/foo/bla/';
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'copy': vi.fn()
-		};
+		const request = new RequestMock()
 		const url = '/foo/bar/file-tri-tra-tralala';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar"',
@@ -971,37 +668,11 @@ describe('Dav object model', () => {
 	});
 
 	it('should copy a DavObject into a different collection, but not if destination is read-only', () => {
-		const davCollection1 = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn(),
-			'isSameCollectionTypeAs': vi.fn()
-		};
+		const davCollection1 = new DavCollectionMock();
 		davCollection1.url = '/foo/bar/';
-		const davCollection2 = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
+		const davCollection2 = new DavCollectionMock();
 		davCollection2.url = '/foo/bla/';
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'copy': vi.fn()
-		};
+		const request = new RequestMock()
 		const url = '/foo/bar/file-tri-tra-tralala';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar"',
@@ -1023,37 +694,11 @@ describe('Dav object model', () => {
 	});
 
 	it('should move a DavObject into a different collection', () => {
-		const davCollection1 = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn(),
-			'isSameCollectionTypeAs': vi.fn()
-		};
+		const davCollection1 = new DavCollectionMock();
 		davCollection1.url = '/foo/bar/';
-		const davCollection2 = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
+		const davCollection2 = new DavCollectionMock();
 		davCollection2.url = '/foo/bla/';
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'move': vi.fn()
-		};
+		const request = new RequestMock()
 		const url = '/foo/bar/file-tri-tra-tralala';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar"',
@@ -1083,25 +728,9 @@ describe('Dav object model', () => {
 	});
 
 	it('should move a DavObject into a different collection, but not if destination is the same as the current collection', () => {
-		const davCollection1 = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn(),
-			'isSameCollectionTypeAs': vi.fn()
-		};
+		const davCollection1 = new DavCollectionMock();
 		davCollection1.url = '/foo/bar/';
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'move': vi.fn()
-		};
+		const request = new RequestMock()
 		const url = '/foo/bar/file-tri-tra-tralala';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar"',
@@ -1121,37 +750,11 @@ describe('Dav object model', () => {
 	});
 
 	it('should move a DavObject into a different collection, but not if destination is of a different collection type', () => {
-		const davCollection1 = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn(),
-			'isSameCollectionTypeAs': vi.fn()
-		};
+		const davCollection1 = new DavCollectionMock();
 		davCollection1.url = '/foo/bar/';
-		const davCollection2 = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
+		const davCollection2 = new DavCollectionMock();
 		davCollection2.url = '/foo/bla/';
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'move': vi.fn()
-		};
+		const request = new RequestMock()
 		const url = '/foo/bar/file-tri-tra-tralala';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar"',
@@ -1173,37 +776,11 @@ describe('Dav object model', () => {
 	});
 
 	it('should move a DavObject into a different collection, but not if destination is read-only', () => {
-		const davCollection1 = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn(),
-			'isSameCollectionTypeAs': vi.fn()
-		};
+		const davCollection1 = new DavCollectionMock();
 		davCollection1.url = '/foo/bar/';
-		const davCollection2 = {
-			'findAll': vi.fn(),
-			'findAllByFilter': vi.fn(),
-			'find': vi.fn(),
-			'createCollection': vi.fn(),
-			'createObject': vi.fn(),
-			'update': vi.fn(),
-			'delete': vi.fn(),
-			'isReadable': vi.fn(),
-			'isWriteable': vi.fn()
-		};
+		const davCollection2 = new DavCollectionMock();
 		davCollection2.url = '/foo/bla/';
-		const request = {
-			'propFind': vi.fn(),
-			'put': vi.fn(),
-			'delete': vi.fn(),
-			'move': vi.fn()
-		};
+		const request = new RequestMock()
 		const url = '/foo/bar/file-tri-tra-tralala';
 		const props = {
 			'{DAV:}getetag': '"etag foo bar"',

@@ -13,6 +13,7 @@ import * as XMLUtility from "../../../src/utility/xmlUtility.js";
 import {AddressBookHome} from "../../../src/models/addressBookHome.js";
 import {DavCollection} from "../../../src/models/davCollection.js";
 import {AddressBook} from "../../../src/models/addressBook.js";
+import RequestMock from "../../mocks/request.mock.js";
 
 describe('Address book home model', () => {
 
@@ -22,12 +23,7 @@ describe('Address book home model', () => {
 
 	it('should inherit from DavCollection', () => {
 		const parent = null;
-		const request = {
-			"propFind": vi.fn(),
-			"put": vi.fn(),
-			"delete": vi.fn(),
-			"pathname": vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/addressbooks/users/admin/';
 
 		const addressBookHome = new AddressBookHome(parent, request, url, {});
@@ -36,19 +32,14 @@ describe('Address book home model', () => {
 
 	it('should find all address-books', () => {
 		const parent = null;
-		const request = {
-			"propFind": vi.fn(),
-			"put": vi.fn(),
-			"delete": vi.fn(),
-			"pathname": vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/addressbooks/users/admin/';
 
 		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: getDefaultPropFind(),
-				xhr: null
+				headers: {}
 			});
 		});
 
@@ -69,19 +60,13 @@ describe('Address book home model', () => {
 
 	it('should create a new address-book collection', () => {
 		const parent = null;
-		const request = {
-			"propFind": vi.fn(),
-			"put": vi.fn(),
-			"delete": vi.fn(),
-			"pathname": vi.fn(),
-			"mkCol": vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/addressbooks/users/admin/';
 
 		request.propFind.mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: getDefaultPropFind(),
-				xhr: null
+				headers: {}
 			})).mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: {
@@ -92,7 +77,7 @@ describe('Address book home model', () => {
 					"{DAV:}displayname" : "Renamed Address book",
 					"{urn:ietf:params:xml:ns:carddav}addressbook-description": 'This is a fancy description',
 				},
-				xhr: null
+				headers: {}
 			}));
 
 		request.pathname.mockImplementation((p) => p);
@@ -101,7 +86,7 @@ describe('Address book home model', () => {
 			return Promise.resolve({
 				status: 201,
 				body: null,
-				xhr: null
+				headers: {}
 			})
 		});
 

@@ -16,6 +16,7 @@ import ScheduleInbox from "../../../src/models/scheduleInbox.js";
 import ScheduleOutbox from "../../../src/models/scheduleOutbox.js";
 import {Subscription} from "../../../src/models/subscription.js";
 import * as XMLUtility from "../../../src/utility/xmlUtility.js";
+import RequestMock from "../../mocks/request.mock.js";
 
 describe('Calendar home model', () => {
 
@@ -25,11 +26,7 @@ describe('Calendar home model', () => {
 
 	it('should inherit from DavCollection', () => {
 		const parent = null;
-		const request = {
-			"propFind": vi.fn(),
-			"put": vi.fn(),
-			"delete": vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		const calendarHome = new CalendarHome(parent, request, url, {});
@@ -38,19 +35,14 @@ describe('Calendar home model', () => {
 
 	it('should find all CalDAV specific collections', () => {
 		const parent = null;
-		const request = {
-			"propFind": vi.fn(),
-			"put": vi.fn(),
-			"delete": vi.fn(),
-			"pathname": vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: getDefaultPropFind(),
-				xhr: null
+				headers: {}
 			});
 		});
 
@@ -82,19 +74,14 @@ describe('Calendar home model', () => {
 
 	it('should find all calendars', () => {
 		const parent = null;
-		const request = {
-			"propFind": vi.fn(),
-			"put": vi.fn(),
-			"delete": vi.fn(),
-			"pathname": vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: getDefaultPropFind(),
-				xhr: null
+				headers: {}
 			});
 		});
 
@@ -119,19 +106,14 @@ describe('Calendar home model', () => {
 
 	it('should find all subscriptions', () => {
 		const parent = null;
-		const request = {
-			"propFind": vi.fn(),
-			"put": vi.fn(),
-			"delete": vi.fn(),
-			"pathname": vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: getDefaultPropFind(),
-				xhr: null
+				headers: {}
 			});
 		});
 
@@ -154,19 +136,14 @@ describe('Calendar home model', () => {
 
 	it('should find all schedule inboxes', () => {
 		const parent = null;
-		const request = {
-			"propFind": vi.fn(),
-			"put": vi.fn(),
-			"delete": vi.fn(),
-			"pathname": vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: getDefaultPropFind(),
-				xhr: null
+				headers: {}
 			});
 		});
 
@@ -189,19 +166,14 @@ describe('Calendar home model', () => {
 
 	it('should find all schedule outboxes', () => {
 		const parent = null;
-		const request = {
-			"propFind": vi.fn(),
-			"put": vi.fn(),
-			"delete": vi.fn(),
-			"pathname": vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockImplementation(() => {
 			return Promise.resolve({
 				status: 207,
 				body: getDefaultPropFind(),
-				xhr: null
+				headers: {}
 			});
 		});
 
@@ -224,19 +196,13 @@ describe('Calendar home model', () => {
 
 	it('should create a calendar collection', () => {
 		const parent = null;
-		const request = {
-			"propFind": vi.fn(),
-			"put": vi.fn(),
-			"delete": vi.fn(),
-			"pathname": vi.fn(),
-			"mkCol": vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: getDefaultPropFind(),
-				xhr: null
+				headers: {}
 			})).mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: {
@@ -248,14 +214,14 @@ describe('Calendar home model', () => {
 					"{DAV:}owner" : "/nextcloud/remote.php/dav/principals/users/admin/",
 					"{DAV:}sync-token" : "http://sabre.io/ns/sync/19",
 				},
-				xhr: null
+				headers: {}
 			}));
 
 		request.mkCol.mockImplementation(() => {
 			return Promise.resolve({
 				status: 201,
 				body: null,
-				xhr: null
+				headers: {}
 			})
 		});
 
@@ -284,19 +250,13 @@ describe('Calendar home model', () => {
 
 	it('should create a calendar collection with additional parameters', () => {
 		const parent = null;
-		const request = {
-			"propFind": vi.fn(),
-			"put": vi.fn(),
-			"delete": vi.fn(),
-			"pathname": vi.fn(),
-			"mkCol": vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: getDefaultPropFind(),
-				xhr: null
+				headers: {}
 			})).mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: {
@@ -308,14 +268,14 @@ describe('Calendar home model', () => {
 					"{DAV:}owner" : "/nextcloud/remote.php/dav/principals/users/admin/",
 					"{DAV:}sync-token" : "http://sabre.io/ns/sync/19",
 				},
-				xhr: null
+				headers: {}
 			}));
 
 		request.mkCol.mockImplementation(() => {
 			return Promise.resolve({
 				status: 201,
 				body: null,
-				xhr: null
+				headers: {}
 			})
 		});
 
@@ -344,19 +304,13 @@ describe('Calendar home model', () => {
 
 	it('should create a calendar collection with additional parameters and timezone', () => {
 		const parent = null;
-		const request = {
-			"propFind": vi.fn(),
-			"put": vi.fn(),
-			"delete": vi.fn(),
-			"pathname": vi.fn(),
-			"mkCol": vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: getDefaultPropFind(),
-				xhr: null
+				headers: {}
 			})).mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: {
@@ -369,14 +323,14 @@ describe('Calendar home model', () => {
 					"{DAV:}sync-token" : "http://sabre.io/ns/sync/19",
 					"{urn:ietf:params:xml:ns:caldav}calendar": "FOO",
 				},
-				xhr: null
+				headers: {}
 			}));
 
 		request.mkCol.mockImplementation(() => {
 			return Promise.resolve({
 				status: 201,
 				body: null,
-				xhr: null
+				headers: {}
 			})
 		});
 
@@ -405,19 +359,13 @@ describe('Calendar home model', () => {
 
 	it('should create a subscribed collection', () => {
 		const parent = null;
-		const request = {
-			"propFind": vi.fn(),
-			"put": vi.fn(),
-			"delete": vi.fn(),
-			"pathname": vi.fn(),
-			"mkCol": vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: getDefaultPropFind(),
-				xhr: null
+				headers: {}
 			})).mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: {
@@ -429,14 +377,14 @@ describe('Calendar home model', () => {
 					"{DAV:}owner" : "/nextcloud/remote.php/dav/principals/users/admin/",
 					"{DAV:}sync-token" : "http://sabre.io/ns/sync/19",
 				},
-				xhr: null
+				headers: {}
 			}));
 
 		request.mkCol.mockImplementation(() => {
 			return Promise.resolve({
 				status: 201,
 				body: null,
-				xhr: null
+				headers: {}
 			})
 		});
 
@@ -465,19 +413,13 @@ describe('Calendar home model', () => {
 
 	it('should create a subscribed collection with additional parameters', () => {
 		const parent = null;
-		const request = {
-			"propFind": vi.fn(),
-			"put": vi.fn(),
-			"delete": vi.fn(),
-			"pathname": vi.fn(),
-			"mkCol": vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.propFind.mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: getDefaultPropFind(),
-				xhr: null
+				headers: {}
 			})).mockReturnValueOnce(Promise.resolve({
 				status: 207,
 				body: {
@@ -489,14 +431,14 @@ describe('Calendar home model', () => {
 					"{DAV:}owner" : "/nextcloud/remote.php/dav/principals/users/admin/",
 					"{DAV:}sync-token" : "http://sabre.io/ns/sync/19",
 				},
-				xhr: null
+				headers: {}
 			}));
 
 		request.mkCol.mockImplementation(() => {
 			return Promise.resolve({
 				status: 201,
 				body: null,
-				xhr: null
+				headers: {}
 			})
 		});
 
@@ -527,15 +469,13 @@ describe('Calendar home model', () => {
 
 	it('should allow to enable the birthday-calendar', () => {
 		const parent = null;
-		const request = {
-			"post": vi.fn()
-		};
+		const request = new RequestMock();
 		const url = '/nextcloud/remote.php/dav/calendars/admin/';
 
 		request.post.mockReturnValue(Promise.resolve({
 				status: 204,
 				body: null,
-				xhr: null
+				headers: {}
 			})
 		);
 
