@@ -27,10 +27,9 @@ export default class DavClient {
 	/**
 	 * @param {object} options
 	 * @param {string} options.rootUrl
-	 * @param {Function} xhrProvider
 	 * @param {object} factories
 	 */
-	constructor(options, xhrProvider = null, factories = {}) {
+	constructor(options, factories = {}) {
 		/**
 		 * root URL of DAV Server
 		 *
