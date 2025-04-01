@@ -50,7 +50,7 @@
     "npm": "^10.0.0"
   },
   "devDependencies": {
-    "@nextcloud/browserslist-config": "^3.0.0",
+    "@nextcloud/browserslist-config": "^3.0.1",
     "@nextcloud/eslint-config": "^8.4.1",
     "@nextcloud/vite-config": "^2.0.1",
     "@vitest/browser": "^3.0.6",
