@@ -11,6 +11,13 @@ export default createLibConfig({
 	libraryFormats: ['es', 'cjs'],
 	config: {
 		test: {
+			coverage: {
+				include: ['src'],
+				provider: 'istanbul',
+				// json-summary' and 'json' are used in the CI by davelosert/vitest-coverage-report-action
+				reporter: ['json-summary', 'json'],
+				reportOnFailure: true,
+			},
 			restoreMocks: true,
 			include: [
 				'test/unit/**/*.js',
