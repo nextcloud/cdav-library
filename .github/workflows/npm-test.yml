@@ -32,4 +32,9 @@ jobs:
         run: npx playwright install --with-deps webkit chromium firefox
 
       - name: Test
-        run: npm run test
+        run: npm run test:coverage
+
+      - name: 'Report Coverage'
+        # Set if: always() to also generate the report if tests are failing
+        if: always() 
+        uses:  davelosert/vitest-coverage-report-action@v2
