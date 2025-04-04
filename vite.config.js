@@ -11,6 +11,12 @@ export default createLibConfig({
 	libraryFormats: ['es', 'cjs'],
 	config: {
 		test: {
+			coverage: {
+				include: ['src'],
+				provider: 'istanbul',
+				reporter: ['json'],
+				reportOnFailure: true,
+			},
 			restoreMocks: true,
 			include: [
 				'test/unit/**/*.js',

@@ -32,4 +32,9 @@ jobs:
         run: npx playwright install --with-deps webkit chromium firefox
 
       - name: Test
-        run: npm run test
+        run: npm run test:coverage
+
+      - name: Upload coverage reports to Codecov with GitHub Action
+        uses: codecov/codecov-action@v5
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
