@@ -21,6 +21,7 @@
     "dev": "vite build --mode=development",
     "watch": "vite build --mode=development --watch",
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
     "lint": "eslint --ext .js src",
     "lint:fix": "eslint --ext .js src --fix"
@@ -54,6 +55,7 @@
     "@nextcloud/eslint-config": "^8.4.2",
     "@nextcloud/vite-config": "^2.3.2",
     "@vitest/browser": "^3.0.6",
+    "@vitest/coverage-istanbul": "^3.1.1",
     "playwright": "^1.49.1",
     "vite": "^5.4.16",
     "vitest": "^3.0.6"
