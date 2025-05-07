@@ -6,6 +6,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.0.0 - 2025-05-07
+### Breaking changes
+- Removed the ability to pass a custom `xhrProvider`
+- Removed `beforeRequestHandler` and `afterRequestHandler` callbacks from the `Request` class
+### Added
+- Pass custom abort signals to instances of the `Request` class
+- Use `@nextcloud/axios` for requests (instead of raw XHR code)
+- Migrate testing code to vitest
+### Fixed
+- Serialize namespaced attributes consistently across browsers
+- Update vulnerable dependencies
+
 ## v1.5.3 - 2025-03-22
 ### Fixed
 - Update vulnerable dependencies
