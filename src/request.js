@@ -42,8 +42,8 @@ export default class Request {
 	 * @param {AbortSignal} abortSignal - the signal from an abort controller
 	 * @return {Promise<{body: string|object, status: number, headers: object}>}
 	 */
-	async options(url, headers = {}, abortSignal = null) {
-		return this.request('OPTIONS', url, headers, {}, abortSignal)
+	async options(url, headers = {}, body = null, abortSignal = null) {
+		return this.request('OPTIONS', url, headers, body, abortSignal)
 	}
 
 	/**
