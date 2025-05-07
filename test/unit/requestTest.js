@@ -24,6 +24,45 @@ describe('Request', () => {
 		XMLUtility.resetPrefixMap()
 	})
 
+	it('should send OPTIONS requests', async () => {
+		const axiosRequestSpy = vi.spyOn(axios, 'request')
+			.mockResolvedValueOnce({
+				status: 234,
+				data: 567,
+			})
+
+		const parser = {
+			canParse: vi.fn(),
+			parse: vi.fn(),
+		}
+
+		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser)
+		const response = await request.options('fooBar', {
+			Foo: 'Bar',
+			Bla: 'Blub',
+		})
+
+		expect(axiosRequestSpy).toHaveBeenCalledTimes(1)
+		expect(axiosRequestSpy).toHaveBeenCalledWith({
+			method: 'OPTIONS',
+			data: null,
+			url: 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar',
+			headers: expect.objectContaining({
+				Depth: '0',
+				'Content-Type': 'application/xml; charset=utf-8',
+				Foo: 'Bar',
+				Bla: 'Blub',
+			}),
+			validateStatus: expect.any(Function),
+			signal: null,
+		})
+
+		expect(response).toEqual({
+			body: 567,
+			status: 234,
+		})
+	})
+
 	it('should send GET requests', async () => {
 		const axiosRequestSpy = vi.spyOn(axios, 'request')
 			.mockResolvedValueOnce({

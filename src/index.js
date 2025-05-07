@@ -137,13 +137,16 @@ export default class DavClient {
 			)
 		}
 
-		const response = await this._request.propFind(principalUrl, propFindList)
+		const [propFindResponse, optionsResponse] = await Promise.all([
+			this._request.propFind(principalUrl, propFindList),
+			this._request.options(principalUrl),
+		])
 
-		this.currentUserPrincipal = new Principal(null, this._request, principalUrl, response.body)
-		this._extractAdvertisedDavFeatures(response.headers)
-		this._extractAddressBookHomes(response.body)
-		this._extractCalendarHomes(response.body)
-		this._extractPrincipalCollectionSets(response.body)
+		this.currentUserPrincipal = new Principal(null, this._request, principalUrl, propFindResponse.body)
+		this._extractAdvertisedDavFeatures(optionsResponse.headers)
+		this._extractAddressBookHomes(propFindResponse.body)
+		this._extractCalendarHomes(propFindResponse.body)
+		this._extractPrincipalCollectionSets(propFindResponse.body)
 		this._createPublicCalendarHome()
 
 		this._isConnected = true
