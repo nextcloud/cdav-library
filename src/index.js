@@ -140,11 +140,13 @@ export default class DavClient {
 		const response = await this._request.propFind(principalUrl, propFindList)
 
 		this.currentUserPrincipal = new Principal(null, this._request, principalUrl, response.body)
-		this._extractAdvertisedDavFeatures(response.headers)
 		this._extractAddressBookHomes(response.body)
 		this._extractCalendarHomes(response.body)
 		this._extractPrincipalCollectionSets(response.body)
 		this._createPublicCalendarHome()
+
+		const optionsResponse = await this._request.options(principalUrl)
+		this._extractAdvertisedDavFeatures(optionsResponse.headers)
 
 		this._isConnected = true
 
