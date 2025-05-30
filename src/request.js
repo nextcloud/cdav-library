@@ -37,6 +37,18 @@ export default class Request {
 	}
 
 	/**
+	 * sends an OPTIONS request
+	 *
+	 * @param {string} url - URL to do the request on
+	 * @param {object} headers - additional HTTP headers to send
+	 * @param {AbortSignal} abortSignal - the signal from an abort controller
+	 * @return {Promise<{body: string|object, status: number, headers: object}>}
+	 */
+	async options(url, headers = {}, abortSignal = null) {
+		return this.request('OPTIONS', url, headers, null, abortSignal)
+	}
+
+	/**
 	 * sends a GET request
 	 *
 	 * @param {string} url - URL to do the request on
