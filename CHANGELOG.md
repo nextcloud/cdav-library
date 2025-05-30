@@ -6,6 +6,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.1.0 - 2025-05-30
+### Added
+- Send custom default headers with each request
+### Fixed
+- Send OPTIONS request to acquire advertised DAV features
+
 ## v2.0.0 - 2025-05-07
 ### Breaking changes
 - Removed the ability to pass a custom `xhrProvider`
