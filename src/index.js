@@ -27,6 +27,7 @@ export default class DavClient {
 	/**
 	 * @param {object} options
 	 * @param {string} options.rootUrl
+	 * @param {{[name: string]: any}} [options.defaultHeaders] A dictionary of default headers to apply to each request.
 	 * @param {object} factories
 	 */
 	constructor(options, factories = {}) {
@@ -35,14 +36,11 @@ export default class DavClient {
 		 *
 		 * @type {string}
 		 */
-		this.rootUrl = null
+		this.rootUrl = options.rootUrl
 
-		if (options.rootUrl.slice(-1) !== '/') {
-			options.rootUrl += '/'
+		if (this.rootUrl.slice(-1) !== '/') {
+			this.rootUrl += '/'
 		}
-
-		// overwrite rootUrl if passed as argument
-		Object.assign(this, options)
 
 		/**
 		 * List of advertised DAV features
@@ -108,7 +106,7 @@ export default class DavClient {
 		 * @type {Request}
 		 * @private
 		 */
-		this._request = new Request(this.rootUrl, this.parser)
+		this._request = new Request(this.rootUrl, this.parser, options.defaultHeaders)
 	}
 
 	/**
