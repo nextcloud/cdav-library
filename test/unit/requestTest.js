@@ -7,7 +7,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi, test } from 'vitest'
 
 import Request from '../../src/request.js'
 import * as XMLUtility from '../../src/utility/xmlUtility.js'
@@ -36,7 +36,14 @@ describe('Request', () => {
 			parse: vi.fn(),
 		}
 
-		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser)
+		const request = new Request(
+			'https://nextcloud.testing/nextcloud/remote.php/dav/',
+			parser,
+			{
+				Foo: 'Will be overwritten',
+				Answer: '42',
+			},
+		)
 		const response = await request.get('fooBar', {
 			Foo: 'Bar',
 			Bla: 'Blub',
@@ -52,6 +59,7 @@ describe('Request', () => {
 				'Content-Type': 'application/xml; charset=utf-8',
 				Foo: 'Bar',
 				Bla: 'Blub',
+				Answer: '42',
 			}),
 			validateStatus: expect.any(Function),
 			signal: null,
@@ -75,7 +83,14 @@ describe('Request', () => {
 			parse: vi.fn(),
 		}
 
-		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser)
+		const request = new Request(
+			'https://nextcloud.testing/nextcloud/remote.php/dav/',
+			parser,
+			{
+				Foo: 'Will be overwritten',
+				Answer: '42',
+			},
+		)
 		const response = await request.patch('fooBar', {
 			Foo: 'Bar',
 			Bla: 'Blub',
@@ -90,6 +105,7 @@ describe('Request', () => {
 				'Content-Type': 'application/xml; charset=utf-8',
 				Foo: 'Bar',
 				Bla: 'Blub',
+				Answer: '42',
 			}),
 			data: '123456',
 			validateStatus: expect.any(Function),
@@ -115,7 +131,14 @@ describe('Request', () => {
 			parse: vi.fn(),
 		}
 
-		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser)
+		const request = new Request(
+			'https://nextcloud.testing/nextcloud/remote.php/dav/',
+			parser,
+			{
+				Foo: 'Will be overwritten',
+				Answer: '42',
+			},
+		)
 		const response = await request.post('fooBar', {
 			Foo: 'Bar',
 			Bla: 'Blub',
@@ -130,6 +153,7 @@ describe('Request', () => {
 				'Content-Type': 'application/xml; charset=utf-8',
 				Foo: 'Bar',
 				Bla: 'Blub',
+				Answer: '42',
 			}),
 			data: '123456',
 			validateStatus: expect.any(Function),
@@ -153,7 +177,14 @@ describe('Request', () => {
 			parse: vi.fn(),
 		}
 
-		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser)
+		const request = new Request(
+			'https://nextcloud.testing/nextcloud/remote.php/dav/',
+			parser,
+			{
+				Foo: 'Will be overwritten',
+				Answer: '42',
+			},
+		)
 		const response = await request.put('fooBar', {
 			Foo: 'Bar',
 			Bla: 'Blub',
@@ -168,6 +199,7 @@ describe('Request', () => {
 				'Content-Type': 'application/xml; charset=utf-8',
 				Foo: 'Bar',
 				Bla: 'Blub',
+				Answer: '42',
 			}),
 			data: '123456',
 			validateStatus: expect.any(Function),
@@ -192,7 +224,14 @@ describe('Request', () => {
 			parse: vi.fn(),
 		}
 
-		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser)
+		const request = new Request(
+			'https://nextcloud.testing/nextcloud/remote.php/dav/',
+			parser,
+			{
+				Foo: 'bar',
+				Answer: '42',
+			},
+		)
 		const response = await request.delete('fooBar')
 
 		expect(axiosRequestSpy).toHaveBeenCalledTimes(1)
@@ -202,6 +241,8 @@ describe('Request', () => {
 			headers: expect.objectContaining({
 				Depth: '0',
 				'Content-Type': 'application/xml; charset=utf-8',
+				Foo: 'bar',
+				Answer: '42',
 			}),
 			data: null,
 			validateStatus: expect.any(Function),
@@ -226,7 +267,14 @@ describe('Request', () => {
 			parse: vi.fn(),
 		}
 
-		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser)
+		const request = new Request(
+			'https://nextcloud.testing/nextcloud/remote.php/dav/',
+			parser,
+			{
+				Foo: 'bar',
+				Answer: '42',
+			},
+		)
 		const response = await request.copy('fooBar', 'barFoo', 'Infinity', true)
 
 		expect(axiosRequestSpy).toHaveBeenCalledTimes(1)
@@ -238,6 +286,8 @@ describe('Request', () => {
 				Destination: 'barFoo',
 				Overwrite: 'T',
 				'Content-Type': 'application/xml; charset=utf-8',
+				Foo: 'bar',
+				Answer: '42',
 			}),
 			data: null,
 			validateStatus: expect.any(Function),
@@ -262,7 +312,14 @@ describe('Request', () => {
 			parse: vi.fn(),
 		}
 
-		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser)
+		const request = new Request(
+			'https://nextcloud.testing/nextcloud/remote.php/dav/',
+			parser,
+			{
+				Foo: 'bar',
+				Answer: '42',
+			},
+		)
 		const response = await request.move('fooBar', 'barFoo')
 
 		expect(axiosRequestSpy).toHaveBeenCalledTimes(1)
@@ -274,6 +331,8 @@ describe('Request', () => {
 				Destination: 'barFoo',
 				Overwrite: 'F',
 				'Content-Type': 'application/xml; charset=utf-8',
+				Foo: 'bar',
+				Answer: '42',
 			}),
 			data: null,
 			validateStatus: expect.any(Function),
@@ -298,7 +357,14 @@ describe('Request', () => {
 			parse: vi.fn(),
 		}
 
-		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser)
+		const request = new Request(
+			'https://nextcloud.testing/nextcloud/remote.php/dav/',
+			parser,
+			{
+				Foo: 'bar',
+				Answer: '42',
+			},
+		)
 		const response = await request.lock('fooBar')
 
 		expect(axiosRequestSpy).toHaveBeenCalledTimes(1)
@@ -308,6 +374,8 @@ describe('Request', () => {
 			headers: expect.objectContaining({
 				Depth: '0',
 				'Content-Type': 'application/xml; charset=utf-8',
+				Foo: 'bar',
+				Answer: '42',
 			}),
 			data: null,
 			validateStatus: expect.any(Function),
@@ -333,7 +401,14 @@ describe('Request', () => {
 			parse: vi.fn(),
 		}
 
-		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser)
+		const request = new Request(
+			'https://nextcloud.testing/nextcloud/remote.php/dav/',
+			parser,
+			{
+				Foo: 'bar',
+				Answer: '42',
+			},
+		)
 		const response = await request.unlock('fooBar')
 
 		expect(axiosRequestSpy).toHaveBeenCalledTimes(1)
@@ -343,6 +418,8 @@ describe('Request', () => {
 			headers: expect.objectContaining({
 				Depth: '0',
 				'Content-Type': 'application/xml; charset=utf-8',
+				Foo: 'bar',
+				Answer: '42',
 			}),
 			data: null,
 			validateStatus: expect.any(Function),
@@ -367,7 +444,14 @@ describe('Request', () => {
 			parse: vi.fn(),
 		}
 
-		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser)
+		const request = new Request(
+			'https://nextcloud.testing/nextcloud/remote.php/dav/',
+			parser,
+			{
+				Foo: 'bar',
+				Answer: '42',
+			},
+		)
 		const response = await request.propFind('fooBar', [['NS1', 'local1'], ['NS2', 'local2']], 1)
 
 		expect(axiosRequestSpy).toHaveBeenCalledTimes(1)
@@ -377,6 +461,8 @@ describe('Request', () => {
 			headers: expect.objectContaining({
 				Depth: 1,
 				'Content-Type': 'application/xml; charset=utf-8',
+				Foo: 'bar',
+				Answer: '42',
 			}),
 			data: '<x0:propfind xmlns:x0="DAV:"><x0:prop><x1:local1 xmlns:x1="NS1"/><x2:local2 xmlns:x2="NS2"/></x0:prop></x0:propfind>',
 			validateStatus: expect.any(Function),
@@ -401,7 +487,14 @@ describe('Request', () => {
 			parse: vi.fn(),
 		}
 
-		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser)
+		const request = new Request(
+			'https://nextcloud.testing/nextcloud/remote.php/dav/',
+			parser,
+			{
+				Foo: 'Will be overwritten',
+				Answer: '42',
+			},
+		)
 		const response = await request.propPatch('fooBar', {
 			Foo: 'Bar',
 			Bla: 'Blub',
@@ -416,6 +509,7 @@ describe('Request', () => {
 				'Content-Type': 'application/xml; charset=utf-8',
 				Foo: 'Bar',
 				Bla: 'Blub',
+				Answer: '42',
 			}),
 			data: '123456',
 			validateStatus: expect.any(Function),
@@ -440,7 +534,14 @@ describe('Request', () => {
 			parse: vi.fn(),
 		}
 
-		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser)
+		const request = new Request(
+			'https://nextcloud.testing/nextcloud/remote.php/dav/',
+			parser,
+			{
+				Foo: 'Will be overwritten',
+				Answer: '42',
+			},
+		)
 		const response = await request.mkCol('fooBar', {
 			Foo: 'Bar',
 			Bla: 'Blub',
@@ -455,6 +556,7 @@ describe('Request', () => {
 				'Content-Type': 'application/xml; charset=utf-8',
 				Foo: 'Bar',
 				Bla: 'Blub',
+				Answer: '42',
 			}),
 			data: '123456',
 			validateStatus: expect.any(Function),
@@ -480,7 +582,14 @@ describe('Request', () => {
 			parse: vi.fn(),
 		}
 
-		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser)
+		const request = new Request(
+			'https://nextcloud.testing/nextcloud/remote.php/dav/',
+			parser,
+			{
+				Foo: 'Will be overwritten',
+				Answer: '42',
+			},
+		)
 		const response = await request.report('fooBar', {
 			Foo: 'Bar',
 			Bla: 'Blub',
@@ -495,6 +604,7 @@ describe('Request', () => {
 				'Content-Type': 'application/xml; charset=utf-8',
 				Foo: 'Bar',
 				Bla: 'Blub',
+				Answer: '42',
 			}),
 			data: '123456',
 			validateStatus: expect.any(Function),
@@ -519,7 +629,14 @@ describe('Request', () => {
 			parse: vi.fn(),
 		}
 
-		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser)
+		const request = new Request(
+			'https://nextcloud.testing/nextcloud/remote.php/dav/',
+			parser,
+			{
+				Foo: 'Will be overwritten',
+				Answer: '42',
+			},
+		)
 		const response = await request.request('METHOD123', 'fooBar', {
 			Foo: 'Bar',
 			Bla: 'Blub',
@@ -535,6 +652,7 @@ describe('Request', () => {
 				'Content-Type': 'application/xml; charset=utf-8',
 				Foo: 'Bar',
 				Bla: 'Blub',
+				Answer: '42',
 			}),
 			validateStatus: expect.any(Function),
 			signal: undefined,
@@ -1307,5 +1425,135 @@ describe('Request', () => {
 		expect(request.absoluteUrl('foo')).toEqual('https://nextcloud.testing/nextcloud/remote.php/dav/foo')
 		expect(request.absoluteUrl('foo/bar/baz/')).toEqual('https://nextcloud.testing/nextcloud/remote.php/dav/foo/bar/baz/')
 		expect(request.absoluteUrl('https://foo.bar/nextcloud/remote.php/caldav/')).toEqual('https://foo.bar/nextcloud/remote.php/caldav/')
+	})
+
+	it('should send custom default headers and respect their precedence', async () => {
+		const axiosRequestSpy = vi.spyOn(axios, 'request')
+			.mockResolvedValueOnce({
+				status: 234,
+				data: 567,
+			})
+
+		const parser = {
+			canParse: vi.fn(),
+			parse: vi.fn(),
+		}
+
+		const request = new Request(
+			'https://nextcloud.testing/nextcloud/remote.php/dav/',
+			parser,
+			{
+				Depth: '9000',
+				Foo: 'Will be overwritten',
+				Answer: '42',
+			},
+		)
+		const response = await request.request('METHOD123', 'fooBar', {
+			Foo: 'Bar',
+			Bla: 'Blub',
+		})
+
+		expect(axiosRequestSpy).toHaveBeenCalledTimes(1)
+		expect(axiosRequestSpy).toHaveBeenCalledWith({
+			method: 'METHOD123',
+			data: undefined,
+			url: 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar',
+			headers: expect.objectContaining({
+				Depth: '9000',
+				'Content-Type': 'application/xml; charset=utf-8',
+				Foo: 'Bar',
+				Bla: 'Blub',
+				Answer: '42',
+			}),
+			validateStatus: expect.any(Function),
+			signal: undefined,
+		})
+
+		expect(response).toEqual({
+			body: 567,
+			status: 234,
+		})
+	})
+
+	test.each([undefined, null])('should handle %s default headers', async (defaultHeaders) => {
+		const axiosRequestSpy = vi.spyOn(axios, 'request')
+			.mockResolvedValueOnce({
+				status: 234,
+				data: 567,
+			})
+
+		const parser = {
+			canParse: vi.fn(),
+			parse: vi.fn(),
+		}
+
+		const request = new Request(
+			'https://nextcloud.testing/nextcloud/remote.php/dav/',
+			parser,
+			defaultHeaders,
+		)
+		const response = await request.request('METHOD123', 'fooBar', {
+			Foo: 'Bar',
+			Bla: 'Blub',
+		})
+
+		expect(axiosRequestSpy).toHaveBeenCalledTimes(1)
+		expect(axiosRequestSpy).toHaveBeenCalledWith({
+			method: 'METHOD123',
+			data: undefined,
+			url: 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar',
+			headers: expect.objectContaining({
+				Depth: '0',
+				'Content-Type': 'application/xml; charset=utf-8',
+				Foo: 'Bar',
+				Bla: 'Blub',
+			}),
+			validateStatus: expect.any(Function),
+			signal: undefined,
+		})
+
+		expect(response).toEqual({
+			body: 567,
+			status: 234,
+		})
+	})
+
+	it('should handle unset default headers', async () => {
+		const axiosRequestSpy = vi.spyOn(axios, 'request')
+			.mockResolvedValueOnce({
+				status: 234,
+				data: 567,
+			})
+
+		const parser = {
+			canParse: vi.fn(),
+			parse: vi.fn(),
+		}
+
+		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser)
+		const response = await request.request('METHOD123', 'fooBar', {
+			Foo: 'Bar',
+			Bla: 'Blub',
+		})
+
+		expect(axiosRequestSpy).toHaveBeenCalledTimes(1)
+		expect(axiosRequestSpy).toHaveBeenCalledWith({
+			method: 'METHOD123',
+			data: undefined,
+			url: 'https://nextcloud.testing/nextcloud/remote.php/dav/fooBar',
+			headers: expect.objectContaining({
+				Depth: '0',
+				'Content-Type': 'application/xml; charset=utf-8',
+				Foo: 'Bar',
+				Bla: 'Blub',
+			}),
+			validateStatus: expect.any(Function),
+			signal: undefined,
+		})
+
+		expect(response).toEqual({
+			body: 567,
+			status: 234,
+		})
 	})
 })

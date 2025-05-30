@@ -27,11 +27,13 @@ export default class Request {
 	 * Creates a new Request object
 	 *
 	 * @param {string} baseUrl - root url of DAV server, use OC.remote('dav')
+	 * @param {{[name: string]: any}} [defaultHeaders] - additional HTTP headers to send with each request
 	 * @param {import('./parser.js').Parser} parser - instance of Parser class
 	 */
-	constructor(baseUrl, parser) {
+	constructor(baseUrl, parser, defaultHeaders = {}) {
 		this.baseUrl = baseUrl
 		this.parser = parser
+		this.defaultHeaders = defaultHeaders
 	}
 
 	/**
@@ -251,7 +253,7 @@ export default class Request {
 	 * @return {Promise<{body: string|object, status: number, headers: object}>}
 	 */
 	async request(method, url, headers, body, abortSignal) {
-		const assignHeaders = Object.assign({}, getDefaultHeaders(), headers)
+		const assignHeaders = Object.assign({}, getDefaultHeaders(), this.defaultHeaders, headers)
 		try {
 			const response = await axios.request({
 				url: this.absoluteUrl(url),
