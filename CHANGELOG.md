@@ -6,6 +6,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## v2.1.1 - 2025-07-22
+### Fixed
+- Update vulnerable dependencies
+
 ## v2.1.0 - 2025-05-30
 ### Added
 - Send custom default headers with each request
