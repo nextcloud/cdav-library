@@ -61,6 +61,6 @@
     "vitest": "^3.0.6"
   },
   "dependencies": {
-    "@nextcloud/axios": "^2.5.1"
+    "@nextcloud/axios": "^2.5.2"
   }
 }
