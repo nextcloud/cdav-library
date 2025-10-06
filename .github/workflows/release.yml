@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: 2025 Nextcloud GmbH and Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+name: Release
+on: workflow_dispatch
+
+jobs:
+  npm-registry:
+    name: 'Npm registry'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    environment: npm registry
+    steps:
+      - name: Conventional nextcloud npm release
+        uses: ChristophWurst/conventional-nextcloud-npm-release@de5407727bf973c74e8944853c38719aeff6bb8a # v1.0.0
+        with:
+          github-token: ${{ secrets.RELEASE_PAT }}
+          npm-token: ${{ secrets.NPM_TOKEN }}
