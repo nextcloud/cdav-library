@@ -50,6 +50,7 @@
         "hamza221",
         "SebastianKrupinski"
       ]
+    },
     {
       "matchUpdateTypes": ["minor", "patch"],
       "matchCurrentVersion": "!/^0/",
