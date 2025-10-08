@@ -38,15 +38,18 @@
       "description": "Request JavaScript reviews",
       "matchManagers": ["npm"],
       "reviewers": [
-        "st3iny"]
+        "hamza221",
+        "SebastianKrupinski"
+      ]
     },
     {
       "description": "Bump Github actions monthly and request reviews",
       "matchManagers": ["github-actions"],
       "extends": ["schedule:monthly"],
       "reviewers": [
-        "st3iny"]
-    },
+        "hamza221",
+        "SebastianKrupinski"
+      ]
     {
       "matchUpdateTypes": ["minor", "patch"],
       "matchCurrentVersion": "!/^0/",
