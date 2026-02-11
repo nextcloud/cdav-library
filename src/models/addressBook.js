@@ -64,9 +64,11 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 	 * findAllAndFilterBySimpleProperties(['EMAIL', 'UID', 'CATEGORIES', 'FN', 'TEL', 'NICKNAME', 'N'])
 	 *
 	 * @param {string[]} props
+	 * @param offset
+	 * @param limit
 	 * @return {Promise<VCard[]>}
 	 */
-	async findAllAndFilterBySimpleProperties(props) {
+	async findAllAndFilterBySimpleProperties(props, offset = null, limit = 0) {
 		const children = []
 		props.forEach((prop) => {
 			children.push({
@@ -86,7 +88,7 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 			children,
 		}, {
 			name: [NS.NEXTCLOUD, 'has-photo'],
-		}])
+		}], null, 'anyof', offset, limit)
 	}
 
 	/**
@@ -114,9 +116,11 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 	 * @param {object[]} prop
 	 * @param {number} limit
 	 * @param {string} test Either anyof or allof
+	 * @param {number} offset Offset for the query
+	 * @param {number} queryLimit Limit for the query
 	 * @return {Promise<VCard[]>}
 	 */
-	async addressbookQuery(filter, prop = null, limit = null, test = 'anyof') {
+	async addressbookQuery(filter, prop = null, limit = null, test = 'anyof', offset = null, queryLimit = null) {
 		debug('sending an addressbook-query request')
 
 		const [skeleton] = XMLUtility.getRootSkeleton(
@@ -159,6 +163,8 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 
 		const headers = {
 			Depth: '1',
+			'X-NEXTCLOUD-Offset': offset,
+			'X-NEXTCLOUD-limit': queryLimit,
 		}
 		const body = XMLUtility.serialize(skeleton)
 		const response = await this._request.report(this.url, headers, body)
