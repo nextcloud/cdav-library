@@ -18,6 +18,7 @@ import * as NS from '../utility/namespaceUtility.js'
  * - {urn:ietf:params:xml:ns:caldav}calendar-description
  * - {urn:ietf:params:xml:ns:caldav}calendar-timezone
  * - {http://owncloud.org/ns}calendar-enabled
+ * - {http://nextcloud.com/ns}default-alarm
  *
  * @param {object} props
  * @return {object}
@@ -69,6 +70,12 @@ export default function calendarPropSet(props) {
 			xmlified.push({
 				name: [NS.OWNCLOUD, 'calendar-enabled'],
 				value: value ? '1' : '0',
+			})
+			break
+		case '{http://nextcloud.com/ns}default-alarm':
+			xmlified.push({
+				name: [NS.NEXTCLOUD, 'default-alarm'],
+				value,
 			})
 			break
 		case '{urn:ietf:params:xml:ns:caldav}schedule-calendar-transp':

@@ -178,6 +178,7 @@ export default class Parser {
 		this.registerParser('{http://owncloud.org/ns}calendar-enabled', Parser.bool)
 		this.registerParser('{http://owncloud.org/ns}enabled', Parser.bool)
 		this.registerParser('{http://owncloud.org/ns}read-only', Parser.bool)
+		this.registerParser('{http://nextcloud.com/ns}default-alarm', Parser.decInt)
 		this.registerParser('{http://nextcloud.com/ns}owner-displayname', Parser.text)
 		this.registerParser('{http://nextcloud.com/ns}deleted-at', Parser.iso8601DateTime)
 		this.registerParser('{http://nextcloud.com/ns}calendar-uri', Parser.text)

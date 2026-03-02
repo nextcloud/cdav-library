@@ -30,9 +30,10 @@ const debug = debugFactory('Calendar')
  * - enabled
  * - order
  * - timezone
+ * - defaultAlarm
  * - components
  *
- * The first four allowing read-write access
+ * The first five allowing read-write access
  *
  * @augments DavCollection
  */
@@ -53,6 +54,7 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 		super._exposeProperty('timezone', NS.IETF_CALDAV, 'calendar-timezone', true)
 		super._exposeProperty('components', NS.IETF_CALDAV, 'supported-calendar-component-set')
 		super._exposeProperty('transparency', NS.IETF_CALDAV, 'schedule-calendar-transp', true)
+		super._exposeProperty('defaultAlarm', NS.NEXTCLOUD, 'default-alarm', true)
 	}
 
 	/**
@@ -281,6 +283,7 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 			[NS.IETF_CALDAV, 'schedule-calendar-transp'],
 			[NS.IETF_CALDAV, 'schedule-default-calendar-URL'],
 			[NS.OWNCLOUD, 'calendar-enabled'],
+			[NS.NEXTCLOUD, 'default-alarm'],
 			[NS.NEXTCLOUD, 'owner-displayname'],
 			[NS.NEXTCLOUD, 'trash-bin-retention-duration'],
 			[NS.NEXTCLOUD, 'deleted-at'],
