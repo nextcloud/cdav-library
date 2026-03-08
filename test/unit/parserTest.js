@@ -10,6 +10,7 @@
 import { describe, expect, it } from "vitest";
 
 import Parser from '../../src/parser.js';
+import * as XPathUtility from '../../src/utility/xPathUtility.js';
 
 describe('Parser', () => {
 
@@ -1949,11 +1950,11 @@ function getDocumentNodeResolverFromXML(xml) {
 	const domParser = new DOMParser();
 	const document = domParser.parseFromString(xml, 'application/xml');
 
-	const responses = document.evaluate('/d:multistatus/d:response', document, resolver, XPathResult.ANY_TYPE, null);
+	const responses = XPathUtility.select('/d:multistatus/d:response', document, resolver, XPathResult.ANY_TYPE, null);
 	const response = responses.iterateNext();
-	const propStats = document.evaluate('d:propstat', response, resolver, XPathResult.ANY_TYPE, null);
+	const propStats = XPathUtility.select('d:propstat', response, resolver, XPathResult.ANY_TYPE, null);
 	const propStat = propStats.iterateNext();
-	const props = document.evaluate('d:prop/*', propStat, resolver, XPathResult.ANY_TYPE, null);
+	const props = XPathUtility.select('d:prop/*', propStat, resolver, XPathResult.ANY_TYPE, null);
 
 	return [document, props.iterateNext(), resolver];
 }

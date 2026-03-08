@@ -9,6 +9,7 @@
 
 import * as NS from './utility/namespaceUtility.js'
 import * as XMLUtility from './utility/xmlUtility.js'
+import * as XPathUtility from './utility/xPathUtility.js'
 import axios from '@nextcloud/axios'
 
 import NetworkRequestAbortedError from './errors/networkRequestAbortedError.js'
@@ -386,22 +387,22 @@ export default class Request {
 		const domParser = new DOMParser()
 		const document = domParser.parseFromString(body, 'application/xml')
 
-		const responses = document.evaluate('/d:multistatus/d:response', document, NS.resolve, XPathResult.ANY_TYPE, null)
+		const responses = XPathUtility.select('/d:multistatus/d:response', document, NS.resolve, XPathResult.ANY_TYPE, null)
 		let responseNode
 
 		while ((responseNode = responses.iterateNext()) !== null) {
-			const href = document.evaluate('string(d:href)', responseNode, NS.resolve, XPathResult.ANY_TYPE, null).stringValue
+			const href = XPathUtility.select('string(d:href)', responseNode, NS.resolve, XPathResult.ANY_TYPE, null).stringValue
 			const parsedProperties = {}
-			const propStats = document.evaluate('d:propstat', responseNode, NS.resolve, XPathResult.ANY_TYPE, null)
+			const propStats = XPathUtility.select('d:propstat', responseNode, NS.resolve, XPathResult.ANY_TYPE, null)
 			let propStatNode
 
 			while ((propStatNode = propStats.iterateNext()) !== null) {
-				const status = document.evaluate('string(d:status)', propStatNode, NS.resolve, XPathResult.ANY_TYPE, null).stringValue
+				const status = XPathUtility.select('string(d:status)', propStatNode, NS.resolve, XPathResult.ANY_TYPE, null).stringValue
 				if (!wasRequestSuccessful(getStatusCodeFromString(status))) {
 					continue
 				}
 
-				const props = document.evaluate('d:prop/*', propStatNode, NS.resolve, XPathResult.ANY_TYPE, null)
+				const props = XPathUtility.select('d:prop/*', propStatNode, NS.resolve, XPathResult.ANY_TYPE, null)
 				let propNode
 
 				while ((propNode = props.iterateNext()) !== null) {

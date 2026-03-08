@@ -7,6 +7,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import * as XPathUtility from './utility/xPathUtility.js'
+
 /**
  *
  */
@@ -205,7 +207,7 @@ export default class Parser {
 	 * @return {string}
 	 */
 	static text(document, node, resolver) {
-		return document.evaluate('string(.)', node, resolver, XPathResult.ANY_TYPE, null).stringValue
+		return XPathUtility.select('string(.)', node, resolver, XPathResult.ANY_TYPE, null).stringValue
 	}
 
 	/**
@@ -296,12 +298,12 @@ export default class Parser {
 	 */
 	static resourceType(document, node, resolver) {
 		const result = []
-		const children = document.evaluate('*', node, resolver, XPathResult.ANY_TYPE, null)
+		const children = XPathUtility.select('*', node, resolver, XPathResult.ANY_TYPE, null)
 		let childNode
 
 		while ((childNode = children.iterateNext()) !== null) {
-			const ns = document.evaluate('namespace-uri(.)', childNode, resolver, XPathResult.ANY_TYPE, null).stringValue
-			const local = document.evaluate('local-name(.)', childNode, resolver, XPathResult.ANY_TYPE, null).stringValue
+			const ns = XPathUtility.select('namespace-uri(.)', childNode, resolver, XPathResult.ANY_TYPE, null).stringValue
+			const local = XPathUtility.select('local-name(.)', childNode, resolver, XPathResult.ANY_TYPE, null).stringValue
 
 			result.push(`{${ns}}${local}`)
 		}
@@ -318,7 +320,7 @@ export default class Parser {
 	 * @return {string}
 	 */
 	static href(document, node, resolver) {
-		return document.evaluate('string(d:href)', node, resolver, XPathResult.ANY_TYPE, null).stringValue
+		return XPathUtility.select('string(d:href)', node, resolver, XPathResult.ANY_TYPE, null).stringValue
 	}
 
 	/**
@@ -331,11 +333,11 @@ export default class Parser {
 	 */
 	static hrefs(document, node, resolver) {
 		const result = []
-		const hrefs = document.evaluate('d:href', node, resolver, XPathResult.ANY_TYPE, null)
+		const hrefs = XPathUtility.select('d:href', node, resolver, XPathResult.ANY_TYPE, null)
 		let hrefNode
 
 		while ((hrefNode = hrefs.iterateNext()) !== null) {
-			result.push(document.evaluate('string(.)', hrefNode, resolver, XPathResult.ANY_TYPE, null).stringValue)
+			result.push(XPathUtility.select('string(.)', hrefNode, resolver, XPathResult.ANY_TYPE, null).stringValue)
 		}
 
 		return result
@@ -351,12 +353,12 @@ export default class Parser {
 	 */
 	static privileges(document, node, resolver) {
 		const result = []
-		const privileges = document.evaluate('d:privilege/*', node, resolver, XPathResult.ANY_TYPE, null)
+		const privileges = XPathUtility.select('d:privilege/*', node, resolver, XPathResult.ANY_TYPE, null)
 		let privilegeNode
 
 		while ((privilegeNode = privileges.iterateNext()) !== null) {
-			const ns = document.evaluate('namespace-uri(.)', privilegeNode, resolver, XPathResult.ANY_TYPE, null).stringValue
-			const local = document.evaluate('local-name(.)', privilegeNode, resolver, XPathResult.ANY_TYPE, null).stringValue
+			const ns = XPathUtility.select('namespace-uri(.)', privilegeNode, resolver, XPathResult.ANY_TYPE, null).stringValue
+			const local = XPathUtility.select('local-name(.)', privilegeNode, resolver, XPathResult.ANY_TYPE, null).stringValue
 
 			result.push(`{${ns}}${local}`)
 		}
@@ -376,7 +378,7 @@ export default class Parser {
 	 */
 	static currentUserPrincipal(document, node, resolver) {
 		const unauthenticatedCount
-			= document.evaluate('count(d:unauthenticated)', node, resolver, XPathResult.ANY_TYPE, null).numberValue
+			= XPathUtility.select('count(d:unauthenticated)', node, resolver, XPathResult.ANY_TYPE, null).numberValue
 
 		if (unauthenticatedCount !== 0) {
 			return {
@@ -401,13 +403,13 @@ export default class Parser {
 	 */
 	static addressDataTypes(document, node, resolver) {
 		const result = []
-		const addressDatas = document.evaluate('cr:address-data-type', node, resolver, XPathResult.ANY_TYPE, null)
+		const addressDatas = XPathUtility.select('cr:address-data-type', node, resolver, XPathResult.ANY_TYPE, null)
 		let addressDataNode
 
 		while ((addressDataNode = addressDatas.iterateNext()) !== null) {
 			result.push({
-				'content-type': document.evaluate('string(@content-type)', addressDataNode, resolver, XPathResult.ANY_TYPE, null).stringValue,
-				version: document.evaluate('string(@version)', addressDataNode, resolver, XPathResult.ANY_TYPE, null).stringValue,
+				'content-type': XPathUtility.select('string(@content-type)', addressDataNode, resolver, XPathResult.ANY_TYPE, null).stringValue,
+				version: XPathUtility.select('string(@version)', addressDataNode, resolver, XPathResult.ANY_TYPE, null).stringValue,
 			})
 		}
 
@@ -424,11 +426,11 @@ export default class Parser {
 	 */
 	static supportedCardDAVCollations(document, node, resolver) {
 		const result = []
-		const collations = document.evaluate('cr:supported-collation', node, resolver, XPathResult.ANY_TYPE, null)
+		const collations = XPathUtility.select('cr:supported-collation', node, resolver, XPathResult.ANY_TYPE, null)
 		let collationNode
 
 		while ((collationNode = collations.iterateNext()) !== null) {
-			result.push(document.evaluate('string(.)', collationNode, resolver, XPathResult.ANY_TYPE, null).stringValue)
+			result.push(XPathUtility.select('string(.)', collationNode, resolver, XPathResult.ANY_TYPE, null).stringValue)
 		}
 
 		return result
@@ -444,11 +446,11 @@ export default class Parser {
 	 */
 	static supportedCalDAVCollations(document, node, resolver) {
 		const result = []
-		const collations = document.evaluate('cl:supported-collation', node, resolver, XPathResult.ANY_TYPE, null)
+		const collations = XPathUtility.select('cl:supported-collation', node, resolver, XPathResult.ANY_TYPE, null)
 		let collationNode
 
 		while ((collationNode = collations.iterateNext()) !== null) {
-			result.push(document.evaluate('string(.)', collationNode, resolver, XPathResult.ANY_TYPE, null).stringValue)
+			result.push(XPathUtility.select('string(.)', collationNode, resolver, XPathResult.ANY_TYPE, null).stringValue)
 		}
 
 		return result
@@ -464,11 +466,11 @@ export default class Parser {
 	 */
 	static calendarComps(document, node, resolver) {
 		const result = []
-		const comps = document.evaluate('cl:comp', node, resolver, XPathResult.ANY_TYPE, null)
+		const comps = XPathUtility.select('cl:comp', node, resolver, XPathResult.ANY_TYPE, null)
 		let compNode
 
 		while ((compNode = comps.iterateNext()) !== null) {
-			result.push(document.evaluate('string(@name)', compNode, resolver, XPathResult.ANY_TYPE, null).stringValue)
+			result.push(XPathUtility.select('string(@name)', compNode, resolver, XPathResult.ANY_TYPE, null).stringValue)
 		}
 
 		return result
@@ -484,13 +486,13 @@ export default class Parser {
 	 */
 	static calendarDatas(document, node, resolver) {
 		const result = []
-		const calendarDatas = document.evaluate('cl:calendar-data', node, resolver, XPathResult.ANY_TYPE, null)
+		const calendarDatas = XPathUtility.select('cl:calendar-data', node, resolver, XPathResult.ANY_TYPE, null)
 		let calendarDataNode
 
 		while ((calendarDataNode = calendarDatas.iterateNext()) !== null) {
 			result.push({
-				'content-type': document.evaluate('string(@content-type)', calendarDataNode, resolver, XPathResult.ANY_TYPE, null).stringValue,
-				version: document.evaluate('string(@version)', calendarDataNode, resolver, XPathResult.ANY_TYPE, null).stringValue,
+				'content-type': XPathUtility.select('string(@content-type)', calendarDataNode, resolver, XPathResult.ANY_TYPE, null).stringValue,
+				version: XPathUtility.select('string(@version)', calendarDataNode, resolver, XPathResult.ANY_TYPE, null).stringValue,
 			})
 		}
 
@@ -506,10 +508,10 @@ export default class Parser {
 	 * @return {string}
 	 */
 	static scheduleCalendarTransp(document, node, resolver) {
-		const children = document.evaluate('cl:opaque | cl:transparent', node, resolver, XPathResult.ANY_TYPE, null)
+		const children = XPathUtility.select('cl:opaque | cl:transparent', node, resolver, XPathResult.ANY_TYPE, null)
 		const childNode = children.iterateNext()
 		if (childNode) {
-			return document.evaluate('local-name(.)', childNode, resolver, XPathResult.ANY_TYPE, null).stringValue
+			return XPathUtility.select('local-name(.)', childNode, resolver, XPathResult.ANY_TYPE, null).stringValue
 		}
 	}
 
@@ -544,12 +546,12 @@ export default class Parser {
 	 */
 	static allowedSharingModes(document, node, resolver) {
 		const result = []
-		const children = document.evaluate('cs:can-be-shared | cs:can-be-published', node, resolver, XPathResult.ANY_TYPE, null)
+		const children = XPathUtility.select('cs:can-be-shared | cs:can-be-published', node, resolver, XPathResult.ANY_TYPE, null)
 		let childNode
 
 		while ((childNode = children.iterateNext()) !== null) {
-			const ns = document.evaluate('namespace-uri(.)', childNode, resolver, XPathResult.ANY_TYPE, null).stringValue
-			const local = document.evaluate('local-name(.)', childNode, resolver, XPathResult.ANY_TYPE, null).stringValue
+			const ns = XPathUtility.select('namespace-uri(.)', childNode, resolver, XPathResult.ANY_TYPE, null).stringValue
+			const local = XPathUtility.select('local-name(.)', childNode, resolver, XPathResult.ANY_TYPE, null).stringValue
 
 			result.push(`{${ns}}${local}`)
 		}
@@ -567,14 +569,14 @@ export default class Parser {
 	 */
 	static ocInvite(document, node, resolver) {
 		const result = []
-		const users = document.evaluate('oc:user', node, resolver, XPathResult.ANY_TYPE, null)
+		const users = XPathUtility.select('oc:user', node, resolver, XPathResult.ANY_TYPE, null)
 		let userNode
 
 		while ((userNode = users.iterateNext()) !== null) {
 			result.push({
 				href: Parser.href(document, userNode, resolver),
-				'common-name': document.evaluate('string(oc:common-name)', userNode, resolver, XPathResult.ANY_TYPE, null).stringValue,
-				'invite-accepted': document.evaluate('count(oc:invite-accepted)', userNode, resolver, XPathResult.ANY_TYPE, null).numberValue === 1,
+				'common-name': XPathUtility.select('string(oc:common-name)', userNode, resolver, XPathResult.ANY_TYPE, null).stringValue,
+				'invite-accepted': XPathUtility.select('count(oc:invite-accepted)', userNode, resolver, XPathResult.ANY_TYPE, null).numberValue === 1,
 				access: Parser.ocAccess(document, userNode, resolver),
 			})
 		}
@@ -592,12 +594,12 @@ export default class Parser {
 	 */
 	static ocAccess(document, node, resolver) {
 		const result = []
-		const privileges = document.evaluate('oc:access/*', node, resolver, XPathResult.ANY_TYPE, null)
+		const privileges = XPathUtility.select('oc:access/*', node, resolver, XPathResult.ANY_TYPE, null)
 		let privilegeNode
 
 		while ((privilegeNode = privileges.iterateNext()) !== null) {
-			const ns = document.evaluate('namespace-uri(.)', privilegeNode, resolver, XPathResult.ANY_TYPE, null).stringValue
-			const local = document.evaluate('local-name(.)', privilegeNode, resolver, XPathResult.ANY_TYPE, null).stringValue
+			const ns = XPathUtility.select('namespace-uri(.)', privilegeNode, resolver, XPathResult.ANY_TYPE, null).stringValue
+			const local = XPathUtility.select('local-name(.)', privilegeNode, resolver, XPathResult.ANY_TYPE, null).stringValue
 
 			result.push(`{${ns}}${local}`)
 		}
