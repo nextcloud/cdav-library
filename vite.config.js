@@ -21,17 +21,7 @@ export default createLibConfig({
 			include: [
 				'test/unit/**/*.js',
 			],
-			browser: {
-				enabled: true,
-				screenshotFailures: false,
-				headless: true,
-				provider: 'playwright',
-				instances: [
-					{ browser: 'webkit' },
-					{ browser: 'chromium' },
-					{ browser: 'firefox' },
-				],
-			},
+			environment: 'jsdom'
 		},
 	},
 })
