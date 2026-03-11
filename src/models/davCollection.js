@@ -200,6 +200,7 @@ export class DavCollection extends DAVEventListener {
 	}
 
 	/**
+	 * @deprecated use canReadObject instead
 	 *
 	 * @return {boolean}
 	 */
@@ -208,11 +209,87 @@ export class DavCollection extends DAVEventListener {
 	}
 
 	/**
+	 * @deprecated use canCreateObject, canModifyObject, canDeleteObject instead
 	 *
 	 * @return {boolean}
 	 */
 	isWriteable() {
 		return this.currentUserPrivilegeSet.includes('{DAV:}write')
+	}
+
+	/**
+	 * checks whether the current user has the privileges to modify properties in this collection
+	 *
+	 * @return {boolean}
+	 */
+	canModifyProperties() {
+		return this.currentUserPrivilegeSet.includes('{DAV:}write-properties')
+			|| this.currentUserPrivilegeSet.includes('{DAV:}write')
+			|| this.currentUserPrivilegeSet.includes('{DAV:}all')
+	}
+
+	/**
+	 * checks whether the current user has the privileges to read ACLs of this collection
+	 *
+	 * @return {boolean}
+	 */
+	canReadPermissions() {
+		return this.currentUserPrivilegeSet.includes('{DAV:}read-acl')
+			|| this.currentUserPrivilegeSet.includes('{DAV:}all')
+	}
+
+	/**
+	 * checks whether the current user has the privileges to modify ACLs of this collection
+	 *
+	 * @return {boolean}
+	 */
+	canModifyPermissions() {
+		return this.currentUserPrivilegeSet.includes('{DAV:}write-acl')
+			|| this.currentUserPrivilegeSet.includes('{DAV:}all')
+	}
+
+	/**
+	 * checks whether the current user has the privileges to read objects in this collection
+	 *
+	 * @return {boolean}
+	 */
+	canReadObject() {
+		return this.currentUserPrivilegeSet.includes('{DAV:}read')
+			|| this.currentUserPrivilegeSet.includes('{DAV:}write')
+			|| this.currentUserPrivilegeSet.includes('{DAV:}all')
+	}
+
+	/**
+	 * checks whether the current user has the privileges to create objects in this collection
+	 *
+	 * @return {boolean}
+	 */
+	canCreateObject() {
+		return this.currentUserPrivilegeSet.includes('{DAV:}bind')
+			|| this.currentUserPrivilegeSet.includes('{DAV:}write')
+			|| this.currentUserPrivilegeSet.includes('{DAV:}all')
+	}
+
+	/**
+	 * checks whether the current user has the privileges to modify objects in this collection
+	 *
+	 * @return {boolean}
+	 */
+	canModifyObject() {
+		return this.currentUserPrivilegeSet.includes('{DAV:}write-content')
+			|| this.currentUserPrivilegeSet.includes('{DAV:}write')
+			|| this.currentUserPrivilegeSet.includes('{DAV:}all')
+	}
+
+	/**
+	 * checks whether the current user has the privileges to delete objects in this collection
+	 *
+	 * @return {boolean}
+	 */
+	canDeleteObject() {
+		return this.currentUserPrivilegeSet.includes('{DAV:}unbind')
+			|| this.currentUserPrivilegeSet.includes('{DAV:}write')
+			|| this.currentUserPrivilegeSet.includes('{DAV:}all')
 	}
 
 	/**
