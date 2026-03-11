@@ -13,6 +13,10 @@ import * as XMLUtility from '../utility/xmlUtility.js'
 import { debugFactory } from '../debug.js'
 const debug = debugFactory('DavCollectionPublishable')
 
+/**
+ *
+ * @param Base
+ */
 export function davCollectionPublishable(Base) {
 	return class extends Base {
 

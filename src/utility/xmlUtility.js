@@ -59,6 +59,12 @@ export function serialize(json) {
 	return serializer.serializeToString(root)
 }
 
+/**
+ *
+ * @param xmlDoc
+ * @param parent
+ * @param json
+ */
 function xmlify(xmlDoc, parent, json) {
 	const [ns, localName] = json.name
 	const element = xmlDoc.createElementNS(ns, getPrefixedNameForNamespace(ns, localName))
@@ -85,10 +91,18 @@ function xmlify(xmlDoc, parent, json) {
 	parent.appendChild(element)
 }
 
+/**
+ *
+ */
 export function resetPrefixMap() {
 	prefixMap = {}
 }
 
+/**
+ *
+ * @param ns
+ * @param localName
+ */
 function getPrefixedNameForNamespace(ns, localName) {
 	if (!Object.prototype.hasOwnProperty.call(prefixMap, ns)) {
 		prefixMap[ns] = 'x' + Object.keys(prefixMap).length

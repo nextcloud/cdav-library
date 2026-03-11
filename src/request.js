@@ -336,6 +336,7 @@ export default class Request {
 	/**
 	 * returns name of file / folder of a url
 	 *
+	 * @param url
 	 * @params {string} url
 	 * @return {string}
 	 */
@@ -352,6 +353,7 @@ export default class Request {
 	/**
 	 * returns pathname for a URL
 	 *
+	 * @param url
 	 * @params {string} url
 	 * @return {string}
 	 */
