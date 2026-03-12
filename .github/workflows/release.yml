@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    environment: npm registry
+    environment: npm release
     steps:
       - name: Conventional nextcloud npm release
         uses: ChristophWurst/conventional-nextcloud-npm-release@de5407727bf973c74e8944853c38719aeff6bb8a # v1.0.0
