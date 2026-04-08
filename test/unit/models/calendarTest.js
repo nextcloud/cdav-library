@@ -109,6 +109,26 @@ END:VCALENDAR
 		expect(calendar.components).toEqual(['VEVENT', 'VTODO']);
 	});
 
+	it('should inherit expose the property defaultAlarmPartDay', () => {
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
+		const url = '/foo/bar/folder';
+		const props = returnDefaultProps();
+
+		const calendar = new Calendar(parent, request, url, props);
+		expect(calendar.defaultAlarmPartDay).toEqual(32400);
+	});
+
+	it('should inherit expose the property defaultAlarmFullDay', () => {
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
+		const url = '/foo/bar/folder';
+		const props = returnDefaultProps();
+
+		const calendar = new Calendar(parent, request, url, props);
+		expect(calendar.defaultAlarmFullDay).toEqual(39600);
+	});
+
 	it('should find all VObjects', () => {
 		const parent = new DavCollectionMock();
 		const request = new RequestMock();
@@ -446,6 +466,8 @@ function returnDefaultProps() {
 		],
 		"{urn:ietf:params:xml:ns:caldav}schedule-calendar-transp" : "opaque",
 		"{http://owncloud.org/ns}calendar-enabled" : true,
+		"{http://nextcloud.com/ns}default-alarm-part-day" : 32400,
+		"{http://nextcloud.com/ns}default-alarm-full-day" : 39600,
 		"{http://nextcloud.com/ns}owner-displayname" : "admin"
 	};
 }
