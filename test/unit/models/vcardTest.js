@@ -46,4 +46,19 @@ describe('VCard model', () => {
 		expect(vcard.data).toEqual('FOO BAR BLA BLUB');
 	});
 
+	it('should expose favorite as a property', () => {
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
+		const url = '/foo/bar/file';
+		const props = {
+			'{DAV:}getetag': '"etag foo bar tralala"',
+			'{DAV:}getcontenttype': 'text/blub',
+			'{DAV:}resourcetype': [],
+			'{http://nextcloud.com/ns}favorite': 1,
+		};
+
+		const vcard = new VCard(parent, request, url, props);
+		expect(vcard.favorite).toEqual(1);
+	});
+
 });
