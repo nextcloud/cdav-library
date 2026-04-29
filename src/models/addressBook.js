@@ -86,6 +86,8 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 			children,
 		}, {
 			name: [NS.NEXTCLOUD, 'has-photo'],
+		}, {
+			name: [NS.NEXTCLOUD, 'favorite'],
 		}])
 	}
 

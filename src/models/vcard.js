@@ -9,6 +9,7 @@
 
 import { DavObject } from './davObject.js'
 import * as NS from '../utility/namespaceUtility.js'
+import vcardPropSet from '../propset/vcardPropSet.js'
 
 /**
  * @class
@@ -26,8 +27,11 @@ export class VCard extends DavObject {
 	constructor(...args) {
 		super(...args)
 
+		this._registerPropSetFactory(vcardPropSet)
+
 		super._exposeProperty('data', NS.IETF_CARDDAV, 'address-data', true)
 		super._exposeProperty('hasphoto', NS.NEXTCLOUD, 'has-photo', false)
+		super._exposeMetaProperty('favorite', NS.NEXTCLOUD, 'favorite', true)
 	}
 
 	/**
