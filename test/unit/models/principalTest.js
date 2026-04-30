@@ -14,6 +14,7 @@ import { Principal } from '../../../src/models/principal.js';
 import * as XMLUtility from '../../../src/utility/xmlUtility.js';
 import RequestMock from "../../mocks/request.mock.js";
 import { DavCollection as DavCollectionMock } from "../../mocks/davCollection.mock.js";
+import NetworkRequestServerError from '../../../src/errors/networkRequestServerError.js'
 
 describe('Principal model', () => {
 	beforeEach(() => {
@@ -498,5 +499,75 @@ describe('Principal model', () => {
 		}).catch(() => {
 			assert.fail('Principal update was not supposed to assert.fail');
 		});
+	});
+
+	it('should clear the internal list of changed properties after a successful update', async () => {
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
+		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
+		const props = {
+			'{DAV:}displayname': 'Umberto',
+			'{urn:ietf:params:xml:ns:caldav}calendar-user-type': 'INDIVIDUAL',
+			'{urn:ietf:params:xml:ns:caldav}calendar-user-address-set': [],
+			'{DAV:}principal-URL': '/nextcloud/remote.php/dav/principals/users/user2/',
+			'{http://sabredav.org/ns}email-address': 'foo-bar@example.com',
+			'{urn:ietf:params:xml:ns:caldav}calendar-home-set': ['/nextcloud/remote.php/dav/calendars/admin/'],
+			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL': '/nextcloud/remote.php/dav/calendars/admin/inbox/',
+			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL': '/nextcloud/remote.php/dav/calendars/admin/outbox/',
+			'{urn:ietf:params:xml:ns:caldav}schedule-default-calendar-URL': '/nextcloud/remote.php/dav/calendars/admin/personal/',
+			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/'],
+		};
+
+		const principal = new Principal(parent, request, url, props);
+
+		request.propPatch.mockImplementation(() => {
+			return Promise.resolve({
+				status: 207,
+				body: {
+					'{urn:ietf:params:xml:ns:caldav}schedule-default-calendar-URL': '/nextcloud/remote.php/dav/calendars/admin/changed/',
+				},
+				headers: {}
+			});
+		});
+
+		principal.scheduleDefaultCalendarUrl = '/nextcloud/remote.php/dav/calendars/admin/changed/';
+
+		await principal.update();
+		await principal.update();
+		await principal.update();
+
+		expect(request.propPatch).toHaveBeenCalledTimes(1);
+	});
+
+	it('should not clear the internal list of changed properties after an unsuccessful update', async () => {
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
+		const url = '/nextcloud/remote.php/dav/foo/bar/baz/';
+		const props = {
+			'{DAV:}displayname': 'Umberto',
+			'{urn:ietf:params:xml:ns:caldav}calendar-user-type': 'INDIVIDUAL',
+			'{urn:ietf:params:xml:ns:caldav}calendar-user-address-set': [],
+			'{DAV:}principal-URL': '/nextcloud/remote.php/dav/principals/users/user2/',
+			'{http://sabredav.org/ns}email-address': 'foo-bar@example.com',
+			'{urn:ietf:params:xml:ns:caldav}calendar-home-set': ['/nextcloud/remote.php/dav/calendars/admin/'],
+			'{urn:ietf:params:xml:ns:caldav}schedule-inbox-URL': '/nextcloud/remote.php/dav/calendars/admin/inbox/',
+			'{urn:ietf:params:xml:ns:caldav}schedule-outbox-URL': '/nextcloud/remote.php/dav/calendars/admin/outbox/',
+			'{urn:ietf:params:xml:ns:caldav}schedule-default-calendar-URL': '/nextcloud/remote.php/dav/calendars/admin/personal/',
+			'{urn:ietf:params:xml:ns:carddav}addressbook-home-set': ['/nextcloud/remote.php/dav/addressbooks/users/admin/'],
+		};
+
+		const principal = new Principal(parent, request, url, props);
+
+		request.propPatch.mockImplementation(() => {
+			return Promise.reject(new NetworkRequestServerError({ status: 500 }));
+		});
+
+		principal.scheduleDefaultCalendarUrl = '/nextcloud/remote.php/dav/calendars/admin/changed/';
+
+		await expect(principal.update()).rejects.toThrow();
+		await expect(principal.update()).rejects.toThrow();
+		await expect(principal.update()).rejects.toThrow();
+
+		expect(request.propPatch).toHaveBeenCalledTimes(3);
 	});
 });
