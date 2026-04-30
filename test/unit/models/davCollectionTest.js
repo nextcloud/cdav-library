@@ -14,6 +14,7 @@ import DAVEventListener from "../../../src/models/davEventListener.js";
 import { DavObject } from "../../../src/models/davObject.js";
 import * as XMLUtility from '../../../src/utility/xmlUtility.js';
 import RequestMock from "../../mocks/request.mock.js";
+import NetworkRequestServerError from '../../../src/errors/networkRequestServerError.js'
 
 describe('Dav collection model', () => {
 
@@ -691,6 +692,95 @@ describe('Dav collection model', () => {
 		}).catch(() => {
 			assert.fail('DavCollection update was not supposed to assert.fail');
 		});
+	});
+
+	it('should clear the internal list of changed properties after a successful update', async () => {
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = new RequestMock();
+		const url = '/foo/bar/folder';
+		const props = {
+			'{DAV:}displayname': 'Foo Bar Bla Blub',
+			'{DAV:}owner': 'https://foo/bar/',
+			'{DAV:}resourcetype': ['{DAV:}collection'],
+			'{DAV:}sync-token': 'https://foo/bar/token/3',
+			'{custom}property': 'custom property value 123',
+			'{DAV:}current-user-privilege-set': ['{DAV:}write',
+				'{DAV:}write-properties', '{DAV:}write-content',
+				'{DAV:}unlock', '{DAV:}bind', '{DAV:}unbind',
+				'{DAV:}write-acl', '{DAV:}read', '{DAV:}read-acl',
+				'{DAV:}read-current-user-privilege-set'],
+		};
+
+		request.propPatch.mockImplementation(() => {
+			return Promise.resolve({
+				status: 207,
+				body: {
+					'{DAV:}displayname': 'test',
+					'{http://apple.com/ns/ical/}calendar-color': ''
+				},
+				headers: {}
+			});
+		});
+
+		const collection = new DavCollection(parent, request, url, props);
+		collection.displayname = 'test';
+
+		await collection.update();
+		await collection.update();
+		await collection.update();
+
+		expect(request.propPatch).toHaveBeenCalledTimes(1);
+	});
+
+	it('should not clear the internal list of changed properties after an unsuccessful update', async () => {
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = new RequestMock();
+		const url = '/foo/bar/folder';
+		const props = {
+			'{DAV:}displayname': 'Foo Bar Bla Blub',
+			'{DAV:}owner': 'https://foo/bar/',
+			'{DAV:}resourcetype': ['{DAV:}collection'],
+			'{DAV:}sync-token': 'https://foo/bar/token/3',
+			'{custom}property': 'custom property value 123',
+			'{DAV:}current-user-privilege-set': ['{DAV:}write',
+				'{DAV:}write-properties', '{DAV:}write-content',
+				'{DAV:}unlock', '{DAV:}bind', '{DAV:}unbind',
+				'{DAV:}write-acl', '{DAV:}read', '{DAV:}read-acl',
+				'{DAV:}read-current-user-privilege-set'],
+		};
+
+		request.propPatch.mockImplementation(() => {
+			return Promise.reject(new NetworkRequestServerError({ status: 500 }));
+		});
+
+		const collection = new DavCollection(parent, request, url, props);
+		collection.displayname = 'test';
+
+		await expect(collection.update()).rejects.toThrow();
+		await expect(collection.update()).rejects.toThrow();
+		await expect(collection.update()).rejects.toThrow();
+
+		expect(request.propPatch).toHaveBeenCalledTimes(3);
 	});
 
 	it('should delete a collection', () => {

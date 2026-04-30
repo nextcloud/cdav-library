@@ -245,8 +245,11 @@ export class Principal extends DavObject {
 
 		dPropSet.push(...propSet)
 
-		const body = XMLUtility.serialize(skeleton)
-		await this._request.propPatch(this._url, {}, body)
+		if (propSet.length >= 1) {
+			const body = XMLUtility.serialize(skeleton)
+			await this._request.propPatch(this._url, {}, body)
+			this._updatedProperties = []
+		}
 	}
 
 }
