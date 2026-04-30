@@ -107,6 +107,30 @@ describe('Calendar prop-set', () => {
 		]);
 	});
 
+	it('should serialize {http://nextcloud.com/ns}default-alarm-part-day correctly', () => {
+		expect(calendarPropSet({
+			'{Foo:}bar': 123,
+			'{http://nextcloud.com/ns}default-alarm-part-day': '32400'
+		})).toEqual([
+			{
+				name: ['http://nextcloud.com/ns', 'default-alarm-part-day'],
+				value: '32400'
+			}
+		]);
+	});
+
+	it('should serialize {http://nextcloud.com/ns}default-alarm-full-day correctly', () => {
+		expect(calendarPropSet({
+			'{Foo:}bar': 123,
+			'{http://nextcloud.com/ns}default-alarm-full-day': '39600'
+		})).toEqual([
+			{
+				name: ['http://nextcloud.com/ns', 'default-alarm-full-day'],
+				value: '39600'
+			}
+		]);
+	});
+
 	it('should serialize {urn:ietf:params:xml:ns:caldav}schedule-calendar-transp correctly - transparent', () => {
 		expect(calendarPropSet({
 			'{Foo:}bar': 123,

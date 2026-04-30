@@ -1885,6 +1885,50 @@ END:VALARM`);
 		expect(parser.parse(document, node, resolver)).toEqual(false);
 	});
 
+	it('should properly handle {http://nextcloud.com/ns}default-alarm-part-day', () => {
+		const parser = new Parser();
+
+		const xml = `<?xml version="1.0" encoding="utf-8" ?>
+<D:multistatus xmlns:D="DAV:" xmlns:nc="http://nextcloud.com/ns">
+	<D:response>
+		<D:href>/foo</D:href>
+		<D:propstat>
+			<D:prop>
+				<nc:default-alarm-part-day>32400</nc:default-alarm-part-day>
+			</D:prop>
+			<D:status>HTTP/1.1 200 OK</D:status>
+		</D:propstat>
+	</D:response>
+</D:multistatus>`;
+
+		const [document, node, resolver] = getDocumentNodeResolverFromXML(xml);
+
+		expect(parser.canParse('{http://nextcloud.com/ns}default-alarm-part-day')).toEqual(true);
+		expect(parser.parse(document, node, resolver)).toEqual(32400);
+	});
+
+	it('should properly handle {http://nextcloud.com/ns}default-alarm-full-day', () => {
+		const parser = new Parser();
+
+		const xml = `<?xml version="1.0" encoding="utf-8" ?>
+<D:multistatus xmlns:D="DAV:" xmlns:nc="http://nextcloud.com/ns">
+	<D:response>
+		<D:href>/foo</D:href>
+		<D:propstat>
+			<D:prop>
+				<nc:default-alarm-full-day>39600</nc:default-alarm-full-day>
+			</D:prop>
+			<D:status>HTTP/1.1 200 OK</D:status>
+		</D:propstat>
+	</D:response>
+</D:multistatus>`;
+
+		const [document, node, resolver] = getDocumentNodeResolverFromXML(xml);
+
+		expect(parser.canParse('{http://nextcloud.com/ns}default-alarm-full-day')).toEqual(true);
+		expect(parser.parse(document, node, resolver)).toEqual(39600);
+	});
+
 	it('should properly handle {http://nextcloud.com/ns}owner-displayname', () => {
 		const parser = new Parser();
 
