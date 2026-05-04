@@ -7,15 +7,21 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { assert, describe, expect, it, vi } from "vitest";
+import { assert, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { DavObject } from "../../../src/models/davObject.js";
 import DAVEventListener from "../../../src/models/davEventListener.js";
 import NetworkRequestClientError from "../../../src/errors/networkRequestClientError.js";
+import * as XMLUtility from '../../../src/utility/xmlUtility.js';
 import RequestMock from "../../mocks/request.mock.js";
 import { DavCollection as DavCollectionMock } from "../../mocks/davCollection.mock.js";
+import NetworkRequestServerError from '../../../src/errors/networkRequestServerError.js'
 
 describe('Dav object model', () => {
+
+	beforeEach(() => {
+		XMLUtility.resetPrefixMap();
+	});
 
 	it('should inherit from DavEventListener', () => {
 		const parent = new DavCollectionMock();
@@ -278,6 +284,115 @@ describe('Dav object model', () => {
 			expect(davObject.etag).toEqual('"new etag foo bar tralala"');
 			expect(davObject.isDirty()).toEqual(false);
 		});
+	});
+
+	it('should update meta properties', () => {
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
+		const url = '/foo/bar/file';
+		const props = {
+			'{DAV:}getetag': '"etag foo bar tralala"',
+			'{DAV:}getcontenttype': 'text/blub',
+			'{DAV:}resourcetype': [],
+		};
+
+		const davObject = new DavObject(parent, request, url, props, false);
+		davObject._registerPropSetFactory((metaProps) => [{
+			name: ['http://nextcloud.com/ns', 'favorite'],
+			value: metaProps['{http://nextcloud.com/ns}favorite'] ? '1' : null,
+		}]);
+		davObject._exposeMetaProperty('favorite', 'http://nextcloud.com/ns', 'favorite', true);
+
+		request.propPatch.mockResolvedValue({
+			body: null,
+			status: 207,
+			headers: {},
+		});
+
+		davObject.favorite = true;
+
+		return davObject.updateProperties().then(() => {
+			expect(request.propPatch).toHaveBeenCalledTimes(1);
+			expect(request.propPatch).toHaveBeenCalledWith(
+				'/foo/bar/file',
+				{},
+				'<x0:propertyupdate xmlns:x0="DAV:"><x0:set><x0:prop><x1:favorite xmlns:x1="http://nextcloud.com/ns">1</x1:favorite></x0:prop></x0:set></x0:propertyupdate>'
+			);
+		});
+	});
+
+	it('should not clear the internal list of changed properties after an unsuccessful meta properties update', async () => {
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
+		const url = '/foo/bar/file';
+		const props = {
+			'{DAV:}getetag': '"etag foo bar tralala"',
+			'{DAV:}getcontenttype': 'text/blub',
+			'{DAV:}resourcetype': [],
+		};
+
+		const davObject = new DavObject(parent, request, url, props, false);
+		davObject._registerPropSetFactory((metaProps) => [{
+			name: ['http://nextcloud.com/ns', 'favorite'],
+			value: metaProps['{http://nextcloud.com/ns}favorite'] ? '1' : null,
+		}]);
+		davObject._exposeMetaProperty('favorite', 'http://nextcloud.com/ns', 'favorite', true);
+
+		request.propPatch.mockImplementation(() => {
+			return Promise.reject(new NetworkRequestServerError({ status: 500 }));
+		});
+
+		davObject.favorite = true;
+
+		await expect(davObject.updateProperties()).rejects.toThrow();
+		await expect(davObject.updateProperties()).rejects.toThrow();
+		await expect(davObject.updateProperties()).rejects.toThrow();
+
+		expect(request.propPatch).toHaveBeenCalledTimes(3);
+		expect(request.propPatch).toHaveBeenCalledWith(
+			'/foo/bar/file',
+			{},
+			'<x0:propertyupdate xmlns:x0="DAV:"><x0:set><x0:prop><x1:favorite xmlns:x1="http://nextcloud.com/ns">1</x1:favorite></x0:prop></x0:set></x0:propertyupdate>'
+		);
+	});
+
+	it('should clear the internal list of changed properties after a successful meta properties update', async () => {
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
+		const url = '/foo/bar/file';
+		const props = {
+			'{DAV:}getetag': '"etag foo bar tralala"',
+			'{DAV:}getcontenttype': 'text/blub',
+			'{DAV:}resourcetype': [],
+		};
+
+		const davObject = new DavObject(parent, request, url, props, false);
+		davObject._registerPropSetFactory((metaProps) => [{
+			name: ['http://nextcloud.com/ns', 'favorite'],
+			value: metaProps['{http://nextcloud.com/ns}favorite'] ? '1' : null,
+		}]);
+		davObject._exposeMetaProperty('favorite', 'http://nextcloud.com/ns', 'favorite', true);
+
+		request.propPatch.mockResolvedValue({
+			status: 207,
+			headers: {},
+			body: {
+				'{http://nextcloud.com/ns}favorite': '1'
+			},
+		});
+
+		davObject.favorite = true;
+
+		await davObject.updateProperties();
+		await davObject.updateProperties();
+		await davObject.updateProperties();
+
+		expect(request.propPatch).toHaveBeenCalledTimes(1);
+		expect(request.propPatch).toHaveBeenCalledWith(
+			'/foo/bar/file',
+			{},
+			'<x0:propertyupdate xmlns:x0="DAV:"><x0:set><x0:prop><x1:favorite xmlns:x1="http://nextcloud.com/ns">1</x1:favorite></x0:prop></x0:set></x0:propertyupdate>'
+		);
 	});
 
 	it('should not update partial data', () => {
