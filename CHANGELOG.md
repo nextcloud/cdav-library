@@ -1,3 +1,21 @@
+# [2.4.0](https://github.com/nextcloud/cdav-library/compare/v2.2.0...v2.4.0) (2026-05-04)
+
+
+### Bug Fixes
+
+* Clear internal list of updated properties on successful update ([e93bfd1](https://github.com/nextcloud/cdav-library/commit/e93bfd1dc2866ffd868f0d0770a1b9c197bf177b))
+* **deps:** bump @nextcloud/axios from 2.5.2 to ^2.6.0 ([#1028](https://github.com/nextcloud/cdav-library/issues/1028)) ([d05047b](https://github.com/nextcloud/cdav-library/commit/d05047b9686c64d7ed98b3b8a19fb4336311426e))
+* **deps:** bump vite from 6.4.1 to v6.4.2 ([#1010](https://github.com/nextcloud/cdav-library/issues/1010)) ([542ef77](https://github.com/nextcloud/cdav-library/commit/542ef779839a892c94649808555a1fbed468dfaf))
+* **deps:** Fix npm audit ([8d5d178](https://github.com/nextcloud/cdav-library/commit/8d5d17837559b968e7526c0a32fd34dbbb4562ac))
+* **deps:** Fix npm audit ([ea88c91](https://github.com/nextcloud/cdav-library/commit/ea88c910f761003c28b785964e022af0da87ccc9))
+
+
+### Features
+
+* default full / part day alarm ([8779140](https://github.com/nextcloud/cdav-library/commit/87791407fe89a525054932e67eeabfa770af1735))
+
+
+
 # [2.2.0](https://github.com/nextcloud/cdav-library/compare/v2.1.1...v2.2.0) (2026-03-12)
 
 
