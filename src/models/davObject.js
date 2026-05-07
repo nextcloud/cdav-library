@@ -209,7 +209,7 @@ export class DavObject extends DAVEventListener {
 			await this._request.propPatch(this._url, {}, body)
 			Object.entries(this._updatedProperties).forEach(entry => {
 				const [key, value] = entry
-				
+
 				if (value !== '{urn:ietf:params:xml:ns:carddav}address-data') {
 					this._updatedProperties.splice(key, 1)
 				}
