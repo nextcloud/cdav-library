@@ -12,6 +12,7 @@ import NetworkRequestClientError from '../errors/networkRequestClientError.js'
 import * as NS from '../utility/namespaceUtility.js'
 
 import { debugFactory } from '../debug.js'
+import * as XMLUtility from '../utility/xmlUtility.js'
 const debug = debugFactory('DavObject')
 
 /**
@@ -39,6 +40,10 @@ export class DavObject extends DAVEventListener {
 			// housekeeping
 			_isPartial: isPartial,
 			_isDirty: false,
+			_updatedProperties: [],
+
+			// factories
+			_propSetFactory: [],
 		})
 
 		this._exposeProperty('etag', NS.DAV, 'getetag', true)
@@ -147,6 +152,13 @@ export class DavObject extends DAVEventListener {
 			this._isDirty = false
 			// Don't overwrite content-type, it's set to text/html in the response ...
 			this._props['{DAV:}getetag'] = res.headers.etag || null
+			Object.entries(this._updatedProperties).forEach(entry => {
+				const [key, value] = entry
+
+				if (value === '{urn:ietf:params:xml:ns:carddav}address-data') {
+					this._updatedProperties.splice(key, 1)
+				}
+			})
 		}).catch((ex) => {
 			this._isDirty = true
 
@@ -156,6 +168,53 @@ export class DavObject extends DAVEventListener {
 
 			throw ex
 		})
+	}
+
+	/**
+	 * Sends a PropPatch request to update the objects
+	 * properties (all properties not available in the
+	 * DAV object itself).
+	 * The request is only made if properties actually changed
+	 * and a propSetFactory is being set-up.
+	 *
+	 * @return {Promise<void>}
+	 */
+	async updateProperties() {
+		if (this._propSetFactory.length === 0) {
+			return
+		}
+
+		if (this._updatedProperties.length === 0) {
+			return
+		}
+
+		const properties = {}
+		this._updatedProperties.forEach((updatedProperty) => {
+			// The vCard itself is being updated by the `update()` method
+			if (updatedProperty !== '{urn:ietf:params:xml:ns:carddav}address-data') {
+				properties[updatedProperty] = this._props[updatedProperty]
+			}
+		})
+		const propSet = this._propSetFactory.reduce((arr, p) => [...arr, ...p(properties)], [])
+
+		const [skeleton, dPropSet] = XMLUtility.getRootSkeleton(
+			[NS.DAV, 'propertyupdate'],
+			[NS.DAV, 'set'],
+			[NS.DAV, 'prop'])
+
+		dPropSet.push(...propSet)
+
+		if (propSet.length >= 1) {
+			const body = XMLUtility.serialize(skeleton)
+			await this._request.propPatch(this._url, {}, body)
+			Object.entries(this._updatedProperties).forEach(entry => {
+				const [key, value] = entry
+				
+				if (value !== '{urn:ietf:params:xml:ns:carddav}address-data') {
+					this._updatedProperties.splice(key, 1)
+				}
+			})
+		}
 	}
 
 	/**
@@ -199,7 +258,17 @@ export class DavObject extends DAVEventListener {
 			Object.defineProperty(this, localName, {
 				get: () => this._props[`{${xmlNamespace}}${xmlName}`],
 				set: (val) => {
-					this._isDirty = true
+					// The vCard itself is stored as `address-data` property and uses the update() method
+					// to write the card to the server, while meta properties like the `favorite`
+					// one uses the updateProperties() method.
+					if (xmlName === 'address-data') {
+						this._isDirty = true
+					}
+
+					if (this._updatedProperties.indexOf(`{${xmlNamespace}}${xmlName}`) === -1) {
+						this._updatedProperties.push(`{${xmlNamespace}}${xmlName}`)
+					}
+
 					this._props[`{${xmlNamespace}}${xmlName}`] = val
 				},
 			})
@@ -222,6 +291,13 @@ export class DavObject extends DAVEventListener {
 			[NS.DAV, 'getetag'],
 			[NS.DAV, 'resourcetype'],
 		]
+	}
+
+	/**
+	 * @param factory
+	 */
+	_registerPropSetFactory(factory) {
+		this._propSetFactory.push(factory)
 	}
 
 }
