@@ -1,3 +1,12 @@
+# [2.5.0](https://github.com/nextcloud/cdav-library/compare/v2.4.0...v2.5.0) (2026-05-07)
+
+
+### Features
+
+* Add custom `favorite` property for each vCard ([41b28a3](https://github.com/nextcloud/cdav-library/commit/41b28a3429510dd8d81a71bda75166c502832a58))
+
+
+
 # [2.4.0](https://github.com/nextcloud/cdav-library/compare/v2.2.0...v2.4.0) (2026-05-04)
 
 
