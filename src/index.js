@@ -486,6 +486,235 @@ export default class DavClient {
 	}
 
 	/**
+	 * Creates a CalendarHome instance for an arbitrary calendar home URL.
+	 *
+	 * This can be used to access calendars that are not in the current user's
+	 * own calendar home – for example when acting as a calendar proxy (delegate)
+	 * for another user.
+	 *
+	 * @param {string} calendarHomeUrl Absolute URL of the calendar home
+	 * @return {CalendarHome}
+	 */
+	getCalendarHomeForUrl(calendarHomeUrl) {
+		const cachedCalendarHome = this._findCachedCalendarHome(calendarHomeUrl)
+		if (cachedCalendarHome) {
+			return cachedCalendarHome
+		}
+
+		const url = this._request.pathname(calendarHomeUrl)
+		return new CalendarHome(this, this._request, url, {})
+	}
+
+	/**
+	 * Finds a previously discovered calendar home by URL.
+	 *
+	 * @param {string} calendarHomeUrl Absolute or relative URL of a calendar home
+	 * @return {CalendarHome|null}
+	 * @private
+	 */
+	_findCachedCalendarHome(calendarHomeUrl) {
+		const url = this._request.pathname(calendarHomeUrl).replace(/\/?$/, '/')
+		return this.calendarHomes.find((calendarHome) => calendarHome.url === url) || null
+	}
+
+	/**
+	 * Fetches the group-member-set of a principal collection (e.g. a calendar-proxy group).
+	 * @see https://tools.ietf.org/html/rfc3744#section-4.3
+	 *
+	 * @param {string} groupUrl Absolute URL of the proxy group principal
+	 * @return {Promise<string[]>} Absolute URLs of member principals
+	 */
+	async getGroupMemberSet(groupUrl) {
+		const { body } = await this._request.propFind(groupUrl, [
+			[NS.DAV, 'group-member-set'],
+		])
+		const members = body[`{${NS.DAV}}group-member-set`] ?? []
+		return members.map((href) => this._request.absoluteUrl(href))
+	}
+
+	/**
+	 * Sets the group-member-set of a principal collection (e.g. a calendar-proxy group).
+	 * @see https://tools.ietf.org/html/rfc3744#section-4.3
+	 *
+	 * @param {string} groupUrl Absolute URL of the proxy group principal
+	 * @param {string[]} memberUrls Absolute URLs of the new member set
+	 * @return {Promise<void>}
+	 */
+	async setGroupMemberSet(groupUrl, memberUrls) {
+		const [skeleton] = XMLUtility.getRootSkeleton([NS.DAV, 'propertyupdate'])
+		skeleton.children.push({
+			name: [NS.DAV, 'set'],
+			children: [{
+				name: [NS.DAV, 'prop'],
+				children: [{
+					name: [NS.DAV, 'group-member-set'],
+					children: memberUrls.map((url) => ({
+						name: [NS.DAV, 'href'],
+						value: url,
+					})),
+				}],
+			}],
+		})
+		const body = XMLUtility.serialize(skeleton)
+		await this._request.propPatch(groupUrl, {}, body)
+	}
+
+	/**
+	 * Fetches the group-membership of a principal (the groups it belongs to).
+	 * @see https://tools.ietf.org/html/rfc3744#section-4.4
+	 *
+	 * @param {string} principalUrl Absolute URL of the principal
+	 * @return {Promise<string[]>} Absolute URLs of groups the principal belongs to
+	 */
+	async getGroupMembership(principalUrl) {
+		const { body } = await this._request.propFind(principalUrl, [
+			[NS.DAV, 'group-membership'],
+		])
+		const groups = body[`{${NS.DAV}}group-membership`] ?? []
+		return groups.map((href) => this._request.absoluteUrl(href))
+	}
+
+	/**
+	 * Discovers the calendar home URL for a principal via CalDAV PROPFIND.
+	 *
+	 * Performs a depth-0 PROPFIND on the principal URL requesting the
+	 * calendar-home-set property (RFC 4791 §6.2.1).
+	 *
+	 * @param {string} principalUrl Absolute URL of the principal
+	 * @return {Promise<string|null>} Absolute URL of the calendar home, or null if not found
+	 */
+	async getCalendarHomeUrlForPrincipal(principalUrl) {
+		const currentPrincipalUrl = this.currentUserPrincipal
+			? this._request.absoluteUrl(this.currentUserPrincipal.url)
+			: null
+		const requestedPrincipalUrl = this._request.absoluteUrl(principalUrl)
+
+		if (currentPrincipalUrl === requestedPrincipalUrl && this.calendarHomes.length > 0) {
+			return this._request.absoluteUrl(this.calendarHomes[0].url)
+		}
+
+		const { body } = await this._request.propFind(principalUrl, [
+			[NS.IETF_CALDAV, 'calendar-home-set'],
+		])
+		const homes = body[`{${NS.IETF_CALDAV}}calendar-home-set`]
+		if (!homes || !homes.length) {
+			return null
+		}
+		return this._request.absoluteUrl(homes[0])
+	}
+
+	/**
+	 * Returns the absolute URL of a calendar proxy group for a given principal.
+	 *
+	 * @param {string} principalUrl Absolute URL of the principal
+	 * @param {'write'|'read'} type The proxy group type
+	 * @return {string}
+	 * @private
+	 */
+	_getProxyGroupUrl(principalUrl, type) {
+		return principalUrl.replace(/\/?$/, '') + '/calendar-proxy-' + type
+	}
+
+	/**
+	 * Returns the absolute URLs of all delegates for a principal, separated by permission level.
+	 *
+	 * @param {string} principalUrl Absolute URL of the principal
+	 * @return {Promise<{write: string[], read: string[]}>} Absolute principal URLs of delegates
+	 */
+	async getDelegatesForPrincipal(principalUrl) {
+		const [write, read] = await Promise.all([
+			this.getGroupMemberSet(this._getProxyGroupUrl(principalUrl, 'write')),
+			this.getGroupMemberSet(this._getProxyGroupUrl(principalUrl, 'read')),
+		])
+		return { write, read }
+	}
+
+	/**
+	 * Adds a delegate to a principal's calendar-proxy group.
+	 *
+	 * Fetches the current member set and appends the new delegate if not already present.
+	 *
+	 * @param {string} ownerPrincipalUrl Absolute URL of the principal who owns the proxy group
+	 * @param {string} delegatePrincipalUrl Absolute or relative URL of the principal to add as delegate
+	 * @param {'write'|'read'} [permission='write'] The proxy group to add the delegate to
+	 * @return {Promise<void>}
+	 */
+	async addDelegate(ownerPrincipalUrl, delegatePrincipalUrl, permission = 'write') {
+		const proxyGroupUrl = this._getProxyGroupUrl(ownerPrincipalUrl, permission)
+		const normalizedUrl = this._request.absoluteUrl(delegatePrincipalUrl)
+		const current = await this.getGroupMemberSet(proxyGroupUrl)
+		if (!current.includes(normalizedUrl)) {
+			await this.setGroupMemberSet(proxyGroupUrl, [...current, normalizedUrl])
+		}
+	}
+
+	/**
+	 * Removes a delegate from a principal's calendar-proxy group.
+	 *
+	 * @param {string} ownerPrincipalUrl Absolute URL of the principal who owns the proxy group
+	 * @param {string} delegatePrincipalUrl Absolute or relative URL of the principal to remove
+	 * @param {'write'|'read'} [permission='write'] The proxy group to remove the delegate from
+	 * @return {Promise<void>}
+	 */
+	async removeDelegate(ownerPrincipalUrl, delegatePrincipalUrl, permission = 'write') {
+		const proxyGroupUrl = this._getProxyGroupUrl(ownerPrincipalUrl, permission)
+		const normalizedUrl = this._request.absoluteUrl(delegatePrincipalUrl)
+		const current = await this.getGroupMemberSet(proxyGroupUrl)
+		await this.setGroupMemberSet(proxyGroupUrl, current.filter((url) => url !== normalizedUrl))
+	}
+
+	/**
+	 * Returns the principal URLs of users who have granted the given principal
+	 * write-proxy (delegate) access.
+	 *
+	 * Inspects the group-membership property for groups ending in
+	 * /calendar-proxy-write and strips that suffix to obtain the owner's
+	 * principal URL.
+	 *
+	 * @param {string} principalUrl Absolute URL of the principal
+	 * @return {Promise<string[]>} Absolute principal URLs of users who delegated to this principal
+	 */
+	async getDelegatorPrincipalUrls(principalUrl) {
+		const groups = await this.getGroupMembership(principalUrl)
+		return groups
+			.filter((url) => url.includes('calendar-proxy-write'))
+			.map((url) => url.replace(/\/calendar-proxy-write\/?$/, '') || null)
+			.filter(Boolean)
+	}
+
+	/**
+	 * Returns the principal URLs and permission level of users who have granted
+	 * the given principal proxy access (both read and write).
+	 *
+	 * Inspects the group-membership property for groups ending in
+	 * /calendar-proxy-write or /calendar-proxy-read and returns objects with
+	 * the owner's principal URL and the permission granted.
+	 *
+	 * @param {string} principalUrl Absolute URL of the principal
+	 * @return {Promise<Array<{principalUrl: string, permission: 'write'|'read'}>>}
+	 */
+	async getDelegatorsWithPermission(principalUrl) {
+		const groups = await this.getGroupMembership(principalUrl)
+		const result = []
+
+		for (const groupUrl of groups) {
+			if (groupUrl.includes('calendar-proxy-write')) {
+				const ownerUrl = groupUrl.replace(/\/calendar-proxy-write\/?$/, '')
+				if (ownerUrl) {
+					result.push({ principalUrl: ownerUrl, permission: 'write' })
+				}
+			} else if (groupUrl.includes('calendar-proxy-read')) {
+				const ownerUrl = groupUrl.replace(/\/calendar-proxy-read\/?$/, '')
+				if (ownerUrl) {
+					result.push({ principalUrl: ownerUrl, permission: 'read' })
+				}
+			}
+		}
+
+		return result
+	}
+
+	/**
 	 * discovers all calendar-homes in this account, all principal collections
 	 * and advertised features
 	 *
