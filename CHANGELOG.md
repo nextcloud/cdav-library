@@ -1,3 +1,12 @@
+## [2.5.1](https://github.com/nextcloud/cdav-library/compare/v2.5.0...v2.5.1) (2026-05-20)
+
+
+### Bug Fixes
+
+* set dirty flag with calendar data too ([6c59076](https://github.com/nextcloud/cdav-library/commit/6c590764168cfb0972ef94d14c7bc14c53ac9208))
+
+
+
 # [2.5.0](https://github.com/nextcloud/cdav-library/compare/v2.4.0...v2.5.0) (2026-05-07)
 
 
