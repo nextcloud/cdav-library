@@ -46,4 +46,25 @@ describe('VObject model', () => {
 		expect(vobject.data).toEqual('FOO BAR BLA BLUB');
 	});
 
+	it('should mark calendar-data changes as dirty', () => {
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
+		const url = '/foo/bar/file';
+		const props = {
+			'{DAV:}getetag': '"etag foo bar tralala"',
+			'{DAV:}getcontenttype': 'text/calendar',
+			'{DAV:}resourcetype': [],
+			'{urn:ietf:params:xml:ns:caldav}calendar-data': 'BEGIN:VCALENDAR\nEND:VCALENDAR',
+		};
+
+		const vobject = new VObject(parent, request, url, props);
+
+		expect(vobject.isDirty()).toEqual(false);
+
+		vobject.data = 'BEGIN:VCALENDAR\nVERSION:2.0\nEND:VCALENDAR';
+
+		expect(vobject.isDirty()).toEqual(true);
+		expect(vobject.data).toEqual('BEGIN:VCALENDAR\nVERSION:2.0\nEND:VCALENDAR');
+	});
+
 });
