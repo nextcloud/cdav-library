@@ -12,6 +12,7 @@ import { assert, beforeEach, describe, expect, it, vi } from "vitest";
 import { DavObject } from "../../../src/models/davObject.js";
 import DAVEventListener from "../../../src/models/davEventListener.js";
 import NetworkRequestClientError from "../../../src/errors/networkRequestClientError.js";
+import * as NS from '../../../src/utility/namespaceUtility.js'
 import * as XMLUtility from '../../../src/utility/xmlUtility.js';
 import RequestMock from "../../mocks/request.mock.js";
 import { DavCollection as DavCollectionMock } from "../../mocks/davCollection.mock.js";
@@ -699,6 +700,27 @@ describe('Dav object model', () => {
 
 		const davObject = new DavObject(parent, request, url, props, false);
 		expect(davObject.url).toEqual('/foo/bar/file');
+	});
+
+	it('should not mark non-data property changes as dirty', () => {
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
+		const url = '/foo/bar/file';
+		const props = {
+			'{DAV:}getetag': '"etag foo bar tralala"',
+			'{DAV:}getcontenttype': 'text/blub',
+			'{DAV:}resourcetype': [],
+		};
+
+		const davObject = new DavObject(parent, request, url, props, false);
+		davObject._exposeProperty('favorite', NS.NEXTCLOUD, 'favorite', true);
+
+		expect(davObject.isDirty()).toEqual(false);
+
+		davObject.favorite = true;
+
+		expect(davObject.isDirty()).toEqual(false);
+		expect(davObject._updatedProperties).toContain('{http://nextcloud.com/ns}favorite');
 	});
 
 	it('should copy a DavObject into a different collection', () => {
