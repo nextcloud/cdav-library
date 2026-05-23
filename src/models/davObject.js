@@ -258,10 +258,10 @@ export class DavObject extends DAVEventListener {
 			Object.defineProperty(this, localName, {
 				get: () => this._props[`{${xmlNamespace}}${xmlName}`],
 				set: (val) => {
-					// The vCard itself is stored as `address-data` property and uses the update() method
-					// to write the card to the server, while meta properties like the `favorite`
+					// The contact itself is stored as `address-data` property and the calendar data is stored as `calendar-data` property.
+					// Both use the update() method to write the data to the server, while meta properties like the `favorite`
 					// one uses the updateProperties() method.
-					if (xmlName === 'address-data') {
+					if (xmlName === 'calendar-data' || xmlName === 'address-data') {
 						this._isDirty = true
 					}
 
