@@ -35,6 +35,8 @@ export class CalendarTrashBin extends DavCollection {
 				.map((p) => ({ name: p }))
 				.concat([
 					{ name: [NS.NEXTCLOUD, 'calendar-uri'] },
+					{ name: [NS.NEXTCLOUD, 'source-calendar-uri'] },
+					{ name: [NS.NEXTCLOUD, 'calendar-owner-principal-uri'] },
 					{ name: [NS.NEXTCLOUD, 'deleted-at'] },
 				]),
 		})
