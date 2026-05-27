@@ -45,6 +45,10 @@ export class DeletedCalendarObject extends VObject {
 		return this._props[`{${NS.NEXTCLOUD}}deleted-at`]
 	}
 
+	get delegator() {
+		return this._props[`{${NS.NEXTCLOUD}}delegator`]
+	}
+
 	/**
 	 * @inheritDoc
 	 */
@@ -54,6 +58,7 @@ export class DeletedCalendarObject extends VObject {
 			[NS.NEXTCLOUD, 'source-calendar-uri'],
 			[NS.NEXTCLOUD, 'calendar-owner-principal-uri'],
 			[NS.NEXTCLOUD, 'deleted-at'],
+			[NS.NEXTCLOUD, 'delegator'],
 		])
 	}
 

@@ -44,6 +44,7 @@ describe('DeletedCalendarObject model', () => {
 			'{http://nextcloud.com/ns}source-calendar-uri': 'source',
 			'{http://nextcloud.com/ns}calendar-owner-principal-uri': 'principals/users/user',
 			'{http://nextcloud.com/ns}deleted-at': new Date('2026-05-20T10:11:12Z'),
+			'{http://nextcloud.com/ns}delegator': 'principals/users/owner',
 		}
 
 		const object = new DeletedCalendarObject(parent, request, url, props)
@@ -52,6 +53,7 @@ describe('DeletedCalendarObject model', () => {
 		expect(object.sourceCalendarUri).toEqual('source')
 		expect(object.calendarOwnerPrincipalUri).toEqual('principals/users/user')
 		expect(object.deletedAt).toEqual(new Date('2026-05-20T10:11:12Z'))
+		expect(object.delegator).toEqual('principals/users/owner')
 	})
 
 })

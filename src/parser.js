@@ -185,6 +185,7 @@ export default class Parser {
 		this.registerParser('{http://nextcloud.com/ns}calendar-uri', Parser.text)
 		this.registerParser('{http://nextcloud.com/ns}source-calendar-uri', Parser.text)
 		this.registerParser('{http://nextcloud.com/ns}calendar-owner-principal-uri', Parser.text)
+		this.registerParser('{http://nextcloud.com/ns}delegator', Parser.text)
 		this.registerParser('{http://nextcloud.com/ns}has-photo', Parser.bool)
 		this.registerParser('{http://nextcloud.com/ns}favorite', Parser.bool)
 		this.registerParser('{http://nextcloud.com/ns}trash-bin-retention-duration', Parser.decInt)
