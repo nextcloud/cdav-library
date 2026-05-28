@@ -9,7 +9,7 @@
 
 import { DavCollection } from './davCollection.js'
 import * as NS from '../utility/namespaceUtility.js'
-import { VObject } from './vobject.js'
+import { DeletedCalendarObject } from './deletedCalendarObject.js'
 import * as XMLUtility from '../utility/xmlUtility.js'
 
 export class CalendarTrashBin extends DavCollection {
@@ -20,7 +20,7 @@ export class CalendarTrashBin extends DavCollection {
 	constructor(...args) {
 		super(...args)
 
-		super._registerObjectFactory('text/calendar', VObject)
+		super._registerObjectFactory('text/calendar', DeletedCalendarObject)
 
 		super._exposeProperty('retentionDuration', NS.NEXTCLOUD, 'trash-bin-retention-duration')
 	}
@@ -31,12 +31,8 @@ export class CalendarTrashBin extends DavCollection {
 		)
 		skeleton.children.push({
 			name: [NS.DAV, 'prop'],
-			children: VObject.getPropFindList()
-				.map((p) => ({ name: p }))
-				.concat([
-					{ name: [NS.NEXTCLOUD, 'calendar-uri'] },
-					{ name: [NS.NEXTCLOUD, 'deleted-at'] },
-				]),
+			children: DeletedCalendarObject.getPropFindList()
+				.map((p) => ({ name: p })),
 		})
 		skeleton.children.push({
 			name: [NS.IETF_CALDAV, 'filter'],
