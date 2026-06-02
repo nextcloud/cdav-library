@@ -1,3 +1,20 @@
+# [2.6.0](https://github.com/nextcloud/cdav-library/compare/v2.5.1...v2.6.0) (2026-06-02)
+
+
+### Bug Fixes
+
+* **deps:** Fix npm audit ([d18c7bb](https://github.com/nextcloud/cdav-library/commit/d18c7bb973e56f14c5bb319f7e3a2dbd60875340))
+* **deps:** Fix npm audit ([2552855](https://github.com/nextcloud/cdav-library/commit/2552855ffb5e02d02560108be53a04ca8087f0d5))
+* **trashbin:** expose delegator prop ([cfb4274](https://github.com/nextcloud/cdav-library/commit/cfb4274fd0adbf527f11ca82f33810025f6c15c9))
+* **trashbin:** expose source-calendar-uri and calendar-owner-principal-uri props ([74d9d83](https://github.com/nextcloud/cdav-library/commit/74d9d83203b3e127e38e574b268984059b7609bd))
+
+
+### Features
+
+* add calendar delegation ([32122eb](https://github.com/nextcloud/cdav-library/commit/32122eb6e52c091152c9c1cf041c4d27289697bb))
+
+
+
 ## [2.5.1](https://github.com/nextcloud/cdav-library/compare/v2.5.0...v2.5.1) (2026-05-20)
 
 
