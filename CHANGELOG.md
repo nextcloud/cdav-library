@@ -1,3 +1,12 @@
+## [2.6.1](https://github.com/nextcloud/cdav-library/compare/v2.6.0...v2.6.1) (2026-06-09)
+
+
+### Bug Fixes
+
+* mocks with vitest v4 ([523ee99](https://github.com/nextcloud/cdav-library/commit/523ee99c4fed50c010c92c381e5eae2c7cc38526))
+
+
+
 # [2.6.0](https://github.com/nextcloud/cdav-library/compare/v2.5.1...v2.6.0) (2026-06-02)
 
 
