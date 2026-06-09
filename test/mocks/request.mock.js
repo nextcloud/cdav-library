@@ -5,17 +5,17 @@
 
 import { vi } from "vitest";
 
-const Request = vi.fn()
-
-Request.prototype.propFind = vi.fn();
-Request.prototype.put = vi.fn();
-Request.prototype.post = vi.fn();
-Request.prototype.delete = vi.fn();
-Request.prototype.move = vi.fn();
-Request.prototype.copy = vi.fn();
-Request.prototype.report = vi.fn();
-Request.prototype.pathname = vi.fn();
-Request.prototype.propPatch = vi.fn();
-Request.prototype.mkCol = vi.fn();
+const Request = vi.fn().mockImplementation(function() {
+	this.propFind = vi.fn();
+	this.put = vi.fn();
+	this.post = vi.fn();
+	this.delete = vi.fn();
+	this.move = vi.fn();
+	this.copy = vi.fn();
+	this.report = vi.fn();
+	this.pathname = vi.fn();
+	this.propPatch = vi.fn();
+	this.mkCol = vi.fn();
+});
 
 export default Request
