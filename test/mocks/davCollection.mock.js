@@ -5,17 +5,17 @@
 
 import { vi } from "vitest";
 
-const DavCollection = vi.fn()
-
-DavCollection.prototype.findAll = vi.fn();
-DavCollection.prototype.findAllByFilter = vi.fn();
-DavCollection.prototype.find = vi.fn();
-DavCollection.prototype.createCollection = vi.fn();
-DavCollection.prototype.createObject = vi.fn();
-DavCollection.prototype.update = vi.fn();
-DavCollection.prototype.delete = vi.fn();
-DavCollection.prototype.isReadable = vi.fn();
-DavCollection.prototype.isWriteable = vi.fn();
-DavCollection.prototype.isSameCollectionTypeAs = vi.fn();
+const DavCollection = vi.fn().mockImplementation(function() {
+	this.findAll = vi.fn();
+	this.findAllByFilter = vi.fn();
+	this.find = vi.fn();
+	this.createCollection = vi.fn();
+	this.createObject = vi.fn();
+	this.update = vi.fn();
+	this.delete = vi.fn();
+	this.isReadable = vi.fn();
+	this.isWriteable = vi.fn();
+	this.isSameCollectionTypeAs = vi.fn();
+});
 
 export { DavCollection };
