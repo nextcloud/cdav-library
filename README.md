@@ -26,10 +26,19 @@ npm run build
 
 ```
 ## Running tests
-You can use the provided npm command to run all tests by using:
+
+> [!IMPORTANT]
+> Integrations tests use [Testcontainers](https://testcontainers.com/) and require an [container runtime](https://node.testcontainers.org/supported-container-runtimes/) to be installed.
 
 ```
+# run all tests
 npm run test
+
+# run only unit tests
+npm run test:unit
+
+# run only integration tests
+npm run test:integration
 ```
 
 ## :v: Code of conduct
