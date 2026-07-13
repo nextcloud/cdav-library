@@ -32,6 +32,8 @@ const debug = debugFactory('Calendar')
  * - timezone
  * - defaultAlarmPartDay
  * - defaultAlarmFullDay
+ * - defaultAlarmsPartDay
+ * - defaultAlarmsFullDay
  * - transparency
  * - components
  *
@@ -58,6 +60,8 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 		super._exposeProperty('transparency', NS.IETF_CALDAV, 'schedule-calendar-transp', true)
 		super._exposeProperty('defaultAlarmPartDay', NS.NEXTCLOUD, 'default-alarm-part-day', true)
 		super._exposeProperty('defaultAlarmFullDay', NS.NEXTCLOUD, 'default-alarm-full-day', true)
+		super._exposeProperty('defaultAlarmsPartDay', NS.NEXTCLOUD, 'default-alarms-part-day', true)
+		super._exposeProperty('defaultAlarmsFullDay', NS.NEXTCLOUD, 'default-alarms-full-day', true)
 	}
 
 	/**
@@ -288,6 +292,8 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 			[NS.OWNCLOUD, 'calendar-enabled'],
 			[NS.NEXTCLOUD, 'default-alarm-part-day'],
 			[NS.NEXTCLOUD, 'default-alarm-full-day'],
+			[NS.NEXTCLOUD, 'default-alarms-part-day'],
+			[NS.NEXTCLOUD, 'default-alarms-full-day'],
 			[NS.NEXTCLOUD, 'owner-displayname'],
 			[NS.NEXTCLOUD, 'trash-bin-retention-duration'],
 			[NS.NEXTCLOUD, 'deleted-at'],

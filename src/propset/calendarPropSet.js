@@ -20,6 +20,8 @@ import * as NS from '../utility/namespaceUtility.js'
  * - {http://owncloud.org/ns}calendar-enabled
  * - {http://nextcloud.com/ns}default-alarm-part-day
  * - {http://nextcloud.com/ns}default-alarm-full-day
+ * - {http://nextcloud.com/ns}default-alarms-part-day
+ * - {http://nextcloud.com/ns}default-alarms-full-day
  *
  * @param {object} props
  * @return {object}
@@ -83,6 +85,18 @@ export default function calendarPropSet(props) {
 			xmlified.push({
 				name: [NS.NEXTCLOUD, 'default-alarm-full-day'],
 				value,
+			})
+			break
+		case '{http://nextcloud.com/ns}default-alarms-part-day':
+			xmlified.push({
+				name: [NS.NEXTCLOUD, 'default-alarms-part-day'],
+				value: Array.isArray(value) ? JSON.stringify(value) : value,
+			})
+			break
+		case '{http://nextcloud.com/ns}default-alarms-full-day':
+			xmlified.push({
+				name: [NS.NEXTCLOUD, 'default-alarms-full-day'],
+				value: Array.isArray(value) ? JSON.stringify(value) : value,
 			})
 			break
 		case '{urn:ietf:params:xml:ns:caldav}schedule-calendar-transp':

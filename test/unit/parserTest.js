@@ -1907,6 +1907,31 @@ END:VALARM`);
 		expect(parser.parse(document, node, resolver)).toEqual(32400);
 	});
 
+	it('should properly handle {http://nextcloud.com/ns}default-alarms-part-day', () => {
+		const parser = new Parser();
+
+		const xml = `<?xml version="1.0" encoding="utf-8" ?>
+<D:multistatus xmlns:D="DAV:" xmlns:nc="http://nextcloud.com/ns">
+	<D:response>
+		<D:href>/foo</D:href>
+		<D:propstat>
+			<D:prop>
+				<nc:default-alarms-part-day>[{"trigger":-86400,"action":"EMAIL"},{"trigger":-900,"action":"DISPLAY"}]</nc:default-alarms-part-day>
+			</D:prop>
+			<D:status>HTTP/1.1 200 OK</D:status>
+		</D:propstat>
+	</D:response>
+</D:multistatus>`;
+
+		const [document, node, resolver] = getDocumentNodeResolverFromXML(xml);
+
+		expect(parser.canParse('{http://nextcloud.com/ns}default-alarms-part-day')).toEqual(true);
+		expect(parser.parse(document, node, resolver)).toEqual([
+			{ trigger: -86400, action: 'EMAIL' },
+			{ trigger: -900, action: 'DISPLAY' },
+		]);
+	});
+
 	it('should properly handle {http://nextcloud.com/ns}default-alarm-full-day', () => {
 		const parser = new Parser();
 

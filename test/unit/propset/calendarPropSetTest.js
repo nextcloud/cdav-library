@@ -131,6 +131,21 @@ describe('Calendar prop-set', () => {
 		]);
 	});
 
+	it('should serialize {http://nextcloud.com/ns}default-alarms-part-day correctly', () => {
+		const alarms = [
+			{ trigger: -86400, action: 'EMAIL' },
+			{ trigger: -900, action: 'DISPLAY' },
+		];
+		expect(calendarPropSet({
+			'{http://nextcloud.com/ns}default-alarms-part-day': alarms,
+		})).toEqual([
+			{
+				name: ['http://nextcloud.com/ns', 'default-alarms-part-day'],
+				value: JSON.stringify(alarms),
+			},
+		]);
+	});
+
 	it('should serialize {urn:ietf:params:xml:ns:caldav}schedule-calendar-transp correctly - transparent', () => {
 		expect(calendarPropSet({
 			'{Foo:}bar': 123,

@@ -180,6 +180,8 @@ export default class Parser {
 		this.registerParser('{http://owncloud.org/ns}read-only', Parser.bool)
 		this.registerParser('{http://nextcloud.com/ns}default-alarm-part-day', Parser.decInt)
 		this.registerParser('{http://nextcloud.com/ns}default-alarm-full-day', Parser.decInt)
+		this.registerParser('{http://nextcloud.com/ns}default-alarms-part-day', Parser.defaultAlarms)
+		this.registerParser('{http://nextcloud.com/ns}default-alarms-full-day', Parser.defaultAlarms)
 		this.registerParser('{http://nextcloud.com/ns}owner-displayname', Parser.text)
 		this.registerParser('{http://nextcloud.com/ns}deleted-at', Parser.iso8601DateTime)
 		this.registerParser('{http://nextcloud.com/ns}calendar-uri', Parser.text)
@@ -595,6 +597,32 @@ export default class Parser {
 	 * @param {XPathNSResolver} resolver
 	 * @return {string[]}
 	 */
+	/**
+	 * Parses a {http://nextcloud.com/ns}default-alarms-* Node (JSON array of alarm templates)
+	 *
+	 * @param {Document} document
+	 * @param {Node} node
+	 * @param {XPathNSResolver} resolver
+	 * @return {Array|null}
+	 */
+	static defaultAlarms(document, node, resolver) {
+		const text = Parser.text(document, node, resolver)
+		if (text === null || text === '') {
+			return null
+		}
+
+		try {
+			const parsed = JSON.parse(text)
+			if (!Array.isArray(parsed) || parsed.length === 0) {
+				return null
+			}
+
+			return parsed
+		} catch (error) {
+			return null
+		}
+	}
+
 	static ocAccess(document, node, resolver) {
 		const result = []
 		const privileges = document.evaluate('oc:access/*', node, resolver, XPathResult.ANY_TYPE, null)

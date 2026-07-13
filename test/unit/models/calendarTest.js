@@ -129,6 +129,23 @@ END:VCALENDAR
 		expect(calendar.defaultAlarmFullDay).toEqual(39600);
 	});
 
+	it('should inherit expose the property defaultAlarmsPartDay', () => {
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
+		const url = '/foo/bar/folder';
+		const props = returnDefaultProps();
+		props['{http://nextcloud.com/ns}default-alarms-part-day'] = [
+			{ trigger: -86400, action: 'EMAIL' },
+			{ trigger: -900, action: 'DISPLAY' },
+		];
+
+		const calendar = new Calendar(parent, request, url, props);
+		expect(calendar.defaultAlarmsPartDay).toEqual([
+			{ trigger: -86400, action: 'EMAIL' },
+			{ trigger: -900, action: 'DISPLAY' },
+		]);
+	});
+
 	it('should find all VObjects', () => {
 		const parent = new DavCollectionMock();
 		const request = new RequestMock();
