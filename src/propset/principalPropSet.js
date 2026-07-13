@@ -21,17 +21,17 @@ export default function prinicipalPropSet(props) {
 
 	Object.entries(props).forEach(([key, value]) => {
 		switch (key) {
-		case '{urn:ietf:params:xml:ns:caldav}schedule-default-calendar-URL':
-			xmlified.push({
-				name: [NS.IETF_CALDAV, 'schedule-default-calendar-URL'],
-				children: [
-					{
-						name: ['DAV:', 'href'],
-						value,
-					},
-				],
-			})
-			break
+			case '{urn:ietf:params:xml:ns:caldav}schedule-default-calendar-URL':
+				xmlified.push({
+					name: [NS.IETF_CALDAV, 'schedule-default-calendar-URL'],
+					children: [
+						{
+							name: ['DAV:', 'href'],
+							value,
+						},
+					],
+				})
+				break
 		}
 	})
 

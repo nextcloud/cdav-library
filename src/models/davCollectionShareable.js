@@ -7,10 +7,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { debugFactory } from '../debug.js'
 import * as NS from '../utility/namespaceUtility.js'
 import * as XMLUtility from '../utility/xmlUtility.js'
-
-import { debugFactory } from '../debug.js'
 const debug = debugFactory('DavCollectionShareable')
 
 /**
@@ -19,7 +18,6 @@ const debug = debugFactory('DavCollectionShareable')
  */
 export function davCollectionShareable(Base) {
 	return class extends Base {
-
 		/**
 		 * @inheritDoc
 		 */
@@ -41,7 +39,9 @@ export function davCollectionShareable(Base) {
 		async share(principalScheme, writeable = false, summary = '') {
 			debug(`Sharing ${this.url} with ${principalScheme}`)
 			const [skeleton, setProp] = XMLUtility.getRootSkeleton(
-				[NS.OWNCLOUD, 'share'], [NS.OWNCLOUD, 'set'])
+				[NS.OWNCLOUD, 'share'],
+				[NS.OWNCLOUD, 'set'],
+			)
 
 			setProp.push({
 				name: [NS.DAV, 'href'],
@@ -88,7 +88,9 @@ export function davCollectionShareable(Base) {
 			debug(`Unsharing ${this.url} with ${principalScheme}`)
 
 			const [skeleton, oSetChildren] = XMLUtility.getRootSkeleton(
-				[NS.OWNCLOUD, 'share'], [NS.OWNCLOUD, 'remove'])
+				[NS.OWNCLOUD, 'share'],
+				[NS.OWNCLOUD, 'remove'],
+			)
 
 			oSetChildren.push({
 				name: [NS.DAV, 'href'],
@@ -141,6 +143,5 @@ export function davCollectionShareable(Base) {
 				[NS.CALENDARSERVER, 'allowed-sharing-modes'],
 			])
 		}
-
 	}
 }

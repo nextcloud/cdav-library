@@ -7,15 +7,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { davCollectionShareable } from './davCollectionShareable.js'
-import { DavCollection } from './davCollection.js'
+import { debugFactory } from '../debug.js'
+import addressBookPropSet from '../propset/addressBookPropSet.js'
 import * as NS from '../utility/namespaceUtility.js'
 import * as StringUtility from '../utility/stringUtility.js'
 import * as XMLUtility from '../utility/xmlUtility.js'
-import addressBookPropSet from '../propset/addressBookPropSet.js'
+import { DavCollection } from './davCollection.js'
+import { davCollectionShareable } from './davCollectionShareable.js'
 import { VCard } from './vcard.js'
-
-import { debugFactory } from '../debug.js'
 const debug = debugFactory('AddressBook')
 
 /**
@@ -33,7 +32,6 @@ const debug = debugFactory('AddressBook')
  * @augments DavCollection
  */
 export class AddressBook extends davCollectionShareable(DavCollection) {
-
 	/**
 	 * @inheritDoc
 	 */
@@ -121,9 +119,7 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 	async addressbookQuery(filter, prop = null, limit = null, test = 'anyof') {
 		debug('sending an addressbook-query request')
 
-		const [skeleton] = XMLUtility.getRootSkeleton(
-			[NS.IETF_CARDDAV, 'addressbook-query'],
-		)
+		const [skeleton] = XMLUtility.getRootSkeleton([NS.IETF_CARDDAV, 'addressbook-query'])
 
 		if (!prop) {
 			skeleton.children.push({
@@ -221,9 +217,7 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 	 * @private
 	 */
 	_buildMultiGetBody(hrefs, prop) {
-		const [skeleton] = XMLUtility.getRootSkeleton(
-			[NS.IETF_CARDDAV, 'addressbook-multiget'],
-		)
+		const [skeleton] = XMLUtility.getRootSkeleton([NS.IETF_CARDDAV, 'addressbook-multiget'])
 
 		if (!prop) {
 			skeleton.children.push({
@@ -283,5 +277,4 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 
 		return !!addressBookDataProperty.children
 	}
-
 }

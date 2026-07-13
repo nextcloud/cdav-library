@@ -11,9 +11,8 @@ const serializer = new XMLSerializer()
 let prefixMap = {}
 
 /**
- * builds the root skeleton
+ * builds the root skeleton from the given namespace / name pairs
  *
- * @params {...Array} array of namespace / name pairs
  * @return {*[]}
  */
 export function getRootSkeleton() {
@@ -49,7 +48,7 @@ export function getRootSkeleton() {
  */
 export function serialize(json) {
 	json = json || {}
-	if (typeof json !== 'object' || !Object.prototype.hasOwnProperty.call(json, 'name')) {
+	if (typeof json !== 'object' || !Object.hasOwn(json, 'name')) {
 		return ''
 	}
 
@@ -104,7 +103,7 @@ export function resetPrefixMap() {
  * @param localName
  */
 function getPrefixedNameForNamespace(ns, localName) {
-	if (!Object.prototype.hasOwnProperty.call(prefixMap, ns)) {
+	if (!Object.hasOwn(prefixMap, ns)) {
 		prefixMap[ns] = 'x' + Object.keys(prefixMap).length
 	}
 

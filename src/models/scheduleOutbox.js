@@ -7,11 +7,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { DavCollection } from './davCollection.js'
 import * as NS from '../utility/namespaceUtility.js'
+import { DavCollection } from './davCollection.js'
 
 export default class ScheduleOutbox extends DavCollection {
-
 	/**
 	 * Sends a free-busy-request for the scheduling outbox
 	 * The data is required to be a valid iTIP data.
@@ -47,5 +46,4 @@ export default class ScheduleOutbox extends DavCollection {
 
 		return result
 	}
-
 }

@@ -22,15 +22,15 @@ export default function vcardPropSet(props) {
 
 	Object.entries(props).forEach(([key, value]) => {
 		switch (key) {
-		case '{http://nextcloud.com/ns}favorite':
-			xmlified.push({
-				name: [NS.NEXTCLOUD, 'favorite'],
-				value: value ? '1' : null,
-			})
-			break
+			case '{http://nextcloud.com/ns}favorite':
+				xmlified.push({
+					name: [NS.NEXTCLOUD, 'favorite'],
+					value: value ? '1' : null,
+				})
+				break
 
-		default:
-			break
+			default:
+				break
 		}
 	})
 

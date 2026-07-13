@@ -7,16 +7,15 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { DavCollection } from './davCollection.js'
-import { davCollectionPublishable } from './davCollectionPublishable.js'
-import { davCollectionShareable } from './davCollectionShareable.js'
-import { VObject } from './vobject.js'
+import { debugFactory } from '../debug.js'
 import calendarPropSet from '../propset/calendarPropSet.js'
 import * as NS from '../utility/namespaceUtility.js'
 import * as StringUtility from '../utility/stringUtility.js'
 import * as XMLUtility from '../utility/xmlUtility.js'
-
-import { debugFactory } from '../debug.js'
+import { DavCollection } from './davCollection.js'
+import { davCollectionPublishable } from './davCollectionPublishable.js'
+import { davCollectionShareable } from './davCollectionShareable.js'
+import { VObject } from './vobject.js'
 const debug = debugFactory('Calendar')
 
 /**
@@ -40,7 +39,6 @@ const debug = debugFactory('Calendar')
  * @augments DavCollection
  */
 export class Calendar extends davCollectionPublishable(davCollectionShareable(DavCollection)) {
-
 	/**
 	 * @inheritDoc
 	 */
@@ -147,9 +145,7 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 	async calendarQuery(filter, prop = null, timezone = null) {
 		debug('sending an calendar-query request')
 
-		const [skeleton] = XMLUtility.getRootSkeleton(
-			[NS.IETF_CALDAV, 'calendar-query'],
-		)
+		const [skeleton] = XMLUtility.getRootSkeleton([NS.IETF_CALDAV, 'calendar-query'])
 
 		if (!prop) {
 			skeleton.children.push({
@@ -203,9 +199,7 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 			return []
 		}
 
-		const [skeleton] = XMLUtility.getRootSkeleton(
-			[NS.IETF_CALDAV, 'calendar-multiget'],
-		)
+		const [skeleton] = XMLUtility.getRootSkeleton([NS.IETF_CALDAV, 'calendar-multiget'])
 
 		if (!prop) {
 			skeleton.children.push({
@@ -242,24 +236,24 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 	 * @param {Date} to
 	 * @return {Promise<string>}
 	 */
+	// eslint-disable-next-line no-unused-vars
 	async freeBusyQuery(from, to) {
-		/* eslint-disable no-tabs */
+
 		// debug('sending a free-busy-query request');
 		//
 		// const [skeleton] = XMLUtility.getRootSkeleton(
-		// 	[NS.IETF_CALDAV, 'free-busy-query'],
-		// 	[NS.IETF_CALDAV, 'time-range']
+		//     [NS.IETF_CALDAV, 'free-busy-query'],
+		//     [NS.IETF_CALDAV, 'time-range']
 		// );
 		//
 		// skeleton[0][0].attributes.push(['start', Calendar._getICalendarDateTimeFromDateObject(from)]);
 		// skeleton[0][0].attributes.push(['end', Calendar._getICalendarDateTimeFromDateObject(to)]);
 		//
 		// const headers = {
-		// 	'Depth': '1'
+		//     'Depth': '1'
 		// };
 		// const body = XMLUtility.serialize(skeleton);
 		// const response = await this._request.report(this.url, headers, body);
-		/* eslint-enable no-tabs */
 
 		// TODO - finish implementation
 	}
@@ -336,5 +330,4 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 			'Z',
 		].join('')
 	}
-
 }

@@ -7,13 +7,12 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { DavCollection } from './davCollection.js'
 import * as NS from '../utility/namespaceUtility.js'
-import { DeletedCalendarObject } from './deletedCalendarObject.js'
 import * as XMLUtility from '../utility/xmlUtility.js'
+import { DavCollection } from './davCollection.js'
+import { DeletedCalendarObject } from './deletedCalendarObject.js'
 
 export class CalendarTrashBin extends DavCollection {
-
 	/**
 	 * @inheritDoc
 	 */
@@ -26,9 +25,7 @@ export class CalendarTrashBin extends DavCollection {
 	}
 
 	async findDeletedObjects() {
-		const [skeleton] = XMLUtility.getRootSkeleton(
-			[NS.IETF_CALDAV, 'calendar-query'],
-		)
+		const [skeleton] = XMLUtility.getRootSkeleton([NS.IETF_CALDAV, 'calendar-query'])
 		skeleton.children.push({
 			name: [NS.DAV, 'prop'],
 			children: DeletedCalendarObject.getPropFindList()
@@ -61,5 +58,4 @@ export class CalendarTrashBin extends DavCollection {
 	async restore(uri) {
 		await this._request.move(uri, this._url + 'restore/file')
 	}
-
 }

@@ -1,3 +1,7 @@
+import { debugFactory } from './debug.js'
+import { AddressBookHome } from './models/addressBookHome.js'
+import { CalendarHome } from './models/calendarHome.js'
+import { Principal } from './models/principal.js'
 /**
  * CDAV Library
  *
@@ -10,11 +14,6 @@ import Parser from './parser.js'
 import Request from './request.js'
 import * as NS from './utility/namespaceUtility.js'
 import * as XMLUtility from './utility/xmlUtility.js'
-import { CalendarHome } from './models/calendarHome.js'
-import { AddressBookHome } from './models/addressBookHome.js'
-import { Principal } from './models/principal.js'
-
-import { debugFactory } from './debug.js'
 const debug = debugFactory('index.js')
 
 export { debugFactory as debug, NS as namespaces }
@@ -23,13 +22,13 @@ export { debugFactory as debug, NS as namespaces }
  *
  */
 export default class DavClient {
-
 	/**
 	 * @param {object} options
 	 * @param {string} options.rootUrl
 	 * @param {{[name: string]: any}} [options.defaultHeaders] A dictionary of default headers to apply to each request.
 	 * @param {object} factories
 	 */
+	// eslint-disable-next-line no-unused-vars
 	constructor(options, factories = {}) {
 		/**
 		 * root URL of DAV Server
@@ -111,6 +110,7 @@ export default class DavClient {
 
 	/**
 	 * initializes the DAVClient
+	 *
 	 * @param {object} options
 	 * @return {Promise<DavClient>}
 	 */
@@ -218,8 +218,7 @@ export default class DavClient {
 	 * @return {Promise<[]>}
 	 */
 	async principalPropertySearchByAddressAndStory(address, story) {
-		const [skeleton] = XMLUtility.getRootSkeleton(
-			[NS.DAV, 'principal-property-search'])
+		const [skeleton] = XMLUtility.getRootSkeleton([NS.DAV, 'principal-property-search'])
 
 		skeleton.children.push({
 			name: [NS.DAV, 'property-search'],
@@ -372,6 +371,7 @@ export default class DavClient {
 
 	/**
 	 * performs a principal property search
+	 *
 	 * @see https://tools.ietf.org/html/rfc3744#section-9.4
 	 *
 	 * @param {Array} props
@@ -432,6 +432,7 @@ export default class DavClient {
 			return new Principal(null, this._request, principalUrl, body)
 		}).catch((err) => {
 			// TODO: improve error handling
+			// eslint-disable-next-line no-console
 			console.debug(err)
 		})
 	}
@@ -461,6 +462,7 @@ export default class DavClient {
 			return principals
 		} catch (err) {
 			// TODO: improve error handling
+			// eslint-disable-next-line no-console
 			console.debug(err)
 		}
 	}
@@ -519,6 +521,7 @@ export default class DavClient {
 
 	/**
 	 * Fetches the group-member-set of a principal collection (e.g. a calendar-proxy group).
+	 *
 	 * @see https://tools.ietf.org/html/rfc3744#section-4.3
 	 *
 	 * @param {string} groupUrl Absolute URL of the proxy group principal
@@ -534,6 +537,7 @@ export default class DavClient {
 
 	/**
 	 * Sets the group-member-set of a principal collection (e.g. a calendar-proxy group).
+	 *
 	 * @see https://tools.ietf.org/html/rfc3744#section-4.3
 	 *
 	 * @param {string} groupUrl Absolute URL of the proxy group principal
@@ -561,6 +565,7 @@ export default class DavClient {
 
 	/**
 	 * Fetches the group-membership of a principal (the groups it belongs to).
+	 *
 	 * @see https://tools.ietf.org/html/rfc3744#section-4.4
 	 *
 	 * @param {string} principalUrl Absolute URL of the principal
@@ -636,7 +641,7 @@ export default class DavClient {
 	 *
 	 * @param {string} ownerPrincipalUrl Absolute URL of the principal who owns the proxy group
 	 * @param {string} delegatePrincipalUrl Absolute or relative URL of the principal to add as delegate
-	 * @param {'write'|'read'} [permission='write'] The proxy group to add the delegate to
+	 * @param {'write'|'read'} [permission] The proxy group to add the delegate to
 	 * @return {Promise<void>}
 	 */
 	async addDelegate(ownerPrincipalUrl, delegatePrincipalUrl, permission = 'write') {
@@ -653,7 +658,7 @@ export default class DavClient {
 	 *
 	 * @param {string} ownerPrincipalUrl Absolute URL of the principal who owns the proxy group
 	 * @param {string} delegatePrincipalUrl Absolute or relative URL of the principal to remove
-	 * @param {'write'|'read'} [permission='write'] The proxy group to remove the delegate from
+	 * @param {'write'|'read'} [permission] The proxy group to remove the delegate from
 	 * @return {Promise<void>}
 	 */
 	async removeDelegate(ownerPrincipalUrl, delegatePrincipalUrl, permission = 'write') {
@@ -797,5 +802,4 @@ export default class DavClient {
 		const url = this._request.pathname(this.rootUrl) + 'public-calendars/'
 		this.publicCalendarHome = new CalendarHome(this, this._request, url, {})
 	}
-
 }

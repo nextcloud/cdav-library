@@ -7,18 +7,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { debugFactory } from '../debug.js'
+import davCollectionPropSet from '../propset/davCollectionPropSet.js'
 import * as NS from '../utility/namespaceUtility.js'
 import * as StringUtility from '../utility/stringUtility.js'
 import * as XMLUtility from '../utility/xmlUtility.js'
 import DAVEventListener from './davEventListener.js'
-
-import { debugFactory } from '../debug.js'
-import davCollectionPropSet from '../propset/davCollectionPropSet.js'
 import { DavObject } from './davObject.js'
 const debug = debugFactory('DavCollection')
 
 export class DavCollection extends DAVEventListener {
-
 	/**
 	 * @param {object} parent
 	 * @param {Request} request
@@ -181,7 +179,8 @@ export class DavCollection extends DAVEventListener {
 		const [skeleton, dPropSet] = XMLUtility.getRootSkeleton(
 			[NS.DAV, 'propertyupdate'],
 			[NS.DAV, 'set'],
-			[NS.DAV, 'prop'])
+			[NS.DAV, 'prop'],
+		)
 
 		dPropSet.push(...propSet)
 
@@ -297,6 +296,7 @@ export class DavCollection extends DAVEventListener {
 
 	/**
 	 * checks whether this is of the same type as another collection
+	 *
 	 * @param {DavCollection} collection
 	 */
 	isSameCollectionTypeAs(collection) {
@@ -376,7 +376,7 @@ export class DavCollection extends DAVEventListener {
 	 * @return {string}
 	 */
 	_getAvailableNameFromToken(token) {
-		return StringUtility.uri(token, name => {
+		return StringUtility.uri(token, (name) => {
 			return this._childrenNames.indexOf(this._url + name) === -1
 				&& this._childrenNames.indexOf(this._url + name + '/') === -1
 		})
@@ -384,6 +384,7 @@ export class DavCollection extends DAVEventListener {
 
 	/**
 	 * get updated properties for this collection from server
+	 *
 	 * @protected
 	 * @return {object}
 	 */
@@ -467,5 +468,4 @@ export class DavCollection extends DAVEventListener {
 			[NS.DAV, 'current-user-privilege-set'],
 		]
 	}
-
 }
