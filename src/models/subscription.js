@@ -7,8 +7,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { Calendar } from './calendar.js'
 import * as NS from '../utility/namespaceUtility.js'
+import { Calendar } from './calendar.js'
 
 /**
  * This class represents a subscription collection
@@ -17,7 +17,6 @@ import * as NS from '../utility/namespaceUtility.js'
  * On top of that it contains more non-standard apple properties
  */
 export class Subscription extends Calendar {
-
 	/**
 	 * @inheritDoc
 	 */
@@ -43,5 +42,4 @@ export class Subscription extends Calendar {
 			[NS.CALENDARSERVER, 'subscribed-strip-attachments'],
 		])
 	}
-
 }

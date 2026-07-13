@@ -7,11 +7,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { DavCollection } from './davCollection.js'
+import { debugFactory } from '../debug.js'
 import * as NS from '../utility/namespaceUtility.js'
 import { AddressBook } from './addressBook.js'
-
-import { debugFactory } from '../debug.js'
+import { DavCollection } from './davCollection.js'
 const debug = debugFactory('AddressBookHome')
 
 /**
@@ -23,7 +22,6 @@ const debug = debugFactory('AddressBookHome')
  * a server to return multiple address book homes though.
  */
 export class AddressBookHome extends DavCollection {
-
 	/**
 	 * @inheritDoc
 	 */
@@ -66,5 +64,4 @@ export class AddressBookHome extends DavCollection {
 		const name = super._getAvailableNameFromToken(displayname)
 		return super.createCollection(name, props)
 	}
-
 }

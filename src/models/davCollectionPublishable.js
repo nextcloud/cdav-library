@@ -7,10 +7,9 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import { debugFactory } from '../debug.js'
 import * as NS from '../utility/namespaceUtility.js'
 import * as XMLUtility from '../utility/xmlUtility.js'
-
-import { debugFactory } from '../debug.js'
 const debug = debugFactory('DavCollectionPublishable')
 
 /**
@@ -19,7 +18,6 @@ const debug = debugFactory('DavCollectionPublishable')
  */
 export function davCollectionPublishable(Base) {
 	return class extends Base {
-
 		/**
 		 * @inheritDoc
 		 */
@@ -37,8 +35,7 @@ export function davCollectionPublishable(Base) {
 		async publish() {
 			debug(`Publishing ${this.url}`)
 
-			const [skeleton] = XMLUtility.getRootSkeleton(
-				[NS.CALENDARSERVER, 'publish-calendar'])
+			const [skeleton] = XMLUtility.getRootSkeleton([NS.CALENDARSERVER, 'publish-calendar'])
 			const xml = XMLUtility.serialize(skeleton)
 
 			// TODO - ideally the server should return a 'pre-publish-url' as described in the standard
@@ -55,8 +52,7 @@ export function davCollectionPublishable(Base) {
 		async unpublish() {
 			debug(`Unpublishing ${this.url}`)
 
-			const [skeleton] = XMLUtility.getRootSkeleton(
-				[NS.CALENDARSERVER, 'unpublish-calendar'])
+			const [skeleton] = XMLUtility.getRootSkeleton([NS.CALENDARSERVER, 'unpublish-calendar'])
 			const xml = XMLUtility.serialize(skeleton)
 
 			await this._request.post(this._url, { 'Content-Type': 'application/xml; charset=utf-8' }, xml)
@@ -71,6 +67,5 @@ export function davCollectionPublishable(Base) {
 				[NS.CALENDARSERVER, 'publish-url'],
 			])
 		}
-
 	}
 }

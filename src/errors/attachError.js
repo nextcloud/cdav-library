@@ -13,7 +13,6 @@
  * @abstract
  */
 export default class AttachError extends Error {
-
 	/**
 	 *
 	 * @param {object} attach
@@ -23,5 +22,4 @@ export default class AttachError extends Error {
 
 		Object.assign(this, attach)
 	}
-
 }

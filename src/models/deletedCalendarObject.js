@@ -7,8 +7,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { VObject } from './vobject.js'
 import * as NS from '../utility/namespaceUtility.js'
+import { VObject } from './vobject.js'
 
 /**
  * This class represents a deleted calendar object from a calendar trash bin.
@@ -16,7 +16,6 @@ import * as NS from '../utility/namespaceUtility.js'
  * @augments VObject
  */
 export class DeletedCalendarObject extends VObject {
-
 	/**
 	 * @inheritDoc
 	 */
@@ -61,5 +60,4 @@ export class DeletedCalendarObject extends VObject {
 			[NS.NEXTCLOUD, 'delegator'],
 		])
 	}
-
 }

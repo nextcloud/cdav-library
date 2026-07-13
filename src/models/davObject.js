@@ -7,12 +7,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import DAVEventListener from './davEventListener.js'
+import { debugFactory } from '../debug.js'
 import NetworkRequestClientError from '../errors/networkRequestClientError.js'
 import * as NS from '../utility/namespaceUtility.js'
-
-import { debugFactory } from '../debug.js'
 import * as XMLUtility from '../utility/xmlUtility.js'
+import DAVEventListener from './davEventListener.js'
 const debug = debugFactory('DavObject')
 
 /**
@@ -20,7 +19,6 @@ const debug = debugFactory('DavObject')
  * @classdesc Generic DavObject aka file
  */
 export class DavObject extends DAVEventListener {
-
 	/**
 	 * @param {DavCollection} parent - The parent collection this DavObject is a child of
 	 * @param {Request} request - The request object initialized by DavClient
@@ -73,6 +71,7 @@ export class DavObject extends DAVEventListener {
 
 	/**
 	 * copies a DavObject to a different DavCollection
+	 *
 	 * @param {DavCollection} collection
 	 * @param {boolean} overwrite
 	 * @param headers
@@ -100,6 +99,7 @@ export class DavObject extends DAVEventListener {
 
 	/**
 	 * moves a DavObject to a different DavCollection
+	 *
 	 * @param {DavCollection} collection
 	 * @param {boolean} overwrite
 	 * @param headers
@@ -128,6 +128,7 @@ export class DavObject extends DAVEventListener {
 
 	/**
 	 * updates the DavObject on the server
+	 *
 	 * @return {Promise<void>}
 	 */
 	async update() {
@@ -152,7 +153,7 @@ export class DavObject extends DAVEventListener {
 			this._isDirty = false
 			// Don't overwrite content-type, it's set to text/html in the response ...
 			this._props['{DAV:}getetag'] = res.headers.etag || null
-			Object.entries(this._updatedProperties).forEach(entry => {
+			Object.entries(this._updatedProperties).forEach((entry) => {
 				const [key, value] = entry
 
 				if (value === '{urn:ietf:params:xml:ns:carddav}address-data') {
@@ -200,14 +201,15 @@ export class DavObject extends DAVEventListener {
 		const [skeleton, dPropSet] = XMLUtility.getRootSkeleton(
 			[NS.DAV, 'propertyupdate'],
 			[NS.DAV, 'set'],
-			[NS.DAV, 'prop'])
+			[NS.DAV, 'prop'],
+		)
 
 		dPropSet.push(...propSet)
 
 		if (propSet.length >= 1) {
 			const body = XMLUtility.serialize(skeleton)
 			await this._request.propPatch(this._url, {}, body)
-			Object.entries(this._updatedProperties).forEach(entry => {
+			Object.entries(this._updatedProperties).forEach((entry) => {
 				const [key, value] = entry
 
 				if (value !== '{urn:ietf:params:xml:ns:carddav}address-data') {
@@ -299,5 +301,4 @@ export class DavObject extends DAVEventListener {
 	_registerPropSetFactory(factory) {
 		this._propSetFactory.push(factory)
 	}
-
 }

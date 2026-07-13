@@ -11,13 +11,13 @@
  *
  */
 export default class Parser {
-
 	/**
 	 *
 	 */
 	constructor() {
 		/**
 		 * Key Value Map of propertyName => parser
+		 *
 		 * @type {object}
 		 * @private
 		 */
@@ -34,7 +34,7 @@ export default class Parser {
 	 * @return {boolean}
 	 */
 	canParse(propertyName) {
-		return Object.prototype.hasOwnProperty.call(this._parser, propertyName)
+		return Object.hasOwn(this._parser, propertyName)
 	}
 
 	/**
@@ -609,5 +609,4 @@ export default class Parser {
 
 		return result
 	}
-
 }

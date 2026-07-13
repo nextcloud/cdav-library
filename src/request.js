@@ -7,22 +7,20 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+import axios from '@nextcloud/axios'
+import NetworkRequestAbortedError from './errors/networkRequestAbortedError.js'
+import NetworkRequestClientError from './errors/networkRequestClientError.js'
+import NetworkRequestError from './errors/networkRequestError.js'
+import NetworkRequestHttpError from './errors/networkRequestHttpError.js'
+import NetworkRequestServerError from './errors/networkRequestServerError.js'
 import * as NS from './utility/namespaceUtility.js'
 import * as XMLUtility from './utility/xmlUtility.js'
-import axios from '@nextcloud/axios'
-
-import NetworkRequestAbortedError from './errors/networkRequestAbortedError.js'
-import NetworkRequestError from './errors/networkRequestError.js'
-import NetworkRequestServerError from './errors/networkRequestServerError.js'
-import NetworkRequestClientError from './errors/networkRequestClientError.js'
-import NetworkRequestHttpError from './errors/networkRequestHttpError.js'
 
 /**
  * Request class is used to send any kind of request to the DAV server
  * It also parses incoming XML responses
  */
 export default class Request {
-
 	/**
 	 * Creates a new Request object
 	 *
@@ -165,7 +163,6 @@ export default class Request {
 	 * @return {Promise<{body: string|object, status: number, headers: object}>}
 	 */
 	async lock(url, headers = {}, body = null, abortSignal = null) {
-
 		// TODO - add parameters for Depth and Timeout
 
 		return this.request('LOCK', url, headers, body, abortSignal)
@@ -182,7 +179,6 @@ export default class Request {
 	 * @return {Promise<{body: string|object, status: number, headers: object}>}
 	 */
 	async unlock(url, headers = {}, body = null, abortSignal = null) {
-
 		// TODO - add parameter for Lock-Token
 
 		return this.request('UNLOCK', url, headers, body, abortSignal)
@@ -205,7 +201,7 @@ export default class Request {
 
 		// create request body
 		const [skeleton, dPropChildren] = XMLUtility.getRootSkeleton([NS.DAV, 'propfind'], [NS.DAV, 'prop'])
-		dPropChildren.push(...properties.map(p => ({ name: p })))
+		dPropChildren.push(...properties.map((p) => ({ name: p })))
 		const body = XMLUtility.serialize(skeleton)
 
 		return this.request('PROPFIND', url, headers, body, abortSignal)
@@ -265,7 +261,7 @@ export default class Request {
 	 * @return {Promise<{body: string|object, status: number, headers: object}>}
 	 */
 	async request(method, url, headers, body, abortSignal) {
-		const assignHeaders = Object.assign({}, getDefaultHeaders(), this.defaultHeaders, headers)
+		const assignHeaders = { ...getDefaultHeaders(), ...this.defaultHeaders, ...headers }
 		try {
 			const response = await axios.request({
 				url: this.absoluteUrl(url),
@@ -336,8 +332,7 @@ export default class Request {
 	/**
 	 * returns name of file / folder of a url
 	 *
-	 * @param url
-	 * @params {string} url
+	 * @param {string} url
 	 * @return {string}
 	 */
 	filename(url) {
@@ -353,8 +348,7 @@ export default class Request {
 	/**
 	 * returns pathname for a URL
 	 *
-	 * @param url
-	 * @params {string} url
+	 * @param {string} url
 	 * @return {string}
 	 */
 	pathname(url) {
@@ -417,7 +411,6 @@ export default class Request {
 
 		return result
 	}
-
 }
 
 /**

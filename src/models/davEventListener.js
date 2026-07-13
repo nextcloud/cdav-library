@@ -8,7 +8,6 @@
  */
 
 export default class DAVEventListener {
-
 	constructor() {
 		this._eventListeners = {}
 	}
@@ -65,13 +64,12 @@ export default class DAVEventListener {
 			}
 		})
 
-		listenersToCallAndRemove.forEach(listener => {
+		listenersToCallAndRemove.forEach((listener) => {
 			this.removeEventListener(type, listener)
 			listener(event)
 		})
-		listenersToCall.forEach(listener => {
+		listenersToCall.forEach((listener) => {
 			listener(event)
 		})
 	}
-
 }

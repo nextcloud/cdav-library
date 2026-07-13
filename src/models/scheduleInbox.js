@@ -7,12 +7,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { Calendar } from './calendar.js'
-import * as NS from '../utility/namespaceUtility.js'
 import scheduleInboxPropSet from '../propset/scheduleInboxPropSet.js'
+import * as NS from '../utility/namespaceUtility.js'
+import { Calendar } from './calendar.js'
 
 export default class ScheduleInbox extends Calendar {
-
 	/**
 	 * @inheritDoc
 	 */
@@ -33,5 +32,4 @@ export default class ScheduleInbox extends Calendar {
 			[NS.IETF_CALDAV, 'calendar-availability'],
 		])
 	}
-
 }

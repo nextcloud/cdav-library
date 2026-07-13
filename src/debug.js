@@ -9,6 +9,7 @@
 
 /**
  * creates a debug function bound to a context
+ *
  * @param {string} context
  * @return {Function}
  */

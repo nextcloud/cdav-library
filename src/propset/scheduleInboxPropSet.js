@@ -21,12 +21,12 @@ export default function calendarPropSet(props) {
 
 	Object.entries(props).forEach(([key, value]) => {
 		switch (key) {
-		case '{urn:ietf:params:xml:ns:caldav}calendar-availability':
-			xmlified.push({
-				name: [NS.IETF_CALDAV, 'calendar-availability'],
-				value: value.toString(),
-			})
-			break
+			case '{urn:ietf:params:xml:ns:caldav}calendar-availability':
+				xmlified.push({
+					name: [NS.IETF_CALDAV, 'calendar-availability'],
+					value: value.toString(),
+				})
+				break
 		}
 	})
 

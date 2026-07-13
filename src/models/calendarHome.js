@@ -7,17 +7,16 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { DavCollection } from './davCollection.js'
-import { Calendar } from './calendar.js'
-import { Subscription } from './subscription.js'
-import ScheduleInbox from './scheduleInbox.js'
-import ScheduleOutbox from './scheduleOutbox.js'
+import { debugFactory } from '../debug.js'
 import * as NS from '../utility/namespaceUtility.js'
 import * as XMLUtility from '../utility/xmlUtility.js'
-
-import { debugFactory } from '../debug.js'
+import { Calendar } from './calendar.js'
 import { CalendarTrashBin } from './calendarTrashBin.js'
+import { DavCollection } from './davCollection.js'
 import { DeletedCalendar } from './deletedCalendar.js'
+import ScheduleInbox from './scheduleInbox.js'
+import ScheduleOutbox from './scheduleOutbox.js'
+import { Subscription } from './subscription.js'
 const debug = debugFactory('CalendarHome')
 
 /**
@@ -29,7 +28,6 @@ const debug = debugFactory('CalendarHome')
  * a server to return multiple calendar homes though.
  */
 export class CalendarHome extends DavCollection {
-
 	/**
 	 * @inheritDoc
 	 */
@@ -71,12 +69,12 @@ export class CalendarHome extends DavCollection {
 		const collections = await super.findAll()
 
 		return {
-			calendars: collections.filter(c => c instanceof Calendar && !(c instanceof ScheduleInbox) && !(c instanceof Subscription) && !(c instanceof DeletedCalendar)),
-			deletedCalendars: collections.filter(c => c instanceof DeletedCalendar),
-			trashBins: collections.filter(c => c instanceof CalendarTrashBin),
-			subscriptions: collections.filter(c => c instanceof Subscription),
-			scheduleInboxes: collections.filter(c => c instanceof ScheduleInbox),
-			scheduleOutboxes: collections.filter(c => c instanceof ScheduleOutbox),
+			calendars: collections.filter((c) => c instanceof Calendar && !(c instanceof ScheduleInbox) && !(c instanceof Subscription) && !(c instanceof DeletedCalendar)),
+			deletedCalendars: collections.filter((c) => c instanceof DeletedCalendar),
+			trashBins: collections.filter((c) => c instanceof CalendarTrashBin),
+			subscriptions: collections.filter((c) => c instanceof Subscription),
+			scheduleInboxes: collections.filter((c) => c instanceof ScheduleInbox),
+			scheduleOutboxes: collections.filter((c) => c instanceof ScheduleOutbox),
 		}
 	}
 
@@ -254,12 +252,9 @@ export class CalendarHome extends DavCollection {
 	 * @return {Promise<void>}
 	 */
 	async enableBirthdayCalendar() {
-		const [skeleton] = XMLUtility.getRootSkeleton(
-			[NS.NEXTCLOUD, 'enable-birthday-calendar'],
-		)
+		const [skeleton] = XMLUtility.getRootSkeleton([NS.NEXTCLOUD, 'enable-birthday-calendar'])
 		const xmlBody = XMLUtility.serialize(skeleton)
 
 		await this._request.post(this.url, {}, xmlBody)
 	}
-
 }

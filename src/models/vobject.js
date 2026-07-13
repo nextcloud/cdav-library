@@ -7,14 +7,13 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { DavObject } from './davObject.js'
 import * as NS from '../utility/namespaceUtility.js'
+import { DavObject } from './davObject.js'
 
 /**
  * @class
  */
 export class VObject extends DavObject {
-
 	/**
 	 * Creates a VObject that is supposed to store calendar-data
 	 * as specified in RFC 5545.
@@ -37,5 +36,4 @@ export class VObject extends DavObject {
 			[NS.IETF_CALDAV, 'calendar-data'],
 		])
 	}
-
 }

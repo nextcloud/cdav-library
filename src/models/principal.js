@@ -7,11 +7,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { DavObject } from './davObject.js'
+import prinicipalPropSet from '../propset/principalPropSet.js'
 import * as NS from '../utility/namespaceUtility.js'
 import * as XMLUtility from '../utility/xmlUtility.js'
-
-import prinicipalPropSet from '../propset/principalPropSet.js'
+import { DavObject } from './davObject.js'
 
 /**
  * @typedef  {object}   PrincipalPropfindOptions
@@ -24,7 +23,6 @@ import prinicipalPropSet from '../propset/principalPropSet.js'
  * @class
  */
 export class Principal extends DavObject {
-
 	/**
 	 * Creates an object that represents a single principal
 	 * as specified in RFC 3744
@@ -124,7 +122,7 @@ export class Principal extends DavObject {
 						this.roomBuildingAddress,
 					]
 					return data
-						.filter(value => !!value)
+						.filter((value) => !!value)
 						.join(', ')
 				},
 			},
@@ -213,9 +211,7 @@ export class Principal extends DavObject {
 			)
 		}
 		if (options.enableCardDAV) {
-			list.push(
-				[NS.IETF_CARDDAV, 'addressbook-home-set'],
-			)
+			list.push([NS.IETF_CARDDAV, 'addressbook-home-set'])
 		}
 
 		return list
@@ -241,7 +237,8 @@ export class Principal extends DavObject {
 		const [skeleton, dPropSet] = XMLUtility.getRootSkeleton(
 			[NS.DAV, 'propertyupdate'],
 			[NS.DAV, 'set'],
-			[NS.DAV, 'prop'])
+			[NS.DAV, 'prop'],
+		)
 
 		dPropSet.push(...propSet)
 
@@ -251,5 +248,4 @@ export class Principal extends DavObject {
 			this._updatedProperties = []
 		}
 	}
-
 }

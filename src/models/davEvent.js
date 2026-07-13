@@ -8,7 +8,6 @@
  */
 
 export default class DAVEvent {
-
 	/**
 	 *
 	 * @param {string} type
@@ -19,5 +18,4 @@ export default class DAVEvent {
 			type,
 		}, options)
 	}
-
 }

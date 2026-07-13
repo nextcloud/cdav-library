@@ -7,15 +7,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { DavObject } from './davObject.js'
-import * as NS from '../utility/namespaceUtility.js'
 import vcardPropSet from '../propset/vcardPropSet.js'
+import * as NS from '../utility/namespaceUtility.js'
+import { DavObject } from './davObject.js'
 
 /**
  * @class
  */
 export class VCard extends DavObject {
-
 	/**
 	 * Creates a VCard that is supposed to store address-data
 	 * as specified in RFC 6350.
@@ -42,5 +41,4 @@ export class VCard extends DavObject {
 			[NS.IETF_CARDDAV, 'address-data'],
 		])
 	}
-
 }
