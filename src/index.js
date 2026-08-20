@@ -199,6 +199,18 @@ export default class DavClient {
 	}
 
 	/**
+	 * Performs a principal property based on the building name of a room
+	 *
+	 * @param {string} name Name of the building the room is in
+	 * @return {Promise<Principal[]>}
+	 */
+	async principalPropertySearchByBuildingName(name) {
+		return this.principalPropertySearch([
+			{ name: [NS.NEXTCLOUD, 'room-building-name'] },
+		], name)
+	}
+
+	/**
 	 * Performs a principal property based on the address of a room
 	 *
 	 * @param {string} address Address of the building the room is in

@@ -61,6 +61,7 @@ export class Principal extends DavObject {
 		// Room and resource booking related
 		this._exposeProperty('roomType', NS.NEXTCLOUD, 'room-type')
 		this._exposeProperty('roomSeatingCapacity', NS.NEXTCLOUD, 'room-seating-capacity')
+		this._exposeProperty('roomBuildingName', NS.NEXTCLOUD, 'room-building-name')
 		this._exposeProperty('roomBuildingAddress', NS.NEXTCLOUD, 'room-building-address')
 		this._exposeProperty('roomBuildingStory', NS.NEXTCLOUD, 'room-building-story')
 		this._exposeProperty('roomBuildingRoomNumber', NS.NEXTCLOUD, 'room-building-room-number')
@@ -204,6 +205,7 @@ export class Principal extends DavObject {
 				[NS.NEXTCLOUD, 'resource-contact-person-vcard'],
 				[NS.NEXTCLOUD, 'room-type'],
 				[NS.NEXTCLOUD, 'room-seating-capacity'],
+				[NS.NEXTCLOUD, 'room-building-name'],
 				[NS.NEXTCLOUD, 'room-building-address'],
 				[NS.NEXTCLOUD, 'room-building-story'],
 				[NS.NEXTCLOUD, 'room-building-room-number'],

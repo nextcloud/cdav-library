@@ -192,6 +192,7 @@ export default class Parser {
 		this.registerParser('{http://nextcloud.com/ns}language', Parser.text)
 		this.registerParser('{http://nextcloud.com/ns}room-type', Parser.text)
 		this.registerParser('{http://nextcloud.com/ns}room-seating-capacity', Parser.decInt)
+		this.registerParser('{http://nextcloud.com/ns}room-building-name', Parser.text)
 		this.registerParser('{http://nextcloud.com/ns}room-building-address', Parser.text)
 		this.registerParser('{http://nextcloud.com/ns}room-building-story', Parser.text)
 		this.registerParser('{http://nextcloud.com/ns}room-building-room-number', Parser.text)

@@ -105,3 +105,29 @@ describe('calendar home helpers', () => {
 		await expect(client.getCalendarHomeUrlForPrincipal('https://cloud.example.com/remote.php/dav/principals/users/bob/')).resolves.toBeNull()
 	})
 })
+
+describe('principalPropertySearchByBuildingName', () => {
+	it('searches by the room-building-name property and returns matching principals', async () => {
+		const client = new Client({ rootUrl: 'https://cloud.example.com/remote.php/dav/' })
+		const reportSpy = vi.spyOn(client._request, 'report').mockResolvedValue({
+			body: {
+				'/remote.php/dav/principals/rooms/room1/': {
+					[`{${NS.NEXTCLOUD}}room-building-name`]: 'Headquarters',
+				},
+			},
+		})
+		vi.spyOn(client._request, 'pathname').mockImplementation((path) => path)
+
+		const result = await client.principalPropertySearchByBuildingName('Headquarters')
+
+		expect(reportSpy).toHaveBeenCalledOnce()
+		const [url, headers, xml] = reportSpy.mock.calls[0]
+		expect(url).toBe(client.rootUrl)
+		expect(headers).toEqual({ Depth: 0 })
+		expect(xml).toContain('room-building-name')
+		expect(xml).toContain('Headquarters')
+
+		expect(result).toHaveLength(1)
+		expect(result[0].url).toBe('/remote.php/dav/principals/rooms/room1/')
+	})
+})
