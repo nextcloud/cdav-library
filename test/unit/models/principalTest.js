@@ -401,6 +401,7 @@ describe('Principal model', () => {
 			['http://nextcloud.com/ns', 'resource-contact-person-vcard'],
 			['http://nextcloud.com/ns', 'room-type'],
 			['http://nextcloud.com/ns', 'room-seating-capacity'],
+			['http://nextcloud.com/ns', 'room-building-name'],
 			['http://nextcloud.com/ns', 'room-building-address'],
 			['http://nextcloud.com/ns', 'room-building-story'],
 			['http://nextcloud.com/ns', 'room-building-room-number'],
