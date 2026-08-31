@@ -131,6 +131,18 @@ describe('Calendar prop-set', () => {
 		]);
 	});
 
+	it('should serialize {http://nextcloud.com/ns}disable-alarm-notifications correctly', () => {
+		expect(calendarPropSet({
+			'{Foo:}bar': 123,
+			'{http://nextcloud.com/ns}disable-alarm-notifications': true
+		})).toEqual([
+			{
+				name: ['http://nextcloud.com/ns', 'disable-alarm-notifications'],
+				value: '1'
+			}
+		]);
+	});
+
 	it('should serialize {urn:ietf:params:xml:ns:caldav}schedule-calendar-transp correctly - transparent', () => {
 		expect(calendarPropSet({
 			'{Foo:}bar': 123,

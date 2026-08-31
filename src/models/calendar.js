@@ -56,6 +56,7 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 		super._exposeProperty('transparency', NS.IETF_CALDAV, 'schedule-calendar-transp', true)
 		super._exposeProperty('defaultAlarmPartDay', NS.NEXTCLOUD, 'default-alarm-part-day', true)
 		super._exposeProperty('defaultAlarmFullDay', NS.NEXTCLOUD, 'default-alarm-full-day', true)
+		super._exposeProperty('disableAlarmNotifications', NS.NEXTCLOUD, 'disable-alarm-notifications', true)
 	}
 
 	/**
@@ -282,6 +283,7 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 			[NS.OWNCLOUD, 'calendar-enabled'],
 			[NS.NEXTCLOUD, 'default-alarm-part-day'],
 			[NS.NEXTCLOUD, 'default-alarm-full-day'],
+			[NS.NEXTCLOUD, 'disable-alarm-notifications'],
 			[NS.NEXTCLOUD, 'owner-displayname'],
 			[NS.NEXTCLOUD, 'trash-bin-retention-duration'],
 			[NS.NEXTCLOUD, 'deleted-at'],

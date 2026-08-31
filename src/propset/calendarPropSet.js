@@ -85,6 +85,12 @@ export default function calendarPropSet(props) {
 					value,
 				})
 				break
+			case '{http://nextcloud.com/ns}disable-alarm-notifications':
+				xmlified.push({
+					name: [NS.NEXTCLOUD, 'disable-alarm-notifications'],
+					value: value ? '1' : '0',
+				})
+				break
 			case '{urn:ietf:params:xml:ns:caldav}schedule-calendar-transp':
 				xmlified.push({
 					name: [NS.IETF_CALDAV, 'schedule-calendar-transp'],
