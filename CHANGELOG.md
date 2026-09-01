@@ -1,3 +1,29 @@
+# [2.8.0](https://github.com/nextcloud/cdav-library/compare/v2.7.0...v2.8.0) (2026-08-31)
+
+
+### Features
+
+* **calendar:** parse {http://nextcloud.com/ns}disable-alarm-notifications property ([ea9825c](https://github.com/nextcloud/cdav-library/commit/ea9825c6e9bb5b67f92ba7b4bfa7b49a04ccd093))
+
+
+
+# [2.7.0](https://github.com/nextcloud/cdav-library/compare/v2.6.2...v2.7.0) (2026-08-20)
+
+
+### Bug Fixes
+
+* **deps:** Fix npm audit ([ab0418c](https://github.com/nextcloud/cdav-library/commit/ab0418c2fec677a2c02d83d17071b802eea02ed7))
+* **deps:** Fix npm audit ([8ec7a12](https://github.com/nextcloud/cdav-library/commit/8ec7a1261efac1be83077568367218c813d3b34f))
+* **deps:** Fix npm audit ([896566b](https://github.com/nextcloud/cdav-library/commit/896566b505b27c7ef05756948cfcaa70fb280dc9))
+* eslint config and apply changes ([82faf37](https://github.com/nextcloud/cdav-library/commit/82faf37d4c915eae884ddea8b805ba1c9c150f70))
+
+
+### Features
+
+* add building name ([cc19cca](https://github.com/nextcloud/cdav-library/commit/cc19cca6b5a1a1c5e6ee231a371371bb8e8979bc))
+
+
+
 ## [2.6.1](https://github.com/nextcloud/cdav-library/compare/v2.6.0...v2.6.1) (2026-06-09)
 
 
