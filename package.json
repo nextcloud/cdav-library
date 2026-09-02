@@ -24,7 +24,8 @@
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
     "lint": "eslint src",
-    "lint:fix": "eslint src --fix"
+    "lint:fix": "eslint src --fix",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
   },
   "repository": {
     "type": "git",
@@ -56,6 +57,7 @@
     "@nextcloud/vite-config": "^2.5.4",
     "@vitest/browser": "^4.1.11",
     "@vitest/coverage-istanbul": "^4.1.11",
+    "conventional-changelog-cli": "^5.0.0",
     "jsdom": "^30.0.1",
     "vite": "^7.3.6",
     "vitest": "^4.1.11",
