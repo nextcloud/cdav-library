@@ -29,7 +29,6 @@ const debug = debugFactory('AddressBook')
  *
  * The first two allowing read-write access
  *
- * @augments DavCollection
  */
 export class AddressBook extends davCollectionShareable(DavCollection) {
 	/**
@@ -40,6 +39,21 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 
 		super._registerObjectFactory('text/vcard', VCard)
 		super._registerPropSetFactory(addressBookPropSet)
+
+		// Type declarations for properties installed dynamically below.
+		/**
+		 * @type {string | undefined}
+		 */
+		this.description
+		/**
+		 * @type {boolean | undefined}
+		 */
+		this.enabled
+		/**
+		 * @type {boolean | undefined}
+		 * @readonly
+		 */
+		this.readOnly
 
 		super._exposeProperty('description', NS.IETF_CARDDAV, 'addressbook-description', true)
 		super._exposeProperty('enabled', NS.OWNCLOUD, 'enabled', true)

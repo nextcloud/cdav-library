@@ -22,6 +22,28 @@ export class DeletedCalendarObject extends VObject {
 	constructor(...args) {
 		super(...args)
 
+		// Type declarations for properties installed dynamically below.
+		/**
+		 * @type {string | undefined}
+		 * @readonly
+		 */
+		this.calendarUri
+		/**
+		 * @type {string | undefined}
+		 * @readonly
+		 */
+		this.sourceCalendarUri
+		/**
+		 * @type {string | undefined}
+		 * @readonly
+		 */
+		this.calendarOwnerPrincipalUri
+		/**
+		 * @type {Date | undefined}
+		 * @readonly
+		 */
+		this.deletedAt
+
 		super._exposeProperty('calendarUri', NS.NEXTCLOUD, 'calendar-uri')
 		super._exposeProperty('sourceCalendarUri', NS.NEXTCLOUD, 'source-calendar-uri')
 		super._exposeProperty('calendarOwnerPrincipalUri', NS.NEXTCLOUD, 'calendar-owner-principal-uri')

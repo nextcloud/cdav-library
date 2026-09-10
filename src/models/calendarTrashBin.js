@@ -21,6 +21,13 @@ export class CalendarTrashBin extends DavCollection {
 
 		super._registerObjectFactory('text/calendar', DeletedCalendarObject)
 
+		// Type declarations for properties installed dynamically below.
+		/**
+		 * @type {number | undefined}
+		 * @readonly
+		 */
+		this.retentionDuration
+
 		super._exposeProperty('retentionDuration', NS.NEXTCLOUD, 'trash-bin-retention-duration')
 	}
 

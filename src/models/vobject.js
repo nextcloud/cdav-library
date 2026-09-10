@@ -25,6 +25,12 @@ export class VObject extends DavObject {
 	constructor(...args) {
 		super(...args)
 
+		// Type declarations for properties installed dynamically below.
+		/**
+		 * @type {string | undefined}
+		 */
+		this.data
+
 		super._exposeProperty('data', NS.IETF_CALDAV, 'calendar-data', true)
 	}
 
