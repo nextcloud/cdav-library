@@ -21,6 +21,12 @@ export default class ScheduleInbox extends Calendar {
 		super._registerPropSetFactory(scheduleInboxPropSet)
 
 		// https://tools.ietf.org/html/rfc7953#section-7.2.4
+		// Type declarations for properties installed dynamically below.
+		/**
+		 * @type {string | undefined}
+		 */
+		this.availability
+
 		super._exposeProperty('availability', NS.IETF_CALDAV, 'calendar-availability', true)
 	}
 

@@ -7,6 +7,11 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+/**
+ * @typedef {import('./davCollection.js').DavCollection} DavCollection
+ * @typedef {import('../request.js').default} Request
+ */
+
 import { debugFactory } from '../debug.js'
 import NetworkRequestClientError from '../errors/networkRequestClientError.js'
 import * as NS from '../utility/namespaceUtility.js'
@@ -43,6 +48,22 @@ export class DavObject extends DAVEventListener {
 			// factories
 			_propSetFactory: [],
 		})
+
+		// Type declarations for properties installed dynamically below.
+		/**
+		 * @type {string | null | undefined}
+		 */
+		this.etag
+		/**
+		 * @type {string | undefined}
+		 * @readonly
+		 */
+		this.contenttype
+		/**
+		 * @type {string}
+		 * @readonly
+		 */
+		this.url
 
 		this._exposeProperty('etag', NS.DAV, 'getetag', true)
 		this._exposeProperty('contenttype', NS.DAV, 'getcontenttype')

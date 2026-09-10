@@ -6,7 +6,7 @@ SPDX-PackageSupplier = "Nextcloud <info@nextcloud.com>"
 SPDX-PackageDownloadLocation = "https://github.com/nextcloud/cdav-library"
 
 [[annotations]]
-path = ["package.json", "package-lock.json", "test/assets/unit/parser/dprop.xml"]
+path = ["package.json", "package-lock.json", "tsconfig.json", "test/types/*.json", "test/assets/unit/parser/dprop.xml"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2018 Nextcloud GmbH and Nextcloud contributors"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
