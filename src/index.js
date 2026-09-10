@@ -51,7 +51,7 @@ export default class DavClient {
 		/**
 		 * Principal object of current user
 		 *
-		 * @type {Principal}
+		 * @type {Principal|null}
 		 */
 		this.currentUserPrincipal = null
 
@@ -111,7 +111,7 @@ export default class DavClient {
 	/**
 	 * initializes the DAVClient
 	 *
-	 * @param {object} options
+	 * @param {import('./models/principal.js').PrincipalPropfindOptions} options
 	 * @return {Promise<DavClient>}
 	 */
 	async connect(options = { enableCalDAV: false, enableCardDAV: false }) {
@@ -227,7 +227,7 @@ export default class DavClient {
 	 *
 	 * @param {string} address Address of the building the room is in
 	 * @param {string} story Story inside the building the room is in
-	 * @return {Promise<[]>}
+	 * @return {Promise<Principal[]>}
 	 */
 	async principalPropertySearchByAddressAndStory(address, story) {
 		const [skeleton] = XMLUtility.getRootSkeleton([NS.DAV, 'principal-property-search'])
@@ -388,7 +388,7 @@ export default class DavClient {
 	 *
 	 * @param {Array} props
 	 * @param {string} match
-	 * @param {string} test 'anyof', 'allof' or none
+	 * @param {'anyof'|'allof'} [test] 'anyof', 'allof' or none
 	 * @return {Promise<Principal[]>}
 	 */
 	async principalPropertySearch(props, match, test) {
@@ -437,7 +437,7 @@ export default class DavClient {
 	 * finds one principal at a given principalUrl
 	 *
 	 * @param {string} principalUrl
-	 * @return {Promise<Principal>}
+	 * @return {Promise<Principal|undefined>}
 	 */
 	async findPrincipal(principalUrl) {
 		return this._request.propFind(principalUrl, Principal.getPropFindList()).then(({ body }) => {

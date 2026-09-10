@@ -7,6 +7,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+/**
+ * @typedef {import('./davEvent.js').default} DAVEvent
+ */
+
 export default class DAVEventListener {
 	constructor() {
 		this._eventListeners = {}

@@ -7,6 +7,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+/**
+ * @typedef {import('./vobject.js').VObject} VObject
+ */
+
 import { debugFactory } from '../debug.js'
 import * as NS from '../utility/namespaceUtility.js'
 import * as XMLUtility from '../utility/xmlUtility.js'

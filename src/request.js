@@ -26,7 +26,7 @@ export default class Request {
 	 *
 	 * @param {string} baseUrl - root url of DAV server, use OC.remote('dav')
 	 * @param {{[name: string]: any}} [defaultHeaders] - additional HTTP headers to send with each request
-	 * @param {import('./parser.js').Parser} parser - instance of Parser class
+	 * @param {import('./parser.js').default} parser - instance of Parser class
 	 */
 	constructor(baseUrl, parser, defaultHeaders = {}) {
 		this.baseUrl = baseUrl

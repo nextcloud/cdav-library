@@ -28,6 +28,21 @@ export class VCard extends DavObject {
 
 		this._registerPropSetFactory(vcardPropSet)
 
+		// Type declarations for properties installed dynamically below.
+		/**
+		 * @type {string | undefined}
+		 */
+		this.data
+		/**
+		 * @type {boolean | undefined}
+		 * @readonly
+		 */
+		this.hasphoto
+		/**
+		 * @type {boolean | undefined}
+		 */
+		this.favorite
+
 		super._exposeProperty('data', NS.IETF_CARDDAV, 'address-data', true)
 		super._exposeProperty('hasphoto', NS.NEXTCLOUD, 'has-photo', false)
 		super._exposeProperty('favorite', NS.NEXTCLOUD, 'favorite', true)
