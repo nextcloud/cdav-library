@@ -14,15 +14,23 @@ const debug = debugFactory('DavCollectionPublishable')
 
 /**
  *
- * @param Base
+ * @template {new (...args: any[]) => object} T
+ * @param {T} Base
  */
 export function davCollectionPublishable(Base) {
-	return class extends Base {
+	class Publishable extends Base {
 		/**
 		 * @inheritDoc
 		 */
 		constructor(...args) {
 			super(...args)
+
+			// Type declarations for properties installed dynamically below.
+			/**
+			 * @type {string | undefined}
+			 * @readonly
+			 */
+			this.publishURL
 
 			super._exposeProperty('publishURL', NS.CALENDARSERVER, 'publish-url')
 		}
@@ -68,4 +76,7 @@ export function davCollectionPublishable(Base) {
 			])
 		}
 	}
+
+	// Keep inferred member types without the implicit index signature of a JS mixin.
+	return /** @type {T & (new (...args: any[]) => Pick<Publishable, 'publishURL' | 'publish' | 'unpublish'>)} */ (Publishable)
 }

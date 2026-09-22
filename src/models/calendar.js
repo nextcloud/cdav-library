@@ -36,7 +36,6 @@ const debug = debugFactory('Calendar')
  *
  * The first seven allowing read-write access
  *
- * @augments DavCollection
  */
 export class Calendar extends davCollectionPublishable(davCollectionShareable(DavCollection)) {
 	/**
@@ -47,6 +46,45 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 
 		super._registerObjectFactory('text/calendar', VObject)
 		super._registerPropSetFactory(calendarPropSet)
+
+		// Type declarations for properties installed dynamically below.
+		/**
+		 * @type {string | undefined}
+		 */
+		this.color
+		/**
+		 * @type {boolean | undefined}
+		 */
+		this.enabled
+		/**
+		 * @type {number | undefined}
+		 */
+		this.order
+		/**
+		 * @type {string | undefined}
+		 */
+		this.timezone
+		/**
+		 * @type {string[] | undefined}
+		 * @readonly
+		 */
+		this.components
+		/**
+		 * @type {string | undefined}
+		 */
+		this.transparency
+		/**
+		 * @type {number | undefined}
+		 */
+		this.defaultAlarmPartDay
+		/**
+		 * @type {number | undefined}
+		 */
+		this.defaultAlarmFullDay
+		/**
+		 * @type {boolean | undefined}
+		 */
+		this.disableAlarmNotifications
 
 		super._exposeProperty('color', NS.APPLE, 'calendar-color', true)
 		super._exposeProperty('enabled', NS.OWNCLOUD, 'calendar-enabled', true)
@@ -92,7 +130,7 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 	/**
 	 * find all VObjects in a time-range filtered by type
 	 *
-	 * @param {number} type
+	 * @param {string} type
 	 * @param {Date} from
 	 * @param {Date} to
 	 * @return {Promise<VObject[]>}
@@ -122,7 +160,7 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 	/**
 	 * create a VObject inside this calendar
 	 *
-	 * @param data
+	 * @param {string} data
 	 * @return {Promise<VObject>}
 	 */
 	async createVObject(data) {

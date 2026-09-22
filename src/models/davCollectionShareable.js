@@ -14,15 +14,28 @@ const debug = debugFactory('DavCollectionShareable')
 
 /**
  *
- * @param Base
+ * @template {new (...args: any[]) => object} T
+ * @param {T} Base
  */
 export function davCollectionShareable(Base) {
-	return class extends Base {
+	class Shareable extends Base {
 		/**
 		 * @inheritDoc
 		 */
 		constructor(...args) {
 			super(...args)
+
+			// Type declarations for properties installed dynamically below.
+			/**
+			 * @type {Array<{href: string, access: string[], 'common-name': string | null, 'invite-accepted': boolean}> | undefined}
+			 * @readonly
+			 */
+			this.shares
+			/**
+			 * @type {string[] | undefined}
+			 * @readonly
+			 */
+			this.allowedSharingModes
 
 			super._exposeProperty('shares', NS.OWNCLOUD, 'invite')
 			super._exposeProperty('allowedSharingModes', NS.CALENDARSERVER, 'allowed-sharing-modes')
@@ -144,4 +157,7 @@ export function davCollectionShareable(Base) {
 			])
 		}
 	}
+
+	// Keep inferred member types without the implicit index signature of a JS mixin.
+	return /** @type {T & (new (...args: any[]) => Pick<Shareable, 'shares' | 'allowedSharingModes' | 'share' | 'unshare' | 'isShareable' | 'isPublishable'>)} */ (Shareable)
 }

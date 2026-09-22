@@ -23,6 +23,28 @@ export class Subscription extends Calendar {
 	constructor(...args) {
 		super(...args)
 
+		// Type declarations for properties installed dynamically below.
+		/**
+		 * @type {string | undefined}
+		 */
+		this.source
+		/**
+		 * @type {string | undefined}
+		 */
+		this.refreshRate
+		/**
+		 * @type {boolean | undefined}
+		 */
+		this.stripTodos
+		/**
+		 * @type {boolean | undefined}
+		 */
+		this.stripAlarms
+		/**
+		 * @type {boolean | undefined}
+		 */
+		this.stripAttachments
+
 		super._exposeProperty('source', NS.CALENDARSERVER, 'source', true)
 		super._exposeProperty('refreshRate', NS.APPLE, 'refreshrate', true)
 		super._exposeProperty('stripTodos', NS.CALENDARSERVER, 'subscribed-strip-todos', true)

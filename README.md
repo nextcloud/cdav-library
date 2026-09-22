@@ -25,6 +25,29 @@ npm run dev
 npm run build
 
 ```
+## TypeScript definitions
+
+`npm run build` generates `dist/index.d.ts` for ES modules and
+`dist/index.d.cts` for CommonJS. Development and watch builds also generate
+these files. They are included in the npm package and resolved automatically:
+
+```typescript
+import DavClient from '@nextcloud/cdav-library'
+
+const client = new DavClient({ rootUrl: 'https://example.com/remote.php/dav/' })
+await client.connect({ enableCalDAV: true, enableCardDAV: true })
+```
+
+Definitions are generated from the JavaScript and JSDoc using the existing Vite
+build. Update the JSDoc when changing the API; do not edit generated files in
+`dist`. Dynamically exposed model properties need a JSDoc-annotated `this.property`
+reference before they are installed in the constructor. Some legacy APIs still
+use broad types where their JSDoc does not provide more detail.
+
+Run `npm run test:types` to build and check strict TypeScript consumers with
+NodeNext (ES modules and CommonJS) and bundler module resolution. To check an
+existing build, use `npm run check:types`.
+
 ## Running tests
 You can use the provided npm command to run all tests by using:
 

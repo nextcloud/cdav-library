@@ -7,6 +7,10 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
+/**
+ * @typedef {import('../request.js').default} Request
+ */
+
 import { debugFactory } from '../debug.js'
 import davCollectionPropSet from '../propset/davCollectionPropSet.js'
 import * as NS from '../utility/namespaceUtility.js'
@@ -51,6 +55,37 @@ export class DavCollection extends DAVEventListener {
 		})
 
 		this._registerPropSetFactory(davCollectionPropSet)
+
+		// Type declarations for properties installed dynamically below.
+		/**
+		 * @type {string | undefined}
+		 */
+		this.displayname
+		/**
+		 * @type {string | undefined}
+		 * @readonly
+		 */
+		this.owner
+		/**
+		 * @type {string[] | undefined}
+		 * @readonly
+		 */
+		this.resourcetype
+		/**
+		 * @type {string | undefined}
+		 * @readonly
+		 */
+		this.syncToken
+		/**
+		 * @type {string[] | undefined}
+		 * @readonly
+		 */
+		this.currentUserPrivilegeSet
+		/**
+		 * @type {string}
+		 * @readonly
+		 */
+		this.url
 
 		this._exposeProperty('displayname', NS.DAV, 'displayname', true)
 		this._exposeProperty('owner', NS.DAV, 'owner')

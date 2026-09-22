@@ -44,6 +44,127 @@ export class Principal extends DavObject {
 
 		this._registerPropSetFactory(prinicipalPropSet)
 
+		// Type declarations for properties installed dynamically below.
+		/**
+		 * @type {string | undefined}
+		 * @readonly
+		 */
+		this.displayname
+		/**
+		 * @type {string | undefined}
+		 * @readonly
+		 */
+		this.calendarUserType
+		/**
+		 * @type {string[] | undefined}
+		 * @readonly
+		 */
+		this.calendarUserAddressSet
+		/**
+		 * @type {string | undefined}
+		 * @readonly
+		 */
+		this.principalUrl
+		/**
+		 * @type {string | undefined}
+		 * @readonly
+		 */
+		this.email
+		/**
+		 * @type {string | undefined}
+		 * @readonly
+		 */
+		this.language
+		/**
+		 * @type {string[] | undefined}
+		 * @readonly
+		 */
+		this.calendarHomes
+		/**
+		 * @type {string | undefined}
+		 * @readonly
+		 */
+		this.scheduleInbox
+		/**
+		 * @type {string | undefined}
+		 * @readonly
+		 */
+		this.scheduleOutbox
+		/**
+		 * @type {string | undefined}
+		 */
+		this.scheduleDefaultCalendarUrl
+		/**
+		 * @type {string[] | undefined}
+		 * @readonly
+		 */
+		this.addressBookHomes
+		/**
+		 * @type {string | undefined}
+		 * @readonly
+		 */
+		this.roomType
+		/**
+		 * @type {number | undefined}
+		 * @readonly
+		 */
+		this.roomSeatingCapacity
+		/**
+		 * @type {string | undefined}
+		 * @readonly
+		 */
+		this.roomBuildingName
+		/**
+		 * @type {string | undefined}
+		 * @readonly
+		 */
+		this.roomBuildingAddress
+		/**
+		 * @type {string | undefined}
+		 * @readonly
+		 */
+		this.roomBuildingStory
+		/**
+		 * @type {string | undefined}
+		 * @readonly
+		 */
+		this.roomBuildingRoomNumber
+		/**
+		 * @type {string | undefined}
+		 * @readonly
+		 */
+		this.roomFeatures
+		/**
+		 * @type {string}
+		 * @readonly
+		 */
+		this.principalScheme
+		/**
+		 * @type {string | null}
+		 * @readonly
+		 */
+		this.userId
+		/**
+		 * @type {string | null}
+		 * @readonly
+		 */
+		this.groupId
+		/**
+		 * @type {string | null}
+		 * @readonly
+		 */
+		this.resourceId
+		/**
+		 * @type {string | null}
+		 * @readonly
+		 */
+		this.roomId
+		/**
+		 * @type {string}
+		 * @readonly
+		 */
+		this.roomAddress
+
 		this._exposeProperty('displayname', NS.DAV, 'displayname')
 		this._exposeProperty('calendarUserType', NS.IETF_CALDAV, 'calendar-user-type')
 		this._exposeProperty('calendarUserAddressSet', NS.IETF_CALDAV, 'calendar-user-address-set')
