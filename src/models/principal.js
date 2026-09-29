@@ -187,6 +187,15 @@ export class Principal extends DavObject {
 		this._exposeProperty('roomBuildingStory', NS.NEXTCLOUD, 'room-building-story')
 		this._exposeProperty('roomBuildingRoomNumber', NS.NEXTCLOUD, 'room-building-room-number')
 		this._exposeProperty('roomFeatures', NS.NEXTCLOUD, 'room-features')
+		this._exposeProperty('resourceType', NS.NEXTCLOUD, 'resource-type')
+		this._exposeProperty('resourceVehicleType', NS.NEXTCLOUD, 'resource-vehicle-type')
+		this._exposeProperty('resourceVehicleMake', NS.NEXTCLOUD, 'resource-vehicle-make')
+		this._exposeProperty('resourceVehicleModel', NS.NEXTCLOUD, 'resource-vehicle-model')
+		this._exposeProperty('resourceVehicleIsElectric', NS.NEXTCLOUD, 'resource-vehicle-is-electric')
+		this._exposeProperty('resourceVehicleRange', NS.NEXTCLOUD, 'resource-vehicle-range')
+		this._exposeProperty('resourceVehicleSeatingCapacity', NS.NEXTCLOUD, 'resource-vehicle-seating-capacity')
+		this._exposeProperty('resourceContactPerson', NS.NEXTCLOUD, 'resource-contact-person')
+		this._exposeProperty('resourceContactPersonVcard', NS.NEXTCLOUD, 'resource-contact-person-vcard')
 
 		Object.defineProperties(this, {
 			principalScheme: {
