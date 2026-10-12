@@ -8,6 +8,22 @@ import { describe, expect, it, vi } from 'vitest'
 import Client from '../../src/index.js'
 import * as NS from '../../src/utility/namespaceUtility.js'
 
+describe('connect', () => {
+	it('requires CalDAV or CardDAV options before making requests', async () => {
+		const client = new Client({ rootUrl: 'https://cloud.example.com/remote.php/dav/' })
+		const propFindSpy = vi.spyOn(client._request, 'propFind')
+		const optionsSpy = vi.spyOn(client._request, 'options')
+		const error = 'At least one of enableCalDAV or enableCardDAV must be true'
+
+		await expect(client.connect()).rejects.toThrow(error)
+		await expect(client.connect({})).rejects.toThrow(error)
+		await expect(client.connect({ enableCalDAV: false, enableCardDAV: false })).rejects.toThrow(error)
+
+		expect(propFindSpy).not.toHaveBeenCalled()
+		expect(optionsSpy).not.toHaveBeenCalled()
+	})
+})
+
 describe('Client', () => {
 	it('should extract advertised DAV features', () => {
 		const headers = {
