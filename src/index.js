@@ -111,10 +111,16 @@ export default class DavClient {
 	/**
 	 * initializes the DAVClient
 	 *
+	 * At least one of enableCalDAV or enableCardDAV must be true.
+	 *
 	 * @param {import('./models/principal.js').PrincipalPropfindOptions} options
 	 * @return {Promise<DavClient>}
 	 */
 	async connect(options = { enableCalDAV: false, enableCardDAV: false }) {
+		if (!options?.enableCalDAV && !options?.enableCardDAV) {
+			throw new Error('At least one of enableCalDAV or enableCardDAV must be true')
+		}
+
 		if (this._isConnected) {
 			return this
 		}
@@ -800,6 +806,10 @@ export default class DavClient {
 	 * @private
 	 */
 	_extractAdvertisedDavFeatures(headers) {
+		if (typeof headers.dav !== 'string' || headers.dav.trim() === '') {
+			throw new Error('OPTIONS response is missing the DAV header; check DAV server or proxy configuration')
+		}
+
 		const dav = headers.dav
 		this.advertisedFeatures.push(...dav.split(',').map((s) => s.trim()))
 	}
