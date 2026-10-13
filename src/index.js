@@ -23,7 +23,6 @@ export { debugFactory as debug, NS as namespaces }
  */
 export default class DavClient {
 	/**
-	 * @param {object} options
 	 * @param {object} options Client configuration.
 	 * @param {string} options.rootUrl Root URL of the DAV server.
 	 * @param {{[name: string]: string}} [options.defaultHeaders] HTTP header names and string values to apply to each request.
