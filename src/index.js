@@ -24,9 +24,10 @@ export { debugFactory as debug, NS as namespaces }
 export default class DavClient {
 	/**
 	 * @param {object} options
-	 * @param {string} options.rootUrl
-	 * @param {{[name: string]: any}} [options.defaultHeaders] A dictionary of default headers to apply to each request.
-	 * @param {object} factories
+	 * @param {object} options Client configuration.
+	 * @param {string} options.rootUrl Root URL of the DAV server.
+	 * @param {{[name: string]: string}} [options.defaultHeaders] HTTP header names and string values to apply to each request.
+	 * @param {object} factories Legacy parameter; currently unused.
 	 */
 	// eslint-disable-next-line no-unused-vars
 	constructor(options, factories = {}) {
@@ -113,7 +114,7 @@ export default class DavClient {
 	 *
 	 * At least one of enableCalDAV or enableCardDAV must be true.
 	 *
-	 * @param {import('./models/principal.js').PrincipalPropfindOptions} options
+	 * @param {import('./models/principal.js').PrincipalPropfindOptions} options Select whether to enable CalDAV, CardDAV, or both.
 	 * @return {Promise<DavClient>}
 	 */
 	async connect(options = { enableCalDAV: false, enableCardDAV: false }) {
@@ -182,7 +183,7 @@ export default class DavClient {
 	/**
 	 * performs a principal property search based on a principal's displayname
 	 *
-	 * @param {string} name
+	 * @param {string} name Display name to search for.
 	 * @return {Promise<Principal[]>}
 	 */
 	async principalPropertySearchByDisplayname(name) {
@@ -194,7 +195,7 @@ export default class DavClient {
 	/**
 	 * performs a principal property search based on a principal's displayname OR email address
 	 *
-	 * @param {string} value
+	 * @param {string} value Display name or email address to search for.
 	 * @return {Promise<Principal[]>}
 	 */
 	async principalPropertySearchByDisplaynameOrEmail(value) {
@@ -807,7 +808,7 @@ export default class DavClient {
 	 */
 	_extractAdvertisedDavFeatures(headers) {
 		if (typeof headers.dav !== 'string' || headers.dav.trim() === '') {
-			throw new Error('OPTIONS response is missing the DAV header; check DAV server or proxy configuration')
+			throw new Error('OPTIONS response is missing the DAV header parameter; check DAV server or proxy configuration')
 		}
 
 		const dav = headers.dav
