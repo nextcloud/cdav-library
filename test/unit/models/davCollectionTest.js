@@ -556,6 +556,47 @@ describe('Dav collection model', () => {
 		});
 	});
 
+	it('should create an object without fetching it', async () => {
+		const parent = {
+			'findAll': vi.fn(),
+			'findAllByFilter': vi.fn(),
+			'find': vi.fn(),
+			'createCollection': vi.fn(),
+			'createObject': vi.fn(),
+			'update': vi.fn(),
+			'delete': vi.fn(),
+			'isReadable': vi.fn(),
+			'isWriteable': vi.fn()
+		};
+		const request = new RequestMock();
+		const url = '/foo/bar/folder';
+		const props = {
+			'{DAV:}displayname': 'Foo Bar Bla Blub',
+			'{DAV:}owner': 'https://foo/bar/',
+			'{DAV:}resourcetype': ['{DAV:}collection'],
+			'{DAV:}sync-token': 'https://foo/bar/token/3',
+			'{DAV:}current-user-privilege-set': ['{DAV:}write',
+				'{DAV:}write-properties', '{DAV:}write-content',
+				'{DAV:}unlock', '{DAV:}bind', '{DAV:}unbind',
+				'{DAV:}write-acl', '{DAV:}read', '{DAV:}read-acl',
+				'{DAV:}read-current-user-privilege-set'],
+		};
+
+		request.put.mockResolvedValue({
+			status: 201,
+			body: null,
+			headers: {},
+		});
+
+		const collection = new DavCollection(parent, request, url, props);
+		const res = await collection.createObject('foo.bar', { 'Content-Type': 'text/calendar' }, 'DATA123', { fetch: false });
+
+		expect(res).toBeNull();
+		expect(request.put).toHaveBeenCalledTimes(1);
+		expect(request.put).toHaveBeenCalledWith('/foo/bar/folder/foo.bar', { 'Content-Type': 'text/calendar' }, 'DATA123');
+		expect(request.propFind).not.toHaveBeenCalled();
+	});
+
 	it('should update the collection', () => {
 		const parent = {
 			'findAll': vi.fn(),
