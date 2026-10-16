@@ -182,15 +182,35 @@ export class DavCollection extends DAVEventListener {
 	 * - AddressBook->createVCard
 	 * - Calendar->createVObject
 	 *
+	 * @overload
 	 * @param {string} name
 	 * @param {object} headers
 	 * @param {string} data
+	 * @param {{ fetch?: true }} [options] Fetch the created object from the server (default)
 	 * @return {Promise<DavObject>}
 	 */
-	async createObject(name, headers, data) {
+	/**
+	 * @overload
+	 * @param {string} name
+	 * @param {object} headers
+	 * @param {string} data
+	 * @param {{ fetch: false }} options Skip fetching the created object from the server
+	 * @return {Promise<null>}
+	 */
+	/**
+	 * @param {string} name
+	 * @param {object} headers
+	 * @param {string} data
+	 * @param {{ fetch?: boolean }} [options] Whether to fetch the created object from the server
+	 * @return {Promise<DavObject|null>}
+	 */
+	async createObject(name, headers, data, { fetch = true } = {}) {
 		debug('creating an object')
 
 		await this._request.put(this.url + name, headers, data)
+		if (!fetch) {
+			return null
+		}
 		return this.find(name)
 	}
 

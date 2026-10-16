@@ -196,6 +196,27 @@ describe('Address book model', () => {
 		});
 	});
 
+	it('should create a new VCard without fetching it', async () => {
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
+		const url = '/foo/bar/folder';
+		const props = returnDefaultProps();
+
+		request.put.mockResolvedValue({
+			status: 201,
+			body: null,
+			headers: {},
+		});
+
+		const addressbook = new AddressBook(parent, request, url, props);
+		const res = await addressbook.createVCard('DATA123', { fetch: false });
+
+		expect(res).toBeNull();
+		expect(request.put).toHaveBeenCalledTimes(1);
+		expect(request.put).toHaveBeenCalledWith(expect.stringMatching(/^\/foo\/bar\/folder\/.+\.vcf$/), { 'Content-Type': 'text/vcard; charset=utf-8' }, 'DATA123');
+		expect(request.propFind).not.toHaveBeenCalled();
+	});
+
 	it('should send an addressbook-query', () => {
 		const parent = new DavCollectionMock();
 		const request = new RequestMock();

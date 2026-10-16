@@ -160,16 +160,29 @@ export class Calendar extends davCollectionPublishable(davCollectionShareable(Da
 	/**
 	 * create a VObject inside this calendar
 	 *
+	 * @overload
 	 * @param {string} data
+	 * @param {{ fetch?: true }} [options] Fetch the created object from the server (default)
 	 * @return {Promise<VObject>}
 	 */
-	async createVObject(data) {
+	/**
+	 * @overload
+	 * @param {string} data
+	 * @param {{ fetch: false }} options Skip fetching the created object from the server
+	 * @return {Promise<null>}
+	 */
+	/**
+	 * @param {string} data
+	 * @param {{ fetch?: boolean }} [options] Whether to fetch the created object from the server
+	 * @return {Promise<VObject|null>}
+	 */
+	async createVObject(data, options = {}) {
 		const name = StringUtility.uid('', 'ics')
 		const headers = {
 			'Content-Type': 'text/calendar; charset=utf-8',
 		}
 
-		return super.createObject(name, headers, data)
+		return super.createObject(name, headers, data, options)
 	}
 
 	/**

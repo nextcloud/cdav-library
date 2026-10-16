@@ -285,6 +285,27 @@ END:VCALENDAR
 		});
 	});
 
+	it('should create a VObject without fetching it', async () => {
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
+		const url = '/foo/bar/folder';
+		const props = returnDefaultProps();
+
+		request.put.mockResolvedValue({
+			status: 201,
+			body: null,
+			headers: {},
+		});
+
+		const calendar = new Calendar(parent, request, url, props);
+		const res = await calendar.createVObject('DATA123', { fetch: false });
+
+		expect(res).toBeNull();
+		expect(request.put).toHaveBeenCalledTimes(1);
+		expect(request.put).toHaveBeenCalledWith(expect.stringMatching(/^\/foo\/bar\/folder\/.+\.ics$/), { 'Content-Type': 'text/calendar; charset=utf-8' }, 'DATA123');
+		expect(request.propFind).not.toHaveBeenCalled();
+	});
+
 	it('should provide a calendar-query', () => {
 		const parent = new DavCollectionMock();
 		const request = new RequestMock();

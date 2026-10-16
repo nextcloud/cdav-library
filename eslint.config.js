@@ -7,4 +7,10 @@ import { recommendedJavascript } from '@nextcloud/eslint-config'
 
 export default [
 	...recommendedJavascript,
+	{
+		rules: {
+			// TypeScript reads @overload from JSDoc to type the generated declarations
+			'jsdoc/check-tag-names': ['error', { definedTags: ['overload'] }],
+		},
+	},
 ]
