@@ -106,10 +106,23 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 	/**
 	 * creates a new VCard object in this address book
 	 *
+	 * @overload
 	 * @param {string} data
+	 * @param {{ fetch?: true }} [options] Fetch the created object from the server (default)
 	 * @return {Promise<VCard>}
 	 */
-	async createVCard(data) {
+	/**
+	 * @overload
+	 * @param {string} data
+	 * @param {{ fetch: false }} options Skip fetching the created object from the server
+	 * @return {Promise<null>}
+	 */
+	/**
+	 * @param {string} data
+	 * @param {{ fetch?: boolean }} [options] Whether to fetch the created object from the server
+	 * @return {Promise<VCard|null>}
+	 */
+	async createVCard(data, options = {}) {
 		debug('creating VCard object')
 
 		const name = StringUtility.uid('', 'vcf')
@@ -117,7 +130,7 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 			'Content-Type': 'text/vcard; charset=utf-8',
 		}
 
-		return super.createObject(name, headers, data)
+		return super.createObject(name, headers, data, options)
 	}
 
 	/**
