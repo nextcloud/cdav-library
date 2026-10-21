@@ -58,6 +58,23 @@ describe('Client', () => {
 			'nc-enable-birthday-calendar',
 		])
 	})
+
+	it('should detect addressbook-query continuation support', () => {
+		const client = new Client({
+			rootUrl: '/foobar/',
+		})
+		client._extractAdvertisedDavFeatures({ dav: '1, 3, access-control, addressbook, sabredav-addressbook-query-continuation' })
+		expect(client.isAddressBookQueryContinuationSupported()).toEqual(true)
+	})
+
+	it('should not detect addressbook-query continuation support if not advertised', () => {
+		const client = new Client({
+			rootUrl: '/foobar/',
+		})
+		expect(client.isAddressBookQueryContinuationSupported()).toEqual(false)
+		client._extractAdvertisedDavFeatures({ dav: '1, 3, access-control, addressbook, nc-paginate' })
+		expect(client.isAddressBookQueryContinuationSupported()).toEqual(false)
+	})
 })
 
 describe('calendar home helpers', () => {
