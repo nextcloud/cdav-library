@@ -18,6 +18,12 @@ import { VCard } from './vcard.js'
 const debug = debugFactory('AddressBook')
 
 /**
+ * @typedef {object} AddressBookQueryPage
+ * @property {VCard[]} vcards VCards of this page
+ * @property {string|null} continuationToken Token to request the next page, null for the last page
+ */
+
+/**
  * This class represents an address book collection as specified in
  * https://tools.ietf.org/html/rfc6352#section-5.2
  *
@@ -79,28 +85,28 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 	 * @return {Promise<VCard[]>}
 	 */
 	async findAllAndFilterBySimpleProperties(props) {
-		const children = []
-		props.forEach((prop) => {
-			children.push({
-				name: [NS.IETF_CARDDAV, 'prop'],
-				attributes: [['name', prop]],
-			})
-		})
+		return this.addressbookQuery(null, AddressBook._getSimplePropertiesProp(props))
+	}
 
-		return this.addressbookQuery(null, [{
-			name: [NS.DAV, 'getetag'],
-		}, {
-			name: [NS.DAV, 'getcontenttype'],
-		}, {
-			name: [NS.DAV, 'resourcetype'],
-		}, {
-			name: [NS.IETF_CARDDAV, 'address-data'],
-			children,
-		}, {
-			name: [NS.NEXTCLOUD, 'has-photo'],
-		}, {
-			name: [NS.NEXTCLOUD, 'favorite'],
-		}])
+	/**
+	 * finds one page of contacts in an address-book, but with filtered data.
+	 * Only use this when DavClient#isAddressBookQueryContinuationSupported() returns true,
+	 * because other servers may truncate the result without signalling it.
+	 *
+	 * Example use:
+	 * findPageAndFilterBySimpleProperties(['EMAIL', 'UID', 'FN'], { limit: 50 })
+	 * findPageAndFilterBySimpleProperties(['EMAIL', 'UID', 'FN'], { limit: 50, continuationToken: page.continuationToken })
+	 *
+	 * @param {string[]} props Names of the vCard properties to retrieve
+	 * @param {object} options Paging and filter options
+	 * @param {number} options.limit Maximum number of vcards in the page
+	 * @param {string|null} [options.continuationToken] Token of the previous page, null for the first page
+	 * @param {object[]|null} [options.filter] Children of the CARDDAV:filter element, null for all contacts
+	 * @param {string} [options.test] Either anyof or allof
+	 * @return {Promise<AddressBookQueryPage>}
+	 */
+	async findPageAndFilterBySimpleProperties(props, { limit, continuationToken = null, filter = null, test = 'anyof' }) {
+		return this.addressbookQueryPage(filter, AddressBook._getSimplePropertiesProp(props), { limit, test, continuationToken })
 	}
 
 	/**
@@ -144,6 +150,28 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 	 * @return {Promise<VCard[]>}
 	 */
 	async addressbookQuery(filter, prop = null, limit = null, test = 'anyof') {
+		const { vcards } = await this.addressbookQueryPage(filter, prop, { limit, test })
+		return vcards
+	}
+
+	/**
+	 * sends an addressbook query as defined in
+	 * https://tools.ietf.org/html/rfc6352#section-8.6
+	 * and returns the continuation token of a truncated result.
+	 *
+	 * A truncated result is signalled by a 507 response for the address book
+	 * (RFC 6352 §8.6.2) carrying a {http://sabredav.org/ns}continuation-token.
+	 * Pass that token back with the same filter, test and limit to get the next page.
+	 *
+	 * @param {object[]|null} filter Children of the CARDDAV:filter element, null for all contacts
+	 * @param {object[]|null} prop Children of the DAV:prop element, null for the default property list
+	 * @param {object} [options] Paging and filter options
+	 * @param {number|null} [options.limit] Maximum number of vcards in the page
+	 * @param {string} [options.test] Either anyof or allof
+	 * @param {string|null} [options.continuationToken] Token of the previous page, null for the first page
+	 * @return {Promise<AddressBookQueryPage>}
+	 */
+	async addressbookQueryPage(filter = null, prop = null, { limit = null, test = 'anyof', continuationToken = null } = {}) {
 		debug('sending an addressbook-query request')
 
 		const [skeleton] = XMLUtility.getRootSkeleton([NS.IETF_CARDDAV, 'addressbook-query'])
@@ -182,12 +210,22 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 			})
 		}
 
+		if (continuationToken) {
+			skeleton.children.push({
+				name: [NS.SABREDAV, 'continuation-token'],
+				value: continuationToken,
+			})
+		}
+
 		const headers = {
 			Depth: '1',
 		}
 		const body = XMLUtility.serialize(skeleton)
 		const response = await this._request.report(this.url, headers, body)
-		return super._handleMultiStatusResponse(response, AddressBook._isRetrievalPartial(prop))
+		return {
+			vcards: super._handleMultiStatusResponse(response, AddressBook._isRetrievalPartial(prop)),
+			continuationToken: AddressBook._extractContinuationToken(response),
+		}
 	}
 
 	/**
@@ -303,5 +341,44 @@ export class AddressBook extends davCollectionShareable(DavCollection) {
 		}
 
 		return !!addressBookDataProperty.children
+	}
+
+	/**
+	 * builds the prop part of a report requesting a set of simple vCard properties
+	 *
+	 * @param {string[]} props
+	 * @return {object[]}
+	 * @private
+	 */
+	static _getSimplePropertiesProp(props) {
+		return [{
+			name: [NS.DAV, 'getetag'],
+		}, {
+			name: [NS.DAV, 'getcontenttype'],
+		}, {
+			name: [NS.DAV, 'resourcetype'],
+		}, {
+			name: [NS.IETF_CARDDAV, 'address-data'],
+			children: props.map((prop) => ({
+				name: [NS.IETF_CARDDAV, 'prop'],
+				attributes: [['name', prop]],
+			})),
+		}, {
+			name: [NS.NEXTCLOUD, 'has-photo'],
+		}, {
+			name: [NS.NEXTCLOUD, 'favorite'],
+		}]
+	}
+
+	/**
+	 * extracts the continuation token from the 507 response of a truncated addressbook-query
+	 *
+	 * @param {{statusResponses?: {status: number, elements: Object<string, string>}[]}} response Response of the REPORT request
+	 * @return {string|null} null when the result was not truncated or the server sent no token
+	 * @private
+	 */
+	static _extractContinuationToken(response) {
+		const truncated = (response.statusResponses ?? []).find((r) => r.status === 507)
+		return truncated?.elements[`{${NS.SABREDAV}}continuation-token`] ?? null
 	}
 }

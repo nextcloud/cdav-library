@@ -1019,6 +1019,7 @@ describe('Request', () => {
 				'{DAV:}current-user-privilege-set': 'value2',
 			},
 			status: 207,
+			statusResponses: [],
 		})
 	})
 
@@ -1342,6 +1343,61 @@ describe('Request', () => {
 				},
 			}),
 			status: 207,
+			statusResponses: [],
+		})
+	})
+
+	it('should separate status-only responses from the properties of multistatus responses', async () => {
+		const xmlResponse = `<?xml version="1.0"?>
+<d:multistatus xmlns:d="DAV:" xmlns:s="http://sabredav.org/ns">
+	<d:response>
+		<d:href>/nextcloud/remote.php/dav/addressbooks/users/admin/contacts/a.vcf</d:href>
+		<d:propstat>
+			<d:prop>
+				<d:getetag>"etag-a"</d:getetag>
+			</d:prop>
+			<d:status>HTTP/1.1 200 OK</d:status>
+		</d:propstat>
+	</d:response>
+	<d:response>
+		<d:href>/nextcloud/remote.php/dav/addressbooks/users/admin/contacts/</d:href>
+		<d:status>HTTP/1.1 507 Insufficient Storage</d:status>
+		<d:error><d:number-of-matches-within-limits/></d:error>
+		<s:continuation-token>opaque-token</s:continuation-token>
+	</d:response>
+</d:multistatus>
+`
+		vi.spyOn(axios, 'request')
+			.mockResolvedValueOnce({
+				data: xmlResponse,
+				status: 207,
+			})
+
+		const parser = {
+			canParse: vi.fn().mockReturnValue(true),
+			parse: vi.fn().mockReturnValue('"etag-a"'),
+		}
+
+		const request = new Request('https://nextcloud.testing/nextcloud/remote.php/dav/', parser)
+		const response = await request.report('addressbooks/users/admin/contacts/', { Depth: '1' }, '')
+
+		expect(parser.canParse).toHaveBeenCalledTimes(1)
+		expect(parser.canParse).toHaveBeenCalledWith('{DAV:}getetag')
+		expect(response).toEqual({
+			body: {
+				'/nextcloud/remote.php/dav/addressbooks/users/admin/contacts/a.vcf': {
+					'{DAV:}getetag': '"etag-a"',
+				},
+			},
+			status: 207,
+			statusResponses: [{
+				href: '/nextcloud/remote.php/dav/addressbooks/users/admin/contacts/',
+				status: 507,
+				errors: ['{DAV:}number-of-matches-within-limits'],
+				elements: {
+					'{http://sabredav.org/ns}continuation-token': 'opaque-token',
+				},
+			}],
 		})
 	})
 
