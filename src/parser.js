@@ -198,6 +198,15 @@ export default class Parser {
 		this.registerParser('{http://nextcloud.com/ns}room-building-story', Parser.text)
 		this.registerParser('{http://nextcloud.com/ns}room-building-room-number', Parser.text)
 		this.registerParser('{http://nextcloud.com/ns}room-features', Parser.text)
+		this.registerParser('{http://nextcloud.com/ns}resource-type', Parser.text)
+		this.registerParser('{http://nextcloud.com/ns}resource-vehicle-type', Parser.text)
+		this.registerParser('{http://nextcloud.com/ns}resource-vehicle-make', Parser.text)
+		this.registerParser('{http://nextcloud.com/ns}resource-vehicle-model', Parser.text)
+		this.registerParser('{http://nextcloud.com/ns}resource-vehicle-is-electric', Parser.bool)
+		this.registerParser('{http://nextcloud.com/ns}resource-vehicle-range', Parser.decInt)
+		this.registerParser('{http://nextcloud.com/ns}resource-vehicle-seating-capacity', Parser.decInt)
+		this.registerParser('{http://nextcloud.com/ns}resource-contact-person', Parser.text)
+		this.registerParser('{http://nextcloud.com/ns}resource-contact-person-vcard', Parser.text)
 
 		// Sabre/Dav specific
 		this.registerParser('{http://sabredav.org/ns}email-address', Parser.text)

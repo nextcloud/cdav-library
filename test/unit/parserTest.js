@@ -1994,6 +1994,40 @@ END:VALARM`);
 		expect(parser.canParse('{http://sabredav.org/ns}email-address')).toEqual(true);
 		expect(parser.parse(document, node, resolver)).toEqual('foo@bar.com');
 	});
+
+	// Nextcloud resource booking
+	it.each([
+		['resource-type', 'car', 'car'],
+		['resource-vehicle-type', 'van', 'van'],
+		['resource-vehicle-make', 'Skoda', 'Skoda'],
+		['resource-vehicle-model', 'Octavia', 'Octavia'],
+		['resource-vehicle-is-electric', '1', true],
+		['resource-vehicle-is-electric', '0', false],
+		['resource-vehicle-range', '450', 450],
+		['resource-vehicle-seating-capacity', '5', 5],
+		['resource-contact-person', 'admin', 'admin'],
+		['resource-contact-person-vcard', 'BEGIN:VCARD', 'BEGIN:VCARD'],
+	])('should properly handle {http://nextcloud.com/ns}%s = %s', (name, value, expected) => {
+		const parser = new Parser();
+
+		const xml = `<?xml version="1.0" encoding="utf-8" ?>
+<D:multistatus xmlns:D="DAV:" xmlns:nc="http://nextcloud.com/ns">
+	<D:response>
+		<D:href>/foo</D:href>
+		<D:propstat>
+			<D:prop>
+				<nc:${name}>${value}</nc:${name}>
+			</D:prop>
+			<D:status>HTTP/1.1 200 OK</D:status>
+		</D:propstat>
+	</D:response>
+</D:multistatus>`;
+
+		const [document, node, resolver] = getDocumentNodeResolverFromXML(xml);
+
+		expect(parser.canParse(`{http://nextcloud.com/ns}${name}`)).toEqual(true);
+		expect(parser.parse(document, node, resolver)).toEqual(expected);
+	});
 });
 
 function getDocumentNodeResolverFromXML(xml) {
