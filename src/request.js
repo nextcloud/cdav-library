@@ -244,7 +244,7 @@ export default class Request {
 	 * @param {object} headers - additional HTTP headers to send
 	 * @param {string} body - request body
 	 * @param {AbortSignal} abortSignal - the signal from an abort controller
-	 * @return {Promise<{body: string|object, status: number, headers: object}>}
+	 * @return {Promise<{body: string|object, status: number, headers: object, statusResponses?: MultiStatusStatusResponse[]}>}
 	 */
 	async report(url, headers, body, abortSignal = null) {
 		return this.request('REPORT', url, headers, body, abortSignal)
@@ -258,7 +258,7 @@ export default class Request {
 	 * @param {object} headers - additional HTTP headers to send
 	 * @param {string} body - request body
 	 * @param {AbortSignal} abortSignal - the signal from an abort controller
-	 * @return {Promise<{body: string|object, status: number, headers: object}>}
+	 * @return {Promise<{body: string|object, status: number, headers: object, statusResponses?: MultiStatusStatusResponse[]}>} statusResponses is set for 207 responses
 	 */
 	async request(method, url, headers, body, abortSignal) {
 		const assignHeaders = { ...getDefaultHeaders(), ...this.defaultHeaders, ...headers }
@@ -274,18 +274,24 @@ export default class Request {
 			})
 
 			let responseBody = response.data
+			let statusResponses
 			if (response.status === 207) {
-				responseBody = this._parseMultiStatusResponse(responseBody)
+				({ properties: responseBody, statusResponses } = this._parseMultiStatusResponse(responseBody))
 				if (parseInt(assignHeaders.Depth, 10) === 0 && method === 'PROPFIND') {
 					responseBody = responseBody[Object.keys(responseBody)[0]]
 				}
 			}
 
-			return {
+			const result = {
 				body: responseBody,
 				status: response.status,
 				headers: response.headers,
 			}
+			if (statusResponses) {
+				result.statusResponses = statusResponses
+			}
+
+			return result
 		} catch (error) {
 			if (axios.isCancel(error)) {
 				// xhr.onabort
@@ -371,12 +377,19 @@ export default class Request {
 	 * parses a multi status response (207), sorts them by path
 	 * and drops all unsuccessful responses
 	 *
+	 * Responses carrying a non-2xx status for the whole resource instead of
+	 * propstat elements (RFC 4918 §14.24) are not part of the properties map.
+	 * They are returned in statusResponses, together with the names of the
+	 * DAV:error conditions and the text content of all extension elements
+	 * (e.g. {http://sabredav.org/ns}continuation-token).
+	 *
 	 * @param {string} body
-	 * @return {object}
+	 * @return {{properties: object, statusResponses: MultiStatusStatusResponse[]}}
 	 * @private
 	 */
 	_parseMultiStatusResponse(body) {
-		const result = {}
+		const properties = {}
+		const statusResponses = []
 		const domParser = new DOMParser()
 		const document = domParser.parseFromString(body, 'application/xml')
 
@@ -385,6 +398,12 @@ export default class Request {
 
 		while ((responseNode = responses.iterateNext()) !== null) {
 			const href = document.evaluate('string(d:href)', responseNode, NS.resolve, XPathResult.ANY_TYPE, null).stringValue
+			const responseStatus = document.evaluate('string(d:status)', responseNode, NS.resolve, XPathResult.ANY_TYPE, null).stringValue
+			if (responseStatus !== '' && !wasRequestSuccessful(getStatusCodeFromString(responseStatus))) {
+				statusResponses.push(parseStatusResponse(responseNode, href, getStatusCodeFromString(responseStatus)))
+				continue
+			}
+
 			const parsedProperties = {}
 			const propStats = document.evaluate('d:propstat', responseNode, NS.resolve, XPathResult.ANY_TYPE, null)
 			let propStatNode
@@ -406,11 +425,50 @@ export default class Request {
 				}
 			}
 
-			result[href] = parsedProperties
+			properties[href] = parsedProperties
 		}
 
-		return result
+		return { properties, statusResponses }
 	}
+}
+
+/**
+ * @typedef {object} MultiStatusStatusResponse
+ * @property {string} href Href of the resource
+ * @property {number} status HTTP status code of the resource
+ * @property {string[]} errors Clark-notated names of the DAV:error conditions
+ * @property {Object<string, string>} elements Text content of all other child elements, keyed by Clark-notated name
+ */
+
+/**
+ * Parses a DAV:response that carries a status for the whole resource
+ *
+ * @param {Element} responseNode The DAV:response element
+ * @param {string} href Href of the resource
+ * @param {number} status HTTP status code of the resource
+ * @return {MultiStatusStatusResponse}
+ * @private
+ */
+function parseStatusResponse(responseNode, href, status) {
+	const errors = []
+	const elements = {}
+
+	for (const child of responseNode.children) {
+		if (child.namespaceURI === NS.DAV && ['href', 'status', 'propstat', 'responsedescription', 'location'].includes(child.localName)) {
+			continue
+		}
+
+		if (child.namespaceURI === NS.DAV && child.localName === 'error') {
+			for (const condition of child.children) {
+				errors.push(`{${condition.namespaceURI}}${condition.localName}`)
+			}
+			continue
+		}
+
+		elements[`{${child.namespaceURI}}${child.localName}`] = child.textContent
+	}
+
+	return { href, status, errors, elements }
 }
 
 /**

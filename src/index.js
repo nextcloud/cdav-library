@@ -180,6 +180,17 @@ export default class DavClient {
 	// }
 
 	/**
+	 * Whether the server signals truncated addressbook-query results with a
+	 * continuation token, so AddressBook#addressbookQueryPage can be used for paging.
+	 * Only reliable after connect()
+	 *
+	 * @return {boolean}
+	 */
+	isAddressBookQueryContinuationSupported() {
+		return this.advertisedFeatures.includes('sabredav-addressbook-query-continuation')
+	}
+
+	/**
 	 * performs a principal property search based on a principal's displayname
 	 *
 	 * @param {string} name Display name to search for.

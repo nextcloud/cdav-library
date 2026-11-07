@@ -339,6 +339,170 @@ describe('Address book model', () => {
 			assert.fail('AddressBook addressbook-multiget was not supposed to assert.fail');
 		});
 	});
+
+	it('should send a paginated addressbook-query without continuation token for the first page', async () => {
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
+		const url = '/foo/bar/folder';
+		const props = returnDefaultProps();
+
+		request.report.mockResolvedValue({
+			status: 207,
+			body: {
+				'/foo/bar/folder/a': getVCardProps(),
+				'/foo/bar/folder/b': getVCardProps(),
+			},
+			headers: {},
+			statusResponses: [{
+				href: '/foo/bar/folder/',
+				status: 507,
+				errors: ['{DAV:}number-of-matches-within-limits'],
+				elements: {
+					'{http://sabredav.org/ns}continuation-token': 'token-page-2',
+				},
+			}],
+		});
+		request.pathname.mockImplementation((p) => p);
+
+		const addressbook = new AddressBook(parent, request, url, props);
+		const page = await addressbook.findPageAndFilterBySimpleProperties(['FN', 'UID'], { limit: 2 });
+
+		expect(page.continuationToken).toEqual('token-page-2');
+		expect(page.vcards.length).toEqual(2);
+		expect(page.vcards[0]).toEqual(expect.any(VCard));
+		expect(page.vcards[0].url).toEqual('/foo/bar/folder/a');
+		expect(page.vcards[1]).toEqual(expect.any(VCard));
+		expect(page.vcards[1].url).toEqual('/foo/bar/folder/b');
+
+		expect(request.report).toHaveBeenCalledTimes(1);
+		expect(request.report).toHaveBeenCalledWith('/foo/bar/folder/', { Depth: '1' },
+			'<x0:addressbook-query xmlns:x0="urn:ietf:params:xml:ns:carddav"><x1:prop xmlns:x1="DAV:"><x1:getetag/><x1:getcontenttype/><x1:resourcetype/><x0:address-data><x0:prop name="FN"/><x0:prop name="UID"/></x0:address-data><x2:has-photo xmlns:x2="http://nextcloud.com/ns"/><x2:favorite xmlns:x2="http://nextcloud.com/ns"/></x1:prop><x0:limit><x0:nresults>2</x0:nresults></x0:limit></x0:addressbook-query>');
+	});
+
+	it('should send a filtered addressbook-query with continuation token and detect the last page', async () => {
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
+		const url = '/foo/bar/folder';
+		const props = returnDefaultProps();
+
+		request.report.mockResolvedValue({
+			status: 207,
+			body: {
+				'/foo/bar/folder/c': getVCardProps(),
+			},
+			headers: {},
+			statusResponses: [],
+		});
+		request.pathname.mockImplementation((p) => p);
+
+		const addressbook = new AddressBook(parent, request, url, props);
+		const page = await addressbook.findPageAndFilterBySimpleProperties(['FN'], {
+			limit: 2,
+			continuationToken: 'token-page-2',
+			test: 'allof',
+			filter: [{
+				name: [NS.IETF_CARDDAV, 'prop-filter'],
+				attributes: [['name', 'FN']],
+				children: [{
+					name: [NS.IETF_CARDDAV, 'text-match'],
+					attributes: [['match-type', 'contains']],
+					value: 'daboo',
+				}],
+			}],
+		});
+
+		expect(page.continuationToken).toEqual(null);
+		expect(page.vcards.length).toEqual(1);
+		expect(page.vcards[0].url).toEqual('/foo/bar/folder/c');
+
+		expect(request.report).toHaveBeenCalledWith('/foo/bar/folder/', { Depth: '1' },
+			'<x0:addressbook-query xmlns:x0="urn:ietf:params:xml:ns:carddav"><x1:prop xmlns:x1="DAV:"><x1:getetag/><x1:getcontenttype/><x1:resourcetype/><x0:address-data><x0:prop name="FN"/></x0:address-data><x2:has-photo xmlns:x2="http://nextcloud.com/ns"/><x2:favorite xmlns:x2="http://nextcloud.com/ns"/></x1:prop><x0:filter test="allof"><x0:prop-filter name="FN"><x0:text-match match-type="contains">daboo</x0:text-match></x0:prop-filter></x0:filter><x0:limit><x0:nresults>2</x0:nresults></x0:limit><x3:continuation-token xmlns:x3="http://sabredav.org/ns">token-page-2</x3:continuation-token></x0:addressbook-query>');
+	});
+
+	it('should send an addressbook-query page with default options', async () => {
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
+		const url = '/foo/bar/folder';
+		const props = returnDefaultProps();
+
+		request.report.mockResolvedValue({
+			status: 207,
+			body: {
+				'/foo/bar/folder/a': getVCardProps(),
+			},
+			headers: {},
+		});
+		request.pathname.mockImplementation((p) => p);
+
+		const addressbook = new AddressBook(parent, request, url, props);
+		const page = await addressbook.addressbookQueryPage();
+
+		expect(page.continuationToken).toEqual(null);
+		expect(page.vcards.length).toEqual(1);
+		expect(request.report).toHaveBeenCalledWith('/foo/bar/folder/', { Depth: '1' },
+			'<x0:addressbook-query xmlns:x0="urn:ietf:params:xml:ns:carddav"><x1:prop xmlns:x1="DAV:"><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x1:displayname/><x1:owner/><x1:resourcetype/><x1:sync-token/><x1:current-user-privilege-set/><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x0:address-data/></x1:prop></x0:addressbook-query>');
+	});
+
+	it('should return null as continuation token for a 507 response without token', async () => {
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
+		const url = '/foo/bar/folder';
+		const props = returnDefaultProps();
+
+		request.report.mockResolvedValue({
+			status: 207,
+			body: {
+				'/foo/bar/folder/a': getVCardProps(),
+			},
+			headers: {},
+			statusResponses: [{
+				href: '/foo/bar/folder/',
+				status: 507,
+				errors: ['{DAV:}number-of-matches-within-limits'],
+				elements: {},
+			}],
+		});
+		request.pathname.mockImplementation((p) => p);
+
+		const addressbook = new AddressBook(parent, request, url, props);
+		const page = await addressbook.addressbookQueryPage(null, null, { limit: 1 });
+
+		expect(page.continuationToken).toEqual(null);
+		expect(page.vcards.length).toEqual(1);
+	});
+
+	it('should not turn the 507 response of a truncated addressbook-query into a VCard', async () => {
+		const parent = new DavCollectionMock();
+		const request = new RequestMock();
+		const url = '/foo/bar/folder';
+		const props = returnDefaultProps();
+
+		request.report.mockResolvedValue({
+			status: 207,
+			body: {
+				'/foo/bar/folder/a': getVCardProps(),
+			},
+			headers: {},
+			statusResponses: [{
+				href: '/foo/bar/folder/',
+				status: 507,
+				errors: ['{DAV:}number-of-matches-within-limits'],
+				elements: {
+					'{http://sabredav.org/ns}continuation-token': 'token-page-2',
+				},
+			}],
+		});
+		request.pathname.mockImplementation((p) => p);
+
+		const addressbook = new AddressBook(parent, request, url, props);
+		const res = await addressbook.addressbookQuery(null, null, 1);
+
+		expect(res.length).toEqual(1);
+		expect(res[0]).toEqual(expect.any(VCard));
+		expect(res[0].url).toEqual('/foo/bar/folder/a');
+		expect(request.report).toHaveBeenCalledWith('/foo/bar/folder/', { Depth: '1' },
+			'<x0:addressbook-query xmlns:x0="urn:ietf:params:xml:ns:carddav"><x1:prop xmlns:x1="DAV:"><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x1:displayname/><x1:owner/><x1:resourcetype/><x1:sync-token/><x1:current-user-privilege-set/><x1:getcontenttype/><x1:getetag/><x1:resourcetype/><x0:address-data/></x1:prop><x0:limit><x0:nresults>1</x0:nresults></x0:limit></x0:addressbook-query>');
+	});
 });
 
 function returnDefaultProps() {
